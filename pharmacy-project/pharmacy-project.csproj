@@ -8,4 +8,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="manufacturer\service\" />
+    <Folder Include="medicine\service\" />
+    <Folder Include="order-details\service\" />
+    <Folder Include="order\service\" />
+    <Folder Include="user\service\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
 </Project>

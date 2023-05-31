@@ -1,0 +1,15 @@
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\bin\Debug\net6.0\pharmacy-project.exe
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\bin\Debug\net6.0\pharmacy-project.deps.json
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\bin\Debug\net6.0\pharmacy-project.runtimeconfig.json
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\bin\Debug\net6.0\pharmacy-project.dll
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\bin\Debug\net6.0\pharmacy-project.pdb
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.csproj.AssemblyReference.cache
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.GeneratedMSBuildEditorConfig.editorconfig
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.AssemblyInfoInputs.cache
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.AssemblyInfo.cs
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.csproj.CoreCompileInputs.cache
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.dll
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\refint\pharmacy-project.dll
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.pdb
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\pharmacy-project.genruntimeconfig.cache
+D:\mycode\csharp\projects\pharmacy-project\pharmacy-project\obj\Debug\net6.0\ref\pharmacy-project.dll
