@@ -21,7 +21,7 @@ namespace pharmacy_project.order.model
             _status = status;
         }
 
-        // Accesors
+        // Accessors
 
         public int Id
         {
