@@ -4,23 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pharmacy_project.user.model
+namespace pharmacy_project.manufacturer.model
 {
-    public class User
+    public class Manufacturer
     {
         private int _id;
         private string _name;
-        private string _email;
-        private string _password;
+        private string _contactEmailAdress;
 
         // Constructors
 
-        public User(int id, string name, string email, string password)
+        public Manufacturer(int id, string name, string contactEmailAdress)
         {
             _id = id;
             _name = name;
-            _email = email;
-            _password = password;
+            _contactEmailAdress = contactEmailAdress;
         }
 
         // Accesors
@@ -43,21 +41,12 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Email
+        public string ContactEmailAdress
         {
-            get { return _email; }
+            get { return _contactEmailAdress; }
             set
             {
-                _email = value;
-            }
-        }
-
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
+                _contactEmailAdress = value;
             }
         }
 
@@ -68,7 +57,7 @@ namespace pharmacy_project.user.model
             string desc = "";
 
             desc += "Name : " + _name + "\n";
-            desc += "Email : " + _email + "\n";
+            desc += "Contact Email Adress : " + _contactEmailAdress + "\n";
 
             return desc;
         }
