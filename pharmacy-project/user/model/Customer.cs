@@ -17,7 +17,7 @@ namespace pharmacy_project.user.model
             _locked = false;
         }
 
-        // Accesors
+        // Accessors
 
         public int Id
         {

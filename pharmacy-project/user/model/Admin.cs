@@ -16,7 +16,7 @@ namespace pharmacy_project.user.model
 
         }
 
-        // Accesors
+        // Accessors
 
         public int Id
         {

@@ -23,7 +23,7 @@ namespace pharmacy_project.user.model
             _password = password;
         }
 
-        // Accesors
+        // Accessors
 
         public int Id
         {

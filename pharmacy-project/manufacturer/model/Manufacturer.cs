@@ -21,7 +21,7 @@ namespace pharmacy_project.manufacturer.model
             _contactEmailAdress = contactEmailAdress;
         }
 
-        // Accesors
+        // Accessors
 
         public int Id
         {
