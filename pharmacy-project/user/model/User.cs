@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,15 +13,28 @@ namespace pharmacy_project.user.model
         private string _name;
         private string _email;
         private string _password;
+        private string _type;
 
         // Constructors
 
-        public User(int id, string name, string email, string password)
+        public User(int id, string name, string email, string password, string type)
         {
             _id = id;
             _name = name;
             _email = email;
             _password = password;
+            _type = type;
+        }
+
+        public User(string text)
+        {
+            string[] data = text.Split('/');
+
+            _type = data[0];
+            _id = Int32.Parse(data[1]);
+            _name = data[2];
+            _email = data[3];
+            _password = data[4];
         }
 
         // Accessors
@@ -58,6 +72,15 @@ namespace pharmacy_project.user.model
             set
             {
                 _password = value;
+            }
+        }
+
+        public string Type
+        {
+            get { return _type; }
+            set
+            {
+                _type = value;
             }
         }
 

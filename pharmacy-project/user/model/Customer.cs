@@ -12,9 +12,14 @@ namespace pharmacy_project.user.model
 
         // Constructors
 
-        public Customer(int id, string name, string email, string password) : base(id, name, email, password)
+        public Customer(int id, string name, string email, string password) : base(id, name, email, password, "Customer")
         {
             _locked = false;
+        }
+
+        public Customer(string text) : base(text)
+        {
+            _locked = Boolean.Parse(text.Split('/')[5]);
         }
 
         // Accessors
@@ -66,7 +71,7 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public string Description()
+        public string CustomerDescription()
         {
             string desc = base.Description();
 

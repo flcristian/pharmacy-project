@@ -13,7 +13,6 @@
     <Folder Include="medicine\service\" />
     <Folder Include="order-details\service\" />
     <Folder Include="order\service\" />
-    <Folder Include="user\service\" />
   </ItemGroup>
 
   <ItemGroup>
