@@ -5,16 +5,16 @@
 
 ## $${\color{#e34b4b}Features}$$
 
-${\color{#19191a}Panels}$
+${Panels}$
 - Login
 - Admin
 - Customer
 
-${\color{#19191a}Login}$
+${Login}$
 - Login
 - Register
 
-${\color{#19191a}Admins}$ can manage (add, remove, edit, list, view details) :
+${Admins}$ can manage (add, remove, edit, list, view details) :
 - Medicine
 - Manufacturers
 - Orders
@@ -26,7 +26,7 @@ They can also check for :
 - Best and worst selling manufacturer
 - Latest orders
 
-${\color{#19191a}Customers}$ can :
+${Customers}$ can :
 - View all products
 - Search for products by tags
 - Add items to cart
@@ -35,7 +35,7 @@ ${\color{#19191a}Customers}$ can :
 - Place orders
 - Change credentials
 
-${\color{#19191a}All\space users\space can\space log\space out.}$
+${All\space users\space can\space log\space out.}$
 
 
 
