@@ -519,5 +519,100 @@ namespace testing_pharmacy_project.Tests
 
             Assert.Single(listToCheck);
         }
+
+        [Fact]
+        public void EditById_FoundDupe_DoesNotModify_ReturnsNegative3()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "name", "email");
+            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(-3, edit);
+            Assert.NotEqual(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void EditById_FoundName_DoesNotModify_ReturnsNegative2()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "name", "modified");
+            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(-2, edit);
+            Assert.NotEqual(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void EditById_FoundEmail_DoesNotModify_ReturnsNegative1()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "modified", "email");
+            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(-1, edit);
+            Assert.NotEqual(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void EditById_Unchanged_DoesNotModify_Returns0()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(0, edit);
+            Assert.NotEqual(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void EditById_NoMatch_ModifiedManufacturer_Returns1()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "modified", "modified");
+            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(1, edit);
+            Assert.Equal(modified, service.FindById(id));
+        }
     }
 }

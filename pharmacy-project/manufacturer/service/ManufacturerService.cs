@@ -241,13 +241,29 @@ namespace pharmacy_project.manufacturer.service
 
         public int EditById(Manufacturer manufacturer, int id)
         {
-            // Returns -1 or 0, the value remains unchanged.
+            // Returns -3, -2, -1 or 0, the value remains unmodified.
             // Returns 1, the value is changed.
 
-            // Checks if the value we want the manufacturer changed to already exists.
-            List<Manufacturer> manufacturers = this.FindDuplicate(manufacturer);
+            // Checks if the manufacturer is a duplicate.
+            List<Manufacturer> foundDupes = this.FindDuplicate(manufacturer);
 
-            if (manufacturers.Count() > 0)
+            if (foundDupes.Count() > 0)
+            {
+                return -3;
+            }
+
+            // Checks if name is already used.
+            Manufacturer foundByName = this.FindByName(manufacturer.Name);
+
+            if (foundByName != null && foundByName.Id != manufacturer.Id)
+            {
+                return -2;
+            }
+
+            // Checks if contact email is already used.
+            Manufacturer foundByEmail = this.FindByEmail(manufacturer.ContactEmailAdress);
+
+            if (foundByEmail != null && foundByEmail.Id != manufacturer.Id)
             {
                 return -1;
             }
