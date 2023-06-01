@@ -1,5 +1,5 @@
-## $${\color{#e34b4b}Pharmacy\space Project}$$
-##### $${\color{#82cf4e}Pharmacy\space Store\space and\space Management\space project.}$$
+# $${\color{#e34b4b}Pharmacy\space Project}$$
+### $${\color{#82cf4e}Pharmacy\space Store\space and\space Management\space project.}$$
 
 ![Project Scheme](https://github.com/flcristian/pharmacy-project/blob/master/schemes/project-scheme.png)
 
