@@ -288,5 +288,41 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(2, cc);
             Assert.Equal(2, ca);
         }
+
+        [Fact]
+        public void Count_ReturnsCorrectCount()
+        {
+            // Arrange
+            List<User> list = new List<User>
+            {
+                new User(1,"name","email","password","type"),
+                new User(2,"name","email","password","type")
+            };
+            UserService service = new UserService(list);
+
+            // Act
+            int count = service.Count();
+
+            // Assert
+            Assert.Equal(list.Count(), count);
+        }
+
+        [Fact]
+        public void ClearList_ListIsEmptyAfterFunctionCall()
+        {
+            // Arrange
+            List<User> list = new List<User>
+            {
+                new User(1,"name","email","password","type"),
+                new User(2,"name","email","password","type")
+            };
+            UserService service = new UserService(list);
+
+            // Act
+            service.ClearList();
+
+            // Assert
+            Assert.Empty(service.List);
+        }
     }
 }

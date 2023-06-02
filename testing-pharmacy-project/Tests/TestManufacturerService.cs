@@ -12,7 +12,7 @@ namespace testing_pharmacy_project.Tests
     public class TestManufacturerService
     {
         [Fact]
-        public void GetCount_ReturnsCorrectValue()
+        public void Count_ReturnsCorrectValue()
         {
             // Arrange
             Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
