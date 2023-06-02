@@ -112,5 +112,69 @@ namespace pharmacy_project.user.service
                 Console.WriteLine(desc);
             }
         }
+
+        public User FindById(int id)
+        {
+            foreach (User user in _list)
+            {
+                if(user.Id == id)
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
+        public User FindByEmail(string email)
+        {
+            foreach(User user in _list)
+            {
+                if (user.Email.Equals(email))
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
+        public User FindByEmailAndPassword(string email, string password)
+        {
+            foreach(User user in _list)
+            {
+                if(user.Email.Equals(email) && user.Password.Equals(password))
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
+        public List<User> FindByName(string name)
+        {
+            List<User> users = new List<User>();
+
+            foreach(User user in _list)
+            {
+                if (user.Name.Equals(name))
+                {
+                    users.Add(user);
+                }
+            }
+
+            return users;
+        }
+
+        public int Count()
+        {
+            return _list.Count();
+        }
+
+        public void ClearList()
+        {
+            _list.Clear();
+        }
     }
 }
