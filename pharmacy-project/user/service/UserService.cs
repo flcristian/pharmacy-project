@@ -176,5 +176,16 @@ namespace pharmacy_project.user.service
         {
             _list.Clear();
         }
+
+        public int NewId()
+        {
+            Random rnd = new Random();
+            int id = rnd.Next(1, 999999);
+            while(this.FindById(id) != null)
+            {
+                id = rnd.Next(1, 999999);
+            }
+            return id;
+        }
     }
 }

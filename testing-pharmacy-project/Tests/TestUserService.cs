@@ -324,5 +324,28 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Empty(service.List);
         }
+
+        [Fact]
+        public void NewId_ReturnsUnusedId_ReturnsIdInRange()
+        {
+            // Arrange
+            User u1 = new User(112341, "name", "email@email.com", "pass", "Admin");
+            User u2 = new User(281723, "name", "email@email.com", "pass", "Admin");
+            User u3 = new User(911913, "name", "email@email.com", "pass", "Admin");
+            User u4 = new User(333224, "test", "test", "pass", "Admin");
+            User u5 = new User(576765, "another", "another", "pass", "Admin");
+            List<User> list = new List<User> { u1, u2, u3, u4, u5 };
+            UserService service = new UserService(list);
+
+            // Act
+            int id = service.NewId();
+
+            // Assert
+            foreach (User u in list)
+            {
+                Assert.NotEqual(u.Id, id);
+            }
+            Assert.InRange(id, 1, 999999);
+        }
     }
 }
