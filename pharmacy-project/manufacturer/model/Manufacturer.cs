@@ -21,6 +21,14 @@ namespace pharmacy_project.manufacturer.model
             _contactEmailAdress = contactEmailAdress;
         }
 
+        public Manufacturer(string text)
+        {
+            string[] data = text.Split('/');
+            _id = Int32.Parse(data[0]);
+            _name = data[1];
+            _contactEmailAdress = data[2];
+        }
+
         // Accessors
 
         public int Id

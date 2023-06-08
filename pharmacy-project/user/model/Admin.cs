@@ -11,7 +11,12 @@ namespace pharmacy_project.user.model
     {
         // Constructors
 
-        public Admin(int id, string name, string email, string password) : base(id, name, email, password)
+        public Admin(int id, string name, string email, string password) : base(id, name, email, password, "Admin")
+        {
+
+        }
+
+        public Admin(string text) : base(text)
         {
 
         }
@@ -56,7 +61,7 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public string Description()
+        public string AdminDescription()
         {
             string desc = base.Description();
 
