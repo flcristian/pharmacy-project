@@ -66,23 +66,14 @@ namespace pharmacy_project.user.service
         public void SaveList()
         {
             StreamWriter sw = new StreamWriter("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt");
-            
+
+            string toSave = "";
             foreach(User user in _list)
             {
-                switch (user.Type)
-                {
-                    case "Admin":
-                        Admin admin = user as Admin;
-                        sw.WriteLine($"{admin.Type}/{admin.Id}/{admin.Name}/{admin.Email}/{admin.Password}");
-                        break;
-                    case "Customer":
-                        Customer customer = user as Customer;
-                        sw.WriteLine($"{customer.Type}/{customer.Id}/{customer.Name}/{customer.Email}/{customer.Password}/{customer.Locked}");
-                        break;
-                    default:
-                        break;
-                }
+                toSave += $"{user.ToSave()}\n";
             }
+            sw.Write(toSave);
+
             sw.Close();
         }
 
@@ -90,26 +81,7 @@ namespace pharmacy_project.user.service
         {
             foreach(User user in _list)
             {
-                string desc = $"{user.Type.ToUpper()}\n";
-                switch (user.Type)
-                {
-                    case "Admin":
-                        Admin admin = user as Admin;
-                        desc += admin.AdminDescription();
-                        break;
-                    case "Customer":
-                        Customer customer = user as Customer;
-                        desc += customer.CustomerDescription();
-                        if (customer.Locked)
-                        {
-                            desc += "USER IS BANNED\n";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                Console.WriteLine(desc);
+                Console.WriteLine(user);
             }
         }
 
@@ -186,6 +158,66 @@ namespace pharmacy_project.user.service
                 id = rnd.Next(1, 999999);
             }
             return id;
+        }
+
+        public int AddUser(User user)
+        {
+            // Checks if the id has already been used. Returns -1 if id is already used.
+            if (this.FindById(user.Id) != null)
+            {
+                return -1;
+            }
+
+            // Checks if the email has been used. Returns 0 if email is already used.
+            if (this.FindByEmail(user.Email) != null)
+            {
+                return 0;
+            }
+
+            _list.Add(user);
+            return 1;
+        }
+
+        public int RemoveById(int id)
+        {
+            User user = this.FindById(id);
+
+            // Checks if the user exists. Returns 0 if no.
+            if(user == null)
+            {
+                return 0;
+            }
+
+            _list.Remove(user);
+            return 1;
+        }
+
+        public int RemoveByEmail(string email)
+        {
+            User user = this.FindByEmail(email);
+
+            // Checks if the user exists. Returns 0 if no.
+            if (user == null)
+            {
+                return 0;
+            }
+
+            _list.Remove(user);
+            return 1;
+        }
+
+        public int EditById(User edited, int id)
+        {
+            User user = this.FindById(id);
+
+            // Checks if the user exists. Returns 0 if no.
+            if (user == null)
+            {
+                return 0;
+            }
+
+            _list[_list.IndexOf(user)] = edited;
+            return 1;
         }
     }
 }

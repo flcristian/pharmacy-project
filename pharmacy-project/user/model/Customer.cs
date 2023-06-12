@@ -71,11 +71,20 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public string CustomerDescription()
+        public override string ToString()
         {
-            string desc = base.Description();
+            string desc = base.ToString();
 
             return desc;
+        }
+
+        public override string ToSave()
+        {
+            string save = base.ToSave();
+
+            save += $"{_locked}";
+
+            return save;
         }
     }
 }

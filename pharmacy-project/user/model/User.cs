@@ -86,7 +86,7 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public string Description()
+        public override string ToString()
         {
             string desc = "";
 
@@ -94,6 +94,13 @@ namespace pharmacy_project.user.model
             desc += "Email : " + _email + "\n";
 
             return desc;
+        }
+
+        public virtual string ToSave()
+        {
+            string save = $"{_type}/{_id}/{_name}/{_email}/{_password}";
+
+            return save;
         }
     }
 }

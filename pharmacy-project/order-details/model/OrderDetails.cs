@@ -63,7 +63,7 @@ namespace pharmacy_project.order_details.model
 
         // Methods
 
-        public string Description()
+        public override string ToString()
         {
             // This description is mainly for admins.
 
