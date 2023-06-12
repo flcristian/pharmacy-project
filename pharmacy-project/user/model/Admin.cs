@@ -61,11 +61,18 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public string AdminDescription()
+        public override string ToString()
         {
-            string desc = base.Description();
+            string desc = base.ToString();
 
             return desc;
+        }
+
+        public override string ToSave()
+        {
+            string save = base.ToSave();
+
+            return save;
         }
     }
 }

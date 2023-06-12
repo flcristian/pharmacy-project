@@ -347,5 +347,65 @@ namespace testing_pharmacy_project.Tests
             }
             Assert.InRange(id, 1, 999999);
         }
+
+        [Fact]
+        public void AddUser_IdAlreadyUsed_DoesNotAddUser_ReturnsNegative1()
+        {
+            // Arrange
+            int id = 18417;
+            Customer customer = new Customer(id, "namecustomer", "emailcustomer", "passcustomer");
+            List<User> list = new List<User>
+            {
+                new Customer(id, "name0", "email0","pass0"),
+                new Customer(1, "name1","email1","pass1"),
+                new Admin(2, "name2","email2","pass2")
+            };
+            UserService service = new UserService(list);
+
+            // Act
+            int add = service.AddUser(customer);
+
+            // Assert
+            Assert.Equal(-1, add);
+            Assert.Equal(3, list.Count());
+        }
+
+        [Fact]
+        public void AddUser_EmailAlreadyUsed_DoesNotAddUser_Returns0()
+        {
+            // Arrange
+            string email = "sameemail";
+            Customer customer = new Customer(14512, "namecustomer", email, "passcustomer");
+            List<User> list = new List<User>
+            {
+                new Customer(0, "name0", "email0","pass0"),
+                new Customer(1, "name1",email,"pass1"),
+                new Admin(2, "name2","email2","pass2")
+            };
+            UserService service = new UserService(list);
+
+            // Act
+            int add = service.AddUser(customer);
+
+            // Assert
+            Assert.Equal(0, add);
+            Assert.Equal(3, list.Count());
+        }
+
+        [Fact]
+        public void AddUser_CanAdd_AddsUser_Returns1()
+        {
+            // Arrange
+            Customer customer = new Customer(123, "namecustomer", "emailcustomer", "passcustomer");
+            List<User> list = new List<User>();
+            UserService service = new UserService(list);
+
+            // Act
+            int add = service.AddUser(customer);
+
+            // Assert
+            Assert.Equal(1, add);
+            Assert.Equal(1, list.Count());
+        }
     }
 }
