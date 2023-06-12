@@ -407,5 +407,125 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(1, add);
             Assert.Equal(1, list.Count());
         }
+
+        [Fact]
+        public void RemoveById_UserNotFound_Returns0()
+        {
+            // Arrange
+            int id = 18417;
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(1, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int remove = service.RemoveById(id);
+
+            // Assert
+            Assert.Equal(0, remove);
+            Assert.Equal(3, list.Count());
+        }
+
+        [Fact]
+        public void RemoveById_UserFound_RemovesUser_Returns1()
+        {
+            // Arrange
+            int id = 1;
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(1, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int remove = service.RemoveById(id);
+
+            // Assert
+            Assert.Equal(1, remove);
+            Assert.Equal(2, list.Count());
+            Assert.Null(service.FindById(id));
+            Assert.DoesNotContain(u2, service.List);
+        }
+
+        [Fact]
+        public void RemoveByEmail_UserNotFound_Returns0()
+        {
+            // Arrange
+            string email = "email31512";
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(1, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int remove = service.RemoveByEmail(email);
+
+            // Assert
+            Assert.Equal(0, remove);
+            Assert.Equal(3, list.Count());
+        }
+
+        [Fact]
+        public void RemoveByEmail_UserFound_RemovesUser_Returns1()
+        {
+            // Arrange
+            string email = "email1";
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(1, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int remove = service.RemoveByEmail(email);
+
+            // Assert
+            Assert.Equal(1, remove);
+            Assert.Equal(2, list.Count());
+            Assert.Null(service.FindByEmail(email));
+            Assert.DoesNotContain(u2, service.List);
+        }
+
+        [Fact]
+        public void EditById_UserNotFound_Returns0()
+        {
+            // Arrange
+            int id = 1281;
+            Customer edited = new Customer(id, "newname", "newemail", "newpass");
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(1, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int edit = service.EditById(edited, id);
+
+            // Assert
+            Assert.Equal(0, edit);
+        }
+
+        [Fact]
+        public void EditById_UserFound_EditsUser_Returns1()
+        {
+            // Arrange
+            int id = 1281;
+            Customer edited = new Customer(id, "newname", "newemail", "newpass");
+            Customer u1 = new Customer(0, "name0", "email0", "pass0");
+            Customer u2 = new Customer(id, "name1", "email1", "pass1");
+            Admin u3 = new Admin(2, "name2", "email2", "pass2");
+            List<User> list = new List<User> { u1, u2, u3 };
+            UserService service = new UserService(list);
+
+            // Act
+            int edit = service.EditById(edited, id);
+
+            // Assert
+            Assert.Equal(1, edit);
+            User test = service.FindById(id);
+            Assert.Equal(edited, service.List[service.List.IndexOf(test)]);
+        }
     }
 }

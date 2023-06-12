@@ -177,5 +177,47 @@ namespace pharmacy_project.user.service
             _list.Add(user);
             return 1;
         }
+
+        public int RemoveById(int id)
+        {
+            User user = this.FindById(id);
+
+            // Checks if the user exists. Returns 0 if no.
+            if(user == null)
+            {
+                return 0;
+            }
+
+            _list.Remove(user);
+            return 1;
+        }
+
+        public int RemoveByEmail(string email)
+        {
+            User user = this.FindByEmail(email);
+
+            // Checks if the user exists. Returns 0 if no.
+            if (user == null)
+            {
+                return 0;
+            }
+
+            _list.Remove(user);
+            return 1;
+        }
+
+        public int EditById(User edited, int id)
+        {
+            User user = this.FindById(id);
+
+            // Checks if the user exists. Returns 0 if no.
+            if (user == null)
+            {
+                return 0;
+            }
+
+            _list[_list.IndexOf(user)] = edited;
+            return 1;
+        }
     }
 }

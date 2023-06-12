@@ -57,10 +57,12 @@ namespace pharmacy_project.manufacturer.service
         {
             StreamWriter sw = new StreamWriter("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\manufacturers.txt");
 
+            string toSave = "";
             foreach(Manufacturer manufacturer in _list)
             {
-                sw.WriteLine($"{manufacturer.Id}/{manufacturer.Name}/{manufacturer.ContactEmailAdress}");
+                toSave += $"{manufacturer.ToSave()}\n";
             }
+            sw.Write(toSave);
 
             sw.Close();
         }
@@ -69,7 +71,7 @@ namespace pharmacy_project.manufacturer.service
         {
             foreach(Manufacturer manufacturer in _list)
             {
-                Console.WriteLine(manufacturer.Description());
+                Console.WriteLine(manufacturer);
             }
         }
 
@@ -201,40 +203,6 @@ namespace pharmacy_project.manufacturer.service
                 return 0;
             }
 
-            _list.Add(manufacturer);
-            return 1;
-        }
-
-        public int AddWithUniqueId(Manufacturer manufacturer)
-        {
-            // Returns -2, -1 or 0, manufacturer was not added.
-            // Returns 1, manufacturer was added.
-
-            // Checks if the manufacturer is a duplicate.
-            List<Manufacturer> foundDupes = this.FindDuplicate(manufacturer);
-
-            if (foundDupes.Count() > 0)
-            {
-                return -2;
-            }
-
-            // Checks if name is already used.
-            Manufacturer foundByName = this.FindByName(manufacturer.Name);
-
-            if (foundByName != null)
-            {
-                return -1;
-            }
-
-            // Checks if contact email is already used.
-            Manufacturer foundByEmail = this.FindByEmail(manufacturer.ContactEmailAdress);
-
-            if (foundByEmail != null)
-            {
-                return 0;
-            }
-
-            manufacturer.Id = this.NewId();
             _list.Add(manufacturer);
             return 1;
         }

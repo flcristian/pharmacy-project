@@ -52,7 +52,7 @@ namespace pharmacy_project.order.model
 
         // Methods
 
-        public string Description()
+        public override string ToString()
         {
             string desc = "";
 

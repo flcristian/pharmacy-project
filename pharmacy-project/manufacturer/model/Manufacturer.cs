@@ -60,7 +60,7 @@ namespace pharmacy_project.manufacturer.model
 
         // Methods
 
-        public string Description()
+        public override string ToString()
         {
             string desc = "";
 
@@ -68,6 +68,13 @@ namespace pharmacy_project.manufacturer.model
             desc += "Contact Email Adress : " + _contactEmailAdress + "\n";
 
             return desc;
+        }
+
+        public string ToSave()
+        {
+            string save = $"{_id}/{_name}/{_contactEmailAdress}";
+
+            return save;
         }
     }
 }

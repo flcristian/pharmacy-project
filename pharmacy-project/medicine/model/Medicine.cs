@@ -103,7 +103,7 @@ namespace pharmacy_project.medicine.model
 
         // Methods
 
-        public string Description()
+        public override string ToString()
         {
             string desc = "";
 
