@@ -20,8 +20,6 @@ namespace pharmacy_project.manufacturer.service
 
         public ManufacturerService()
         {
-            _list = new List<Manufacturer>();
-
             this.ReadList();
         }
 
@@ -40,9 +38,11 @@ namespace pharmacy_project.manufacturer.service
 
         public void ReadList()
         {
-            _list = new List<Manufacturer>();
-            StreamReader sr = new StreamReader("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\manufacturers.txt");
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            path += "..\\..\\..\\resources\\manufacturers.txt";
+            StreamReader sr = new StreamReader(path);
 
+            _list = new List<Manufacturer>();
             while (!sr.EndOfStream)
             {
                 string text = sr.ReadLine();
@@ -50,26 +50,35 @@ namespace pharmacy_project.manufacturer.service
 
                 _list.Add(manufacturer);
             }
+
             sr.Close();
         }
 
         public void SaveList()
         {
-            StreamWriter sw = new StreamWriter("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\manufacturers.txt");
-
             string toSave = "";
             foreach(Manufacturer manufacturer in _list)
             {
                 toSave += $"{manufacturer.ToSave()}\n";
             }
-            sw.Write(toSave);
 
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            path += "..\\..\\..\\resources\\manufacturers.txt";
+
+            StreamWriter sw = new StreamWriter(path);
+            sw.Write(toSave);
             sw.Close();
         }
 
         public void Afisare()
         {
-            foreach(Manufacturer manufacturer in _list)
+            if (_list.Count() == 0)
+            {
+                Console.WriteLine("There are no manufacturers.\n");
+                return;
+            }
+
+            foreach (Manufacturer manufacturer in _list)
             {
                 Console.WriteLine(manufacturer);
             }

@@ -82,7 +82,7 @@ namespace pharmacy_project.user.model
         {
             string save = base.ToSave();
 
-            save += $"{_locked}";
+            save += $"/{_locked}";
 
             return save;
         }
