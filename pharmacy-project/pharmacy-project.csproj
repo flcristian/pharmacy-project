@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="manufacturer\service\" />
-    <Folder Include="medicine\service\" />
     <Folder Include="order-details\service\" />
     <Folder Include="order\service\" />
   </ItemGroup>

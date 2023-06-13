@@ -38,9 +38,11 @@ namespace pharmacy_project.user.service
 
         public void ReadList()
         {
-            _list = new List<User>();
-            StreamReader sr = new StreamReader("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt");
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            path += "..\\..\\..\\resources\\users.txt";
+            StreamReader sr = new StreamReader(path);
 
+            _list = new List<User>();
             while (!sr.EndOfStream)
             {
                 string text = sr.ReadLine();
@@ -60,26 +62,35 @@ namespace pharmacy_project.user.service
                         break;
                 }
             }
+
             sr.Close();
         }
 
         public void SaveList()
         {
-            StreamWriter sw = new StreamWriter("D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt");
-
             string toSave = "";
             foreach(User user in _list)
             {
                 toSave += $"{user.ToSave()}\n";
             }
-            sw.Write(toSave);
 
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            path += "..\\..\\..\\resources\\users.txt";
+
+            StreamWriter sw = new StreamWriter(path);
+            sw.Write(toSave);
             sw.Close();
         }
 
         public void Afisare()
         {
-            foreach(User user in _list)
+            if (_list.Count() == 0)
+            {
+                Console.WriteLine("There are no users.\n");
+                return;
+            }
+
+            foreach (User user in _list)
             {
                 Console.WriteLine(user);
             }

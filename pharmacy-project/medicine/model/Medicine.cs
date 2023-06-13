@@ -18,7 +18,7 @@ namespace pharmacy_project.medicine.model
 
         // Constructors
 
-        public Medicine(int id, int manufacturerId, double price, int stockAmmount, string name, string information, string tagsList)
+        public Medicine(int id, int manufacturerId, double price, int stockAmmount, string name, string information, string tags)
         {
             _id = id;
             _manufacturerId = manufacturerId;
@@ -28,9 +28,27 @@ namespace pharmacy_project.medicine.model
             _information = information;
 
             _tags = new List<string>();
-            string[] tagList = new string[9999];
-            tagList = tagsList.Split("..");
+            string[] tagList = tags.Split(",");
             foreach(string tag in tagList)
+            {
+                _tags.Add(tag);
+            }
+        }
+
+        public Medicine(string text)
+        {
+            string[] data = text.Split('/');
+
+            _id = Int32.Parse(data[0]);
+            _manufacturerId = Int32.Parse(data[1]);
+            _price = Double.Parse(data[2]);
+            _stockAmmount = Int32.Parse(data[3]);
+            _name = data[4];
+            _information = data[5];
+
+            _tags = new List<string>();
+            string[] tags = data[6].Split(",");
+            foreach (string tag in tags)
             {
                 _tags.Add(tag);
             }
@@ -122,5 +140,43 @@ namespace pharmacy_project.medicine.model
 
             return desc;
         }
+
+        public string DescriptionForAdmin()
+        {
+            string desc = "";
+
+            desc += "Id : " + _id + "\n";
+            desc += "Name : " + _name + "\n";
+            desc += "Information : " + _information + "\n";
+            desc += "Price : " + _price + "$\n";
+            desc += "Stock Ammount : " + _stockAmmount + "\n";
+            desc += "Tags : ";
+
+            foreach (string tag in _tags)
+            {
+                desc += tag + " ";
+            }
+
+            desc += "\n";
+
+            return desc;
+        }
+
+        public string ToSave()
+        {
+            string save = $"{_id}/{_manufacturerId}/{_price}/{_stockAmmount}/{_name}/{_information}/";
+
+            foreach(string tag in _tags)
+            {
+                save += tag;
+
+                if(_tags.IndexOf(tag) != _tags.Count() - 1)
+                {
+                    save += ",";
+                }
+            }
+
+            return save;
+        }  
     }
 }
