@@ -21,6 +21,15 @@ namespace pharmacy_project.order.model
             _status = status;
         }
 
+        public Order(string text)
+        {
+            string[] data = text.Split('/');
+
+            _id = Int32.Parse(data[0]);
+            _customerId = Int32.Parse(data[1]);
+            _status = data[2];
+        }
+
         // Accessors
 
         public int Id
@@ -61,6 +70,13 @@ namespace pharmacy_project.order.model
             desc += "Status : " + _status + "\n";
 
             return desc;
+        }
+
+        public string ToSave()
+        {
+            string save = $"{_id}/{_customerId}/{_status}";
+
+            return save;
         }
     }
 }

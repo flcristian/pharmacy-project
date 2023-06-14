@@ -70,7 +70,7 @@ namespace pharmacy_project.manufacturer.service
             sw.Close();
         }
 
-        public void Afisare()
+        public void Display()
         {
             if (_list.Count() == 0)
             {
@@ -83,6 +83,22 @@ namespace pharmacy_project.manufacturer.service
                 Console.WriteLine(manufacturer);
             }
         }
+
+        public void DisplayAdmin()
+        {
+            if (_list.Count() == 0)
+            {
+                Console.WriteLine("There are no manufacturers.\n");
+                return;
+            }
+
+            foreach (Manufacturer manufacturer in _list)
+            {
+                Console.WriteLine(manufacturer.DescriptionAdmin());
+            }
+        }
+
+        // TODO: ADD DISPLAY BY ID
 
         public int Count()
         {

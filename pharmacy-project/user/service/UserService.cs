@@ -82,7 +82,7 @@ namespace pharmacy_project.user.service
             sw.Close();
         }
 
-        public void Afisare()
+        public void Display()
         {
             if (_list.Count() == 0)
             {
@@ -95,6 +95,8 @@ namespace pharmacy_project.user.service
                 Console.WriteLine(user);
             }
         }
+
+        // TODO: ADD DISPLAY BY ID
 
         public User FindById(int id)
         {

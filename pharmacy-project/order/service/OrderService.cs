@@ -1,32 +1,31 @@
-﻿using pharmacy_project.medicine.model;
+﻿using pharmacy_project.order.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pharmacy_project.medicine.service
+namespace pharmacy_project.order.service
 {
-    public class MedicineService
+    public class OrderService
     {
-        private List<Medicine> _list;
+        private List<Order> _list;
 
         // Constructors
 
-        public MedicineService()
+        public OrderService()
         {
             this.ReadList();
         }
 
-        public MedicineService(List<Medicine> list)
+        public OrderService(List<Order> list)
         {
             _list = list;
         }
 
         // Accessors
 
-        public List<Medicine> List
+        public List<Order> List
         {
             get { return _list; }
             set
@@ -40,15 +39,15 @@ namespace pharmacy_project.medicine.service
         public void ReadList()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\medicine.txt";
+            path += "..\\..\\..\\resources\\orders.txt";
             StreamReader sr = new StreamReader(path);
 
-            _list = new List<Medicine>();
+            _list = new List<Order>();
             while (!sr.EndOfStream)
             {
                 string text = sr.ReadLine();
-                Medicine medicine = new Medicine(text);
-                _list.Add(medicine);
+                Order order = new Order(text);
+                _list.Add(order);
             }
             sr.Close();
         }
@@ -56,13 +55,13 @@ namespace pharmacy_project.medicine.service
         public void SaveList()
         {
             string toSave = "";
-            foreach(Medicine medicine in _list)
+            foreach (Order order in _list)
             {
-                toSave += $"{medicine.ToSave()}\n";
+                toSave += $"{order.ToSave()}\n";
             }
 
             string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\medicine.txt";
+            path += "..\\..\\..\\resources\\orders.txt";
 
             StreamWriter sw = new StreamWriter(path);
             sw.Write(toSave);
@@ -71,41 +70,40 @@ namespace pharmacy_project.medicine.service
 
         public void Display()
         {
-            if(_list.Count() == 0)
-            {
-                Console.WriteLine("There are no medicine.\n");
-                return;
-            }
-
-            foreach(Medicine medicine in _list)
-            {
-                Console.WriteLine(medicine);
-            }
-        }
-
-        public void DisplayAdmin()
-        {
             if (_list.Count() == 0)
             {
-                Console.WriteLine("There are no medicine.\n");
+                Console.WriteLine("There are no order.\n");
                 return;
             }
 
-            foreach (Medicine medicine in _list)
+            foreach (Order order in _list)
             {
-                Console.WriteLine(medicine.DescriptionForAdmin());
+                Console.WriteLine(order);
             }
         }
 
-        // TODO: ADD DISPLAY BY ID
-
-        public Medicine FindById(int id)
+        public int DisplayById(int id)
         {
-            foreach(Medicine medicine in _list)
+            Order order = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (order == null)
             {
-                if(medicine.Id == id)
+                return 0;
+            }
+
+            Console.WriteLine(order);
+            return 1;
+        }
+
+        // TODO: TEST DISPLAY BY ID
+        
+        public Order FindById(int id)
+        {
+            foreach (Order order in _list)
+            {
+                if (order.Id == id)
                 {
-                    return medicine;
+                    return order;
                 }
             }
 
@@ -121,7 +119,7 @@ namespace pharmacy_project.medicine.service
         {
             Random rnd = new Random();
             int id = rnd.Next(1, 999999);
-            while(this.FindById(id) != null)
+            while (this.FindById(id) != null)
             {
                 id = rnd.Next(1, 999999);
             }
@@ -133,41 +131,41 @@ namespace pharmacy_project.medicine.service
             return _list.Count();
         }
 
-        public int AddMedicine(Medicine medicine)
+        public int AddOrder(Order order)
         {
             // Checks if the id is already used. Returns 0 if id is already used.
-            if(this.FindById(medicine.Id) != null)
+            if (this.FindById(order.Id) != null)
             {
                 return 0;
             }
 
-            _list.Add(medicine);
+            _list.Add(order);
             return 1;
         }
 
         public int RemoveById(int id)
         {
-            Medicine medicine = this.FindById(id);
-            // Checks if the medicine exists. Returns 0 if no.
-            if (medicine == null)
+            Order order = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (order == null)
             {
                 return 0;
             }
 
-            _list.Remove(medicine);
+            _list.Remove(order);
             return 1;
         }
 
-        public int EditById(Medicine edited, int id)
+        public int EditById(Order edited, int id)
         {
-            Medicine medicine = this.FindById(id);
-            // Checks if the medicine exists. Returns 0 if no.
-            if (medicine == null)
+            Order order = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (order == null)
             {
                 return 0;
             }
 
-            _list[_list.IndexOf(medicine)] = edited;
+            _list[_list.IndexOf(order)] = edited;
             return 1;
         }
     }
