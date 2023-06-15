@@ -275,6 +275,38 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
+        public void DisplayById_ManufacturerNotFound_Returns0()
+        {
+            // Assert
+            int id = 1674;
+            Manufacturer manufacturer = new Manufacturer(1241, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { manufacturer };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayById_ManufacturerFound_Returns1()
+        {
+            // Assert
+            int id = 1674;
+            Manufacturer manufacturer = new Manufacturer(id, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { manufacturer };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
         public void NewId_ReturnsUnusedId_ReturnsIdInRange()
         {
             // Arrange

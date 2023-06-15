@@ -290,6 +290,38 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
+        public void DisplayById_UserNotFound_Returns0()
+        {
+            // Assert
+            int id = 1674;
+            Customer user = new Customer(0, "name0", "email0", "pass0");
+            List<User> list = new List<User> { user };
+            UserService service = new UserService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayById_UserFound_Returns1()
+        {
+            // Assert
+            int id = 1674;
+            Customer user = new Customer(id, "name0", "email0", "pass0");
+            List<User> list = new List<User> { user };
+            UserService service = new UserService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
         public void Count_ReturnsCorrectCount()
         {
             // Arrange

@@ -94,8 +94,6 @@ namespace pharmacy_project.order.service
             Console.WriteLine(order);
             return 1;
         }
-
-        // TODO: TEST DISPLAY BY ID
         
         public Order FindById(int id)
         {
@@ -109,6 +107,8 @@ namespace pharmacy_project.order.service
 
             return null;
         }
+
+        // TODO : Find by order status.
 
         public void ClearList()
         {

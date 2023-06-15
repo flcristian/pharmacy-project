@@ -97,7 +97,18 @@ namespace pharmacy_project.medicine.service
             }
         }
 
-        // TODO: ADD DISPLAY BY ID
+        public int DisplayById(int id)
+        {
+            Medicine medicine = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (medicine == null)
+            {
+                return 0;
+            }
+
+            Console.WriteLine(medicine);
+            return 1;
+        }
 
         public Medicine FindById(int id)
         {

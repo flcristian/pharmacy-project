@@ -96,7 +96,18 @@ namespace pharmacy_project.user.service
             }
         }
 
-        // TODO: ADD DISPLAY BY ID
+        public int DisplayById(int id)
+        {
+            User user = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (user == null)
+            {
+                return 0;
+            }
+
+            Console.WriteLine(user);
+            return 1;
+        }
 
         public User FindById(int id)
         {

@@ -98,7 +98,18 @@ namespace pharmacy_project.manufacturer.service
             }
         }
 
-        // TODO: ADD DISPLAY BY ID
+        public int DisplayById(int id)
+        {
+            Manufacturer manufacturer = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (manufacturer == null)
+            {
+                return 0;
+            }
+
+            Console.WriteLine(manufacturer);
+            return 1;
+        }
 
         public int Count()
         {
