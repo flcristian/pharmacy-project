@@ -10,12 +10,14 @@ using pharmacy_project.user.model;
 using pharmacy_project.user.service;
 using System.Collections.Specialized;
 using static System.Net.Mime.MediaTypeNames;
+using System.Globalization;
+using System.Runtime.Serialization;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        OrderService service = new OrderService();
-        service.Display();
+        
     }
+
 }

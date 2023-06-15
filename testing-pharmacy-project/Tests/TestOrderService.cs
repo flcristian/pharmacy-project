@@ -100,6 +100,102 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
+        public void DisplayByIdCustomer_OrderNotFound_Returns0()
+        {
+            // Assert
+            int id = 1674;
+            Order order = new Order(182, 1, "Submitted");
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByIdCustomer(id);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayByIdCustomer_OrderFound_Returns1()
+        {
+            // Assert
+            int id = 1674;
+            Order order = new Order(id, 1, "Submitted");
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByIdCustomer(id);
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
+        public void DisplayByStatus_OrderNotFound_Returns0()
+        {
+            // Assert
+            string status = "Completed";
+            Order order = new Order(182, 1, "Submitted");
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByStatus(status);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayByStatus_OrderFound_Returns1()
+        {
+            // Assert
+            string status = "Completed";
+            Order order = new Order(182, 1, status);
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByStatus(status);
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
+        public void DisplayByStatusSortedByDate_OrderNotFound_Returns0()
+        {
+            // Assert
+            string status = "Submitted";
+            Order order = new Order(182, 1, "status");
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByStatusSortedByDate(status);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayByStatusSortedByDate_OrderFound_Returns1()
+        {
+            // Assert
+            string status = "Submitted";
+            Order order = new Order(182, 1, status);
+            List<Order> list = new List<Order> { order };
+            OrderService service = new OrderService(list);
+
+            // Act
+            int display = service.DisplayByStatusSortedByDate(status);
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
         public void ClearList_EmptiesList()
         {
             // Arrange

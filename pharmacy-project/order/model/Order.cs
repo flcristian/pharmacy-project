@@ -73,6 +73,15 @@ namespace pharmacy_project.order.model
             }
         }
 
+        public string[] StatusDates
+        {
+            get { return _statusDates; }
+            set
+            {
+                value.CopyTo(StatusDates, 0);
+            }
+        }
+
         // Methods
 
         public override string ToString()
@@ -81,6 +90,24 @@ namespace pharmacy_project.order.model
 
             desc += "Id : " + _id + "\n";
             desc += "Customer Id : " + _customerId + "\n";
+            desc += "Status : " + _status + "\n";
+
+            string[] statuses = new string[4] { "Submitted", "Sent", "Received", "Completed" };
+            int i = 0;
+            while (i < 4 && _statusDates[i] != null)
+            {
+                desc += statuses[i] + " : " + _statusDates[i] + "\n";
+                i++;
+            }
+
+            return desc;
+        }
+
+        public string CustomerDescription()
+        {
+            string desc = "";
+
+            desc += "Id : " + _id + "\n";
             desc += "Status : " + _status + "\n";
 
             string[] statuses = new string[4] { "Submitted", "Sent", "Received", "Completed" };
