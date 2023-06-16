@@ -12,12 +12,14 @@ using System.Collections.Specialized;
 using static System.Net.Mime.MediaTypeNames;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Linq.Expressions;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        
+        MedicineService service = new MedicineService();
+        service.DisplayByAscendingPrice();
     }
 
 }
