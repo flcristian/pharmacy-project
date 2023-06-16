@@ -69,7 +69,7 @@ namespace pharmacy_project.medicine.service
             sw.Close();
         }
 
-        public void Afisare()
+        public void Display()
         {
             if(_list.Count() == 0)
             {
@@ -83,7 +83,7 @@ namespace pharmacy_project.medicine.service
             }
         }
 
-        public void AfisareAdmin()
+        public void DisplayAdmin()
         {
             if (_list.Count() == 0)
             {
@@ -92,6 +92,81 @@ namespace pharmacy_project.medicine.service
             }
 
             foreach (Medicine medicine in _list)
+            {
+                Console.WriteLine(medicine.DescriptionForAdmin());
+            }
+        }
+
+        public int DisplayById(int id)
+        {
+            Medicine medicine = this.FindById(id);
+            // Checks if the order exists. Returns 0 if no.
+            if (medicine == null)
+            {
+                return 0;
+            }
+
+            Console.WriteLine(medicine);
+            return 1;
+        }
+
+        public void DisplayByAscendingPrice()
+        {
+            if (_list.Count() == 0)
+            {
+                Console.WriteLine("There are no medicine.\n");
+                return;
+            }
+
+            List<Medicine> list = new List<Medicine>();
+            list = _list.OrderBy(medicine => medicine.Price).ToList();
+
+            foreach(Medicine medicine in list)
+            {
+                Console.WriteLine(medicine);
+            }
+        }
+
+        public void DisplayByDescendingPrice()
+        {
+            if (_list.Count() == 0)
+            {
+                Console.WriteLine("There are no medicine.\n");
+                return;
+            }
+
+            List<Medicine> list = new List<Medicine>();
+            list = _list.OrderBy(medicine => medicine.Price).Reverse().ToList();
+
+            foreach (Medicine medicine in list)
+            {
+                Console.WriteLine(medicine);
+            }
+        }
+
+        public void DisplayByList(List<Medicine> list)
+        {
+            if (list.Count() == 0)
+            {
+                Console.WriteLine("There are no medicine.\n");
+                return;
+            }
+
+            foreach (Medicine medicine in list)
+            {
+                Console.WriteLine(medicine);
+            }
+        }
+
+        public void DisplayByListAdmin(List<Medicine> list)
+        {
+            if (list.Count() == 0)
+            {
+                Console.WriteLine("There are no medicine.\n");
+                return;
+            }
+
+            foreach (Medicine medicine in list)
             {
                 Console.WriteLine(medicine.DescriptionForAdmin());
             }
@@ -108,6 +183,20 @@ namespace pharmacy_project.medicine.service
             }
 
             return null;
+        }
+
+        public List<Medicine> FindByName(string name)
+        {
+            List<Medicine> list = new List<Medicine>();
+            foreach(Medicine medicine in _list)
+            {
+                if (medicine.Name.Equals(name))
+                {
+                    list.Add(medicine);
+                }
+            }
+
+            return list;
         }
 
         public void ClearList()

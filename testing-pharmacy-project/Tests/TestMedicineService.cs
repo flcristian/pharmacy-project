@@ -11,6 +11,7 @@ namespace testing_pharmacy_project.Tests
 
     public class TestMedicineService
     {
+
         [Fact]
         public void FindById_ValidMatch_ReturnsMedicine()
         {
@@ -80,6 +81,99 @@ namespace testing_pharmacy_project.Tests
 
             Assert.Equal(medicine, found);
             Assert.NotEqual(another, found);
+        }
+
+        [Fact]
+        public void FindByName_FoundMedicines_ReturnsMedicineList()
+        {
+            // Arrange
+            string name = "name";
+            Medicine m1 = new Medicine(1, 1, 1, 1, "name", "info", "tag");
+            Medicine m2 = new Medicine(2, 1, 1, 1, "name", "info", "tag");
+            Medicine m3 = new Medicine(3, 1, 1, 1, "name", "info", "tag");
+            Medicine m4 = new Medicine(4, 1, 1, 1, "name", "info", "tag");
+            List<Medicine> medicines = new List<Medicine> { m1, m2, m3, m4 };
+            List<Medicine> list = new List<Medicine> { m1, m2, m3, m4 };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            List<Medicine> found = service.FindByName(name);
+
+            // Assert
+            Assert.NotEmpty(found);
+            Assert.Equal(medicines, found);
+            Assert.Equal(4, found.Count());
+        }
+
+        [Fact]
+        public void FindByName_NoMatch_ReturnsEmptyList()
+        {
+            // Arrange
+            string name = "name";
+            List<Medicine> medicines = new List<Medicine>();
+            List<Medicine> list = new List<Medicine>();
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            List<Medicine> found = service.FindByName(name);
+
+            // Assert
+            Assert.Empty(found);
+        }
+
+        [Fact]
+        public void FindByName_MultipleNamesInList_ReturnsCorrectList()
+        {
+            // Arrange
+            string name = "name";
+            Medicine m1 = new Medicine(1, 1, 1, 1, "name", "info", "tag");
+            Medicine m2 = new Medicine(2, 1, 1, 1, "name", "info", "tag");
+            Medicine m3 = new Medicine(3, 1, 1, 1, "name", "info", "tag");
+            Medicine m4 = new Medicine(4, 1, 1, 1, "name", "info", "tag");
+            Medicine m5 = new Medicine(5, 4, 2, 4, "anothername", "info", "anothertag");
+            List<Medicine> medicines = new List<Medicine> { m1, m2, m3, m4 };
+            List<Medicine> list = new List<Medicine> { m1, m2, m3, m4, m5 };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            List<Medicine> found = service.FindByName(name);
+
+            // Assert
+            Assert.NotEmpty(found);
+            Assert.Equal(4, found.Count());
+            Assert.DoesNotContain(m5, found);
+        }
+
+        [Fact]
+        public void DisplayById_MedicineNotFound_Returns0()
+        {
+            // Assert
+            int id = 1674;
+            Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
+            List<Medicine> list = new List<Medicine> { medicine };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void DisplayById_MedicineFound_Returns1()
+        {
+            // Assert
+            int id = 1674;
+            Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
+            List<Medicine> list = new List<Medicine> { medicine };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            int display = service.DisplayById(id);
+
+            // Assert
+            Assert.Equal(1, display);
         }
 
         [Fact]

@@ -146,6 +146,7 @@ namespace pharmacy_project.medicine.model
             string desc = "";
 
             desc += "Id : " + _id + "\n";
+            desc += "Manufacturer Id : " + _manufacturerId + "\n";
             desc += "Name : " + _name + "\n";
             desc += "Information : " + _information + "\n";
             desc += "Price : " + _price + "$\n";

@@ -70,6 +70,17 @@ namespace pharmacy_project.manufacturer.model
             return desc;
         }
 
+        public string DescriptionAdmin()
+        {
+            string desc = "";
+
+            desc += "Id : " + _id + "\n";
+            desc += "Name : " + _name + "\n";
+            desc += "Contact Email Adress : " + _contactEmailAdress + "\n";
+
+            return desc;
+        }
+
         public string ToSave()
         {
             string save = $"{_id}/{_name}/{_contactEmailAdress}";
