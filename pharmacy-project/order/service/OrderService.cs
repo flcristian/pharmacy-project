@@ -24,17 +24,6 @@ namespace pharmacy_project.order.service
             _list = list;
         }
 
-        // Accessors
-
-        public List<Order> List
-        {
-            get { return _list; }
-            set
-            {
-                _list = value;
-            }
-        }
-
         // Methods
 
         public void ReadList()
@@ -275,6 +264,11 @@ namespace pharmacy_project.order.service
 
             _list[_list.IndexOf(order)] = edited;
             return 1;
+        }
+
+        public List<Order> GetList()
+        {
+            return _list;
         }
     }
 }

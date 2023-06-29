@@ -292,7 +292,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_UserNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Customer user = new Customer(0, "name0", "email0", "pass0");
             List<User> list = new List<User> { user };
@@ -308,7 +308,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_UserFound_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Customer user = new Customer(id, "name0", "email0", "pass0");
             List<User> list = new List<User> { user };
@@ -354,7 +354,7 @@ namespace testing_pharmacy_project.Tests
             service.ClearList();
 
             // Assert
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
         }
 
         [Fact]
@@ -437,7 +437,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, add);
-            Assert.Equal(1, list.Count());
+            Assert.Single(list);
         }
 
         [Fact]
@@ -477,7 +477,7 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(1, remove);
             Assert.Equal(2, list.Count());
             Assert.Null(service.FindById(id));
-            Assert.DoesNotContain(u2, service.List);
+            Assert.DoesNotContain(u2, service.GetList());
         }
 
         [Fact]
@@ -517,7 +517,7 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(1, remove);
             Assert.Equal(2, list.Count());
             Assert.Null(service.FindByEmail(email));
-            Assert.DoesNotContain(u2, service.List);
+            Assert.DoesNotContain(u2, service.GetList());
         }
 
         [Fact]
@@ -557,7 +557,21 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, edit);
             User test = service.FindById(id);
-            Assert.Equal(edited, service.List[service.List.IndexOf(test)]);
+            Assert.Equal(edited, service.GetList()[service.GetList().IndexOf(test)]);
+        }
+
+        [Fact]
+        public void GetList_ReturnsSameList()
+        {
+            // Arrange
+            List<User> list = new List<User> { new User(1, "name", "email", "password", "Customer") };
+            UserService service = new UserService(list);
+
+            // Act
+            List<User> returned = service.GetList();
+
+            // Assert
+            Assert.Equal(list, returned);
         }
     }
 }

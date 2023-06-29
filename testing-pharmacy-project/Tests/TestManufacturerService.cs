@@ -277,7 +277,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_ManufacturerNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Manufacturer manufacturer = new Manufacturer(1241, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer };
@@ -293,7 +293,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_ManufacturerFound_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Manufacturer manufacturer = new Manufacturer(id, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer };
@@ -342,7 +342,7 @@ namespace testing_pharmacy_project.Tests
             service.ClearList();
 
             // Assert
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
         }
 
         [Fact]
@@ -359,7 +359,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.True(removed);
-            Assert.DoesNotContain(manufacturer, service.List);
+            Assert.DoesNotContain(manufacturer, service.GetList());
         }
 
         [Fact]
@@ -392,8 +392,8 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.True(removed);
-            Assert.DoesNotContain(manufacturer, service.List);
-            Assert.Contains(another, service.List);
+            Assert.DoesNotContain(manufacturer, service.GetList());
+            Assert.Contains(another, service.GetList());
         }
 
         [Fact]
@@ -410,7 +410,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(-3, add);
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
@@ -427,7 +427,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(-2, add);
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
@@ -444,7 +444,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(-1, add);
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
@@ -461,7 +461,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(0, add);
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
@@ -477,7 +477,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, add);
-            Assert.Contains(toAdd, service.List);
+            Assert.Contains(toAdd, service.GetList());
         }
 
         [Fact]
@@ -573,6 +573,20 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, edit);
             Assert.Equal(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void GetList_ReturnsSameList()
+        {
+            // Arrange
+            List<Manufacturer> list = new List<Manufacturer> { new Manufacturer(1,"name","email") };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            List<Manufacturer> returned = service.GetList();
+
+            // Assert
+            Assert.Equal(list, returned);
         }
     }
 }

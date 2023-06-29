@@ -19,7 +19,7 @@ internal class Program
     private static void Main(string[] args)
     {
         MedicineService service = new MedicineService();
-        service.DisplayByAscendingPrice();
+        service.DisplayByDescendingPrice();
     }
 
 }

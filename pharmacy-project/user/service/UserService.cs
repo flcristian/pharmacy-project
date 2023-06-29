@@ -23,17 +23,6 @@ namespace pharmacy_project.user.service
             _list = list;
         }
 
-        // Accessors
-
-        public List<User> List
-        {
-            get { return _list; }
-            set
-            {
-                _list = value;
-            }
-        }
-
         // Methods
 
         public void ReadList()
@@ -242,6 +231,11 @@ namespace pharmacy_project.user.service
 
             _list[_list.IndexOf(user)] = edited;
             return 1;
+        }
+
+        public List<User> GetList()
+        {
+            return _list;
         }
     }
 }
