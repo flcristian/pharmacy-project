@@ -23,6 +23,22 @@ namespace pharmacy_project.order_details.model
             _ammounts = ammounts;
         }
 
+        public OrderDetails(string text)
+        {
+            string[] data = text.Split('/');
+
+            _id = Int32.Parse(data[0]);
+            _orderId = Int32.Parse(data[1]);
+
+            _medicineIds = new List<int>();
+            _ammounts = new List<int>();
+            for(int i = 2; i < data.Count(); i += 2)
+            {
+                _medicineIds.Add(Int32.Parse(data[i]));
+                _ammounts.Add(Int32.Parse(data[i + 1]));
+            }
+        }
+
         // Accessors
 
         public int Id
@@ -84,6 +100,23 @@ namespace pharmacy_project.order_details.model
             }
 
             return desc;
+        }
+
+        public string ToSave()
+        {
+            string save = $"{_id}/{_orderId}/";
+
+            for(int i = 0; i < _medicineIds.Count(); i++)
+            {
+                save += $"{_medicineIds[i]}/{_ammounts[i]}";
+
+                if(i != _medicineIds.Count() - 1)
+                {
+                    save += "/";
+                }
+            }
+
+            return save;
         }
     }
 }

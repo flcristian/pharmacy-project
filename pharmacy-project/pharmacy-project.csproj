@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="manufacturer\service\" />
-    <Folder Include="order-details\service\" />
   </ItemGroup>
 
   <ItemGroup>
