@@ -15,7 +15,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_ValidMatch_ReturnsMedicine()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
             List<Medicine> list = new List<Medicine> { medicine };
@@ -42,7 +42,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_NoMatch_ReturnsNull()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             List<Medicine> list = new List<Medicine>();
             MedicineService service = new MedicineService(list);
@@ -57,7 +57,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_MultipleMedicine_ReturnsCorrectMedicine()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
             Medicine another = new Medicine(71, 1, 85, 189, "afuj", "agawj", "tag91");
@@ -147,7 +147,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_MedicineNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
             List<Medicine> list = new List<Medicine> { medicine };
@@ -163,7 +163,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_MedicineFound_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
             List<Medicine> list = new List<Medicine> { medicine };
@@ -193,7 +193,7 @@ namespace testing_pharmacy_project.Tests
             service.ClearList();
 
             // Assert
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
         }
 
@@ -235,7 +235,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.InRange(newId, 1, 999999);
-            foreach(Medicine medicine in service.List)
+            foreach(Medicine medicine in service.GetList())
             {
                 Assert.NotEqual(newId, medicine.Id);
             }
@@ -244,7 +244,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void AddMedicine_IdAlreadyUsed_DoesNotAddMedicine_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine toAdd = new Medicine(id, 2, 2, 2, "anothername", "someinfo", "atag");
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
@@ -257,13 +257,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(0, add);
             Assert.Equal(1, service.Count());
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
         public void AddMedicine_IdNotUsed_AddsMedicine_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine toAdd = new Medicine(id, 2, 2, 2, "anothername", "someinfo", "atag");
             Medicine medicine = new Medicine(41, 0, 1, 1, "name", "info", "tag1,tag2");
@@ -276,13 +276,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, add);
             Assert.Equal(2, service.Count());
-            Assert.Contains(toAdd, service.List);
+            Assert.Contains(toAdd, service.GetList());
         }
 
         [Fact]
         public void RemoveById_MedicineNotFound_DoesNotRemoveMedicine_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
             List<Medicine> list = new List<Medicine> { medicine };
@@ -294,13 +294,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(0, remove);
             Assert.Equal(1, service.Count());
-            Assert.Contains(medicine, service.List);
+            Assert.Contains(medicine, service.GetList());
         }
 
         [Fact]
         public void RemoveById_MedicineFound_RemovesMedicine_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
             List<Medicine> list = new List<Medicine> { medicine };
@@ -311,15 +311,15 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, remove);
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
-            Assert.DoesNotContain(medicine, service.List);
+            Assert.DoesNotContain(medicine, service.GetList());
         }
 
         [Fact]
         public void EditById_MedicineNotFound_DoesNotEditMedicine_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine edited = new Medicine(id, 0, 1, 1, "newname", "newinfo", "newtag");
             Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
@@ -331,14 +331,14 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.List);
+            Assert.DoesNotContain(edited, service.GetList());
             Assert.NotEqual(service.FindById(189), edited);
         }
 
         [Fact]
         public void EditById_MedicineFound_EditsMedicine_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Medicine edited = new Medicine(id, 0, 1, 1, "newname", "newinfo", "newtag");
             Medicine medicine = new Medicine(id, 0, 1, 1, "name", "info", "tag1,tag2");
@@ -350,8 +350,22 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, edit);
-            Assert.Contains(edited, service.List);
+            Assert.Contains(edited, service.GetList());
             Assert.Equal(service.FindById(id), edited);
+        }
+
+        [Fact]
+        public void GetList_ReturnsSameList()
+        {
+            // Arrange
+            List<Medicine> list = new List<Medicine> { new Medicine(1, 1, 10, 10, "name", "info", "tag1,tag2") };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            List<Medicine> returned = service.GetList();
+
+            // Assert
+            Assert.Equal(list, returned);
         }
     }
 }

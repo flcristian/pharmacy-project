@@ -13,7 +13,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_ValidMatch_ReturnsOrder()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(id, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -33,7 +33,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_NoMatch_ReturnsNull()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             List<Order> list = new List<Order>();
             OrderService service = new OrderService(list);
@@ -48,7 +48,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void FindById_MultipleOrder_ReturnsCorrectOrder()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(id, 1, "Submitted");
             Order another = new Order(71, 1, "anotherSubmitted");
@@ -70,7 +70,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_OrderNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(182, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -86,7 +86,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayById_OrderFound_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(id, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -102,7 +102,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByIdCustomer_OrderNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(182, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -118,7 +118,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByIdCustomer_OrderFound_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(id, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -134,7 +134,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByStatus_OrderNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             string status = "Completed";
             Order order = new Order(182, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -150,7 +150,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByStatus_OrderFound_Returns1()
         {
-            // Assert
+            // Arrange
             string status = "Completed";
             Order order = new Order(182, 1, status);
             List<Order> list = new List<Order> { order };
@@ -166,7 +166,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByStatusSortedByDate_OrderNotFound_Returns0()
         {
-            // Assert
+            // Arrange
             string status = "Submitted";
             Order order = new Order(182, 1, "status");
             List<Order> list = new List<Order> { order };
@@ -182,7 +182,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void DisplayByStatusSortedByDate_OrderFound_Returns1()
         {
-            // Assert
+            // Arrange
             string status = "Submitted";
             Order order = new Order(182, 1, status);
             List<Order> list = new List<Order> { order };
@@ -212,7 +212,7 @@ namespace testing_pharmacy_project.Tests
             service.ClearList();
 
             // Assert
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
         }
 
@@ -254,7 +254,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.InRange(newId, 1, 999999);
-            foreach (Order order in service.List)
+            foreach (Order order in service.GetList())
             {
                 Assert.NotEqual(newId, order.Id);
             }
@@ -263,7 +263,7 @@ namespace testing_pharmacy_project.Tests
         [Fact]
         public void AddOrder_IdAlreadyUsed_DoesNotAddOrder_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order toAdd = new Order(id, 1, "Submitted");
             Order order = new Order(id, 2, "Submitted");
@@ -276,13 +276,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(0, add);
             Assert.Equal(1, service.Count());
-            Assert.DoesNotContain(toAdd, service.List);
+            Assert.DoesNotContain(toAdd, service.GetList());
         }
 
         [Fact]
         public void AddOrder_IdNotUsed_AddsOrder_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order toAdd = new Order(id, 1, "Submitted");
             Order order = new Order(182, 2, "Submitted");
@@ -295,13 +295,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, add);
             Assert.Equal(2, service.Count());
-            Assert.Contains(toAdd, service.List);
+            Assert.Contains(toAdd, service.GetList());
         }
 
         [Fact]
         public void RemoveById_OrderNotFound_DoesNotRemoveOrder_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(52, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -313,13 +313,13 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(0, remove);
             Assert.Equal(1, service.Count());
-            Assert.Contains(order, service.List);
+            Assert.Contains(order, service.GetList());
         }
 
         [Fact]
         public void RemoveById_OrderFound_RemovesOrder_Returns1()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order order = new Order(id, 1, "Submitted");
             List<Order> list = new List<Order> { order };
@@ -330,15 +330,15 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, remove);
-            Assert.Empty(service.List);
+            Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
-            Assert.DoesNotContain(order, service.List);
+            Assert.DoesNotContain(order, service.GetList());
         }
 
         [Fact]
         public void EditById_OrderNotFound_DoesNotEditOrder_Returns0()
         {
-            // Assert
+            // Arrange
             int id = 1674;
             Order edited = new Order(id, 0, "Submitted");
             Order order = new Order(189, 0, "Submitted");
@@ -350,7 +350,7 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.List);
+            Assert.DoesNotContain(edited, service.GetList());
             Assert.NotEqual(service.FindById(189), edited);
         }
 
@@ -369,8 +369,22 @@ namespace testing_pharmacy_project.Tests
 
             // Assert
             Assert.Equal(1, edit);
-            Assert.Contains(edited, service.List);
+            Assert.Contains(edited, service.GetList());
             Assert.Equal(service.FindById(id), edited);
+        }
+
+        [Fact]
+        public void GetList_ReturnsSameList()
+        {
+            // Arrange
+            List<Order> list = new List<Order> { new Order(1,1,"status") };
+            OrderService service = new OrderService(list);
+
+            // Act
+            List<Order> returned = service.GetList();
+
+            // Assert
+            Assert.Equal(list, returned);
         }
     }
 }

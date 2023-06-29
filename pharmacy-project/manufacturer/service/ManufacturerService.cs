@@ -23,17 +23,6 @@ namespace pharmacy_project.manufacturer.service
             this.ReadList();
         }
 
-        // Accessors
-
-        public List<Manufacturer> List
-        {
-            get { return _list; }
-            set
-            {
-                _list = value;
-            }
-        }
-
         // Methods
 
         public void ReadList()
@@ -282,6 +271,11 @@ namespace pharmacy_project.manufacturer.service
 
             _list[_list.IndexOf(found)] = manufacturer;
             return 1;
+        }
+
+        public List<Manufacturer> GetList()
+        {
+            return _list;
         }
     }
 }
