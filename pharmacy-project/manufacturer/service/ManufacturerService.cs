@@ -61,7 +61,7 @@ namespace pharmacy_project.manufacturer.service
 
         public void Display()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no manufacturers.\n");
                 return;
@@ -75,7 +75,7 @@ namespace pharmacy_project.manufacturer.service
 
         public void DisplayAdmin()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no manufacturers.\n");
                 return;
@@ -240,7 +240,7 @@ namespace pharmacy_project.manufacturer.service
             // Checks if the manufacturer is a duplicate.
             List<Manufacturer> foundDupes = this.FindDuplicate(manufacturer);
 
-            if (foundDupes.Count() > 0)
+            if (foundDupes.Any())
             {
                 return -3;
             }

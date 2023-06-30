@@ -60,7 +60,7 @@ namespace pharmacy_project.medicine.service
 
         public void Display()
         {
-            if(_list.Count() == 0)
+            if(!_list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -74,7 +74,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayAdmin()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -101,7 +101,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByAscendingPrice()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -118,7 +118,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByDescendingPrice()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -135,7 +135,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByList(List<Medicine> list)
         {
-            if (list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -149,7 +149,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByListAdmin(List<Medicine> list)
         {
-            if (list.Count() == 0)
+            if (!list.Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;

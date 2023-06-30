@@ -60,7 +60,7 @@ namespace pharmacy_project.order.service
 
         public void Display()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no order.\n");
                 return;
@@ -110,7 +110,7 @@ namespace pharmacy_project.order.service
             }
 
             // Returns 0 if no orders have been found.
-            if(orders.Count() == 0)
+            if(!orders.Any())
             {
                 return 0;
             }
@@ -134,7 +134,7 @@ namespace pharmacy_project.order.service
             }
 
             // Returns 0 if no orders have been found.
-            if (orders.Count() == 0)
+            if (!orders.Any())
             {
                 return 0;
             }
