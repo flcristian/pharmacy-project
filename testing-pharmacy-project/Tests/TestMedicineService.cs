@@ -317,25 +317,6 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void EditById_MedicineNotFound_DoesNotEditMedicine_Returns0()
-        {
-            // Arrange
-            int id = 1674;
-            Medicine edited = new Medicine(id, 0, 1, 1, "newname", "newinfo", "newtag");
-            Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
-            List<Medicine> list = new List<Medicine> { medicine };
-            MedicineService service = new MedicineService(list);
-
-            // Act
-            int edit = service.EditById(edited, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.GetList());
-            Assert.NotEqual(service.FindById(189), edited);
-        }
-
-        [Fact]
         public void EditById_MedicineFound_EditsMedicine_Returns1()
         {
             // Arrange

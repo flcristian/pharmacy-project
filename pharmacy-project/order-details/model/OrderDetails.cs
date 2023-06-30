@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order_details.model
 {
-    public class OrderDetails
+    public class OrderDetails : IHasId, IToSave
     {
         private int _id;
         private int _orderId;

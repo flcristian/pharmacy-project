@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace pharmacy_project.user.model
 {
-    public class Admin:User
+    public class Admin : User
     {
         // Constructors
 

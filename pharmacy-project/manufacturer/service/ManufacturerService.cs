@@ -45,6 +45,24 @@ namespace pharmacy_project.manufacturer.service
             return 1;
         }
 
+        public override int Add(Manufacturer manufacturer)
+        {
+            // Checks if the email is already used
+            if(this.FindByEmail(manufacturer.ContactEmailAdress) != null)
+            {
+                return -1;
+            }
+
+            // Checks if the name is already used
+            if(this.FindByName(manufacturer.Name) != null)
+            {
+                return 0;
+            }
+
+            base.Add(manufacturer);
+            return 1;
+        }
+
         public Manufacturer FindByName(String name)
         {
             foreach(Manufacturer manufacturer in base.GetList())
@@ -58,7 +76,7 @@ namespace pharmacy_project.manufacturer.service
             return null;
         }
 
-        public Manufacturer FindByContactEmailAdress(String email)
+        public Manufacturer FindByEmail(String email)
         {
             foreach (Manufacturer manufacturer in base.GetList())
             {

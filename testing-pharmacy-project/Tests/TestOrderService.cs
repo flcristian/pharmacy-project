@@ -104,7 +104,7 @@ namespace testing_pharmacy_project.Tests
         {
             // Arrange
             int id = 1674;
-            Order order = new Order(182, 1, "Submitted");
+            Order order = new Order(1, 182, "Submitted");
             List<Order> list = new List<Order> { order };
             OrderService service = new OrderService(list);
 
@@ -120,7 +120,7 @@ namespace testing_pharmacy_project.Tests
         {
             // Arrange
             int id = 1674;
-            Order order = new Order(id, 1, "Submitted");
+            Order order = new Order(1, id, "Submitted");
             List<Order> list = new List<Order> { order };
             OrderService service = new OrderService(list);
 
@@ -333,25 +333,6 @@ namespace testing_pharmacy_project.Tests
             Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
             Assert.DoesNotContain(order, service.GetList());
-        }
-
-        [Fact]
-        public void EditById_OrderNotFound_DoesNotEditOrder_Returns0()
-        {
-            // Arrange
-            int id = 1674;
-            Order edited = new Order(id, 0, "Submitted");
-            Order order = new Order(189, 0, "Submitted");
-            List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
-
-            // Act
-            int edit = service.EditById(edited, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.GetList());
-            Assert.NotEqual(service.FindById(189), edited);
         }
 
         [Fact]

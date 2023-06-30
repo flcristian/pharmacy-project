@@ -94,5 +94,23 @@ namespace pharmacy_project.user.service
             base.RemoveById(user.Id);
             return 1;
         }
+
+        public override int Add(User user)
+        {
+            // Checks if id is already used.
+            if(base.FindById(user.Id) != null)
+            {
+                return -1;
+            }
+
+            // Checks if email is already used.
+            if(this.FindByEmail(user.Email) != null)
+            {
+                return 0;
+            }
+
+            base.Add(user);
+            return 1;
+        }
     }
 }

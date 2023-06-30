@@ -4,10 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.user.model
 {
-    public class User
+    public class User : IToSave, IHasId
     {
         private int _id;
         private string _name;

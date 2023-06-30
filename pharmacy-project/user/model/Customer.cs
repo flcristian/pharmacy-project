@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pharmacy_project.user.model
 {
-    public  class Customer:User
+    public  class Customer : User
     {
         private bool _locked;
 

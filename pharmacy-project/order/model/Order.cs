@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order.model
 {
-    public class Order
+    public class Order : IToSave, IHasId
     {
         private int _id;
         private int _customerId;

@@ -205,76 +205,6 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void FindDuplicate_ValidMatches_ReturnsList()
-        {
-            // Arrange
-            Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
-            Manufacturer m2 = new Manufacturer(2, "manufacturer", "email@email.com");
-            Manufacturer m3 = new Manufacturer(3, "manufacturer", "email@email.com");
-            Manufacturer m4 = new Manufacturer(4, "test", "test");
-            List<Manufacturer> list = new List<Manufacturer> { m1, m2, m3, m4 };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            List<Manufacturer> found = service.FindDuplicate(m1);
-
-            // Assert
-            Assert.NotEmpty(found);
-            foreach(Manufacturer m in found)
-            {
-                Assert.NotEqual(m1.Id, m.Id);
-                Assert.Equal(m1.Name, m.Name);
-                Assert.Equal(m1.ContactEmailAdress, m.ContactEmailAdress);
-                Assert.NotEqual(m4.Name, m.Name);
-                Assert.NotEqual(m4.ContactEmailAdress, m.ContactEmailAdress);
-            }
-        }
-
-        [Fact]
-        public void FindDuplicate_NoMatch_ReturnsEmptyList()
-        {
-            // Arrange
-            Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
-            List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            List<Manufacturer> found = service.FindDuplicate(m1);
-
-            // Assert
-            Assert.Empty(found);
-        }
-
-        [Fact]
-        public void FindDuplicate_MultipleManufacturers_ReturnsCorrectList()
-        {
-            // Arrange
-            Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
-            Manufacturer m2 = new Manufacturer(2, "manufacturer", "email@email.com");
-            Manufacturer m3 = new Manufacturer(3, "manufacturer", "email@email.com");
-            Manufacturer m4 = new Manufacturer(4, "test", "test");
-            Manufacturer m5 = new Manufacturer(5, "another", "another");
-            List<Manufacturer> list = new List<Manufacturer> { m1, m2, m3, m4, m5 };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            List<Manufacturer> found = service.FindDuplicate(m1);
-
-            // Assert
-            Assert.NotEmpty(found);
-            foreach (Manufacturer m in found)
-            {
-                Assert.NotEqual(m1.Id, m.Id);
-                Assert.Equal(m1.Name, m.Name);
-                Assert.Equal(m1.ContactEmailAdress, m.ContactEmailAdress);
-                Assert.NotEqual(m4.Name, m.Name);
-                Assert.NotEqual(m4.ContactEmailAdress, m.ContactEmailAdress);
-                Assert.NotEqual(m5.Name, m.Name);
-                Assert.NotEqual(m5.ContactEmailAdress, m.ContactEmailAdress);
-            }
-        }
-
-        [Fact]
         public void DisplayById_ManufacturerNotFound_Returns0()
         {
             // Arrange
@@ -397,40 +327,6 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void Add_FoundDupe_DoesNotAdd_ReturnsNegative3()
-        {
-            // Arrange
-            Manufacturer toAdd = new Manufacturer(1, "name", "email");
-            Manufacturer dupe = new Manufacturer(2, "name", "email");
-            List<Manufacturer> list = new List<Manufacturer> { dupe };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int add = service.Add(toAdd);
-
-            // Assert
-            Assert.Equal(-3, add);
-            Assert.DoesNotContain(toAdd, service.GetList());
-        }
-
-        [Fact]
-        public void Add_FoundName_DoesNotAdd_ReturnsNegative2()
-        {
-            // Arrange
-            Manufacturer toAdd = new Manufacturer(1, "name", "email");
-            Manufacturer hasSameName = new Manufacturer(2, "name", "anotheremail");
-            List<Manufacturer> list = new List<Manufacturer> { hasSameName };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int add = service.Add(toAdd);
-
-            // Assert
-            Assert.Equal(-2, add);
-            Assert.DoesNotContain(toAdd, service.GetList());
-        }
-
-        [Fact]
         public void Add_FoundEmail_DoesNotAdd_ReturnsNegative1()
         {
             // Arrange
@@ -448,12 +344,12 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void Add_FoundId_DoesNotAdd_Returns0()
+        public void Add_FoundName_DoesNotAdd_ReturnsNegative2()
         {
             // Arrange
             Manufacturer toAdd = new Manufacturer(1, "name", "email");
-            Manufacturer dupe = new Manufacturer(1, "nafasme", "emaasfil");
-            List<Manufacturer> list = new List<Manufacturer> { dupe };
+            Manufacturer hasSameName = new Manufacturer(2, "name", "anotheremail");
+            List<Manufacturer> list = new List<Manufacturer> { hasSameName };
             ManufacturerService service = new ManufacturerService(list);
 
             // Act
@@ -478,82 +374,6 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, add);
             Assert.Contains(toAdd, service.GetList());
-        }
-
-        [Fact]
-        public void EditById_FoundDupe_DoesNotModify_ReturnsNegative3()
-        {
-            // Arrange
-            int id = 100;
-            Manufacturer modified = new Manufacturer(id, "name", "email");
-            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
-            Manufacturer another = new Manufacturer(2, "name", "email");
-            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int edit = service.EditById(modified, id);
-
-            // Assert
-            Assert.Equal(-3, edit);
-            Assert.NotEqual(modified, service.FindById(id));
-        }
-
-        [Fact]
-        public void EditById_FoundName_DoesNotModify_ReturnsNegative2()
-        {
-            // Arrange
-            int id = 100;
-            Manufacturer modified = new Manufacturer(id, "name", "modified");
-            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
-            Manufacturer another = new Manufacturer(2, "name", "email");
-            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int edit = service.EditById(modified, id);
-
-            // Assert
-            Assert.Equal(-2, edit);
-            Assert.NotEqual(modified, service.FindById(id));
-        }
-
-        [Fact]
-        public void EditById_FoundEmail_DoesNotModify_ReturnsNegative1()
-        {
-            // Arrange
-            int id = 100;
-            Manufacturer modified = new Manufacturer(id, "modified", "email");
-            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
-            Manufacturer another = new Manufacturer(2, "name", "email");
-            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int edit = service.EditById(modified, id);
-
-            // Assert
-            Assert.Equal(-1, edit);
-            Assert.NotEqual(modified, service.FindById(id));
-        }
-
-        [Fact]
-        public void EditById_Unchanged_DoesNotModify_Returns0()
-        {
-            // Arrange
-            int id = 100;
-            Manufacturer modified = new Manufacturer(id, "modifythis", "modifythis");
-            Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
-            Manufacturer another = new Manufacturer(2, "name", "email");
-            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
-
-            // Act
-            int edit = service.EditById(modified, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-            Assert.NotEqual(modified, service.FindById(id));
         }
 
         [Fact]

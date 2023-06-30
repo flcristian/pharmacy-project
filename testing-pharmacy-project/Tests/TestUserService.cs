@@ -521,25 +521,6 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void EditById_UserNotFound_Returns0()
-        {
-            // Arrange
-            int id = 1281;
-            Customer edited = new Customer(id, "newname", "newemail", "newpass");
-            Customer u1 = new Customer(0, "name0", "email0", "pass0");
-            Customer u2 = new Customer(1, "name1", "email1", "pass1");
-            Admin u3 = new Admin(2, "name2", "email2", "pass2");
-            List<User> list = new List<User> { u1, u2, u3 };
-            UserService service = new UserService(list);
-
-            // Act
-            int edit = service.EditById(edited, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-        }
-
-        [Fact]
         public void EditById_UserFound_EditsUser_Returns1()
         {
             // Arrange

@@ -20,7 +20,7 @@ namespace pharmacy_project.order.service
         public int DisplayById(int id)
         {
             Order order = base.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
+            // Checks if the order exists. Returns 0 if not.
             if (order == null)
             {
                 return 0;
