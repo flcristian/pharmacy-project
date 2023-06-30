@@ -261,7 +261,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddOrder_IdAlreadyUsed_DoesNotAddOrder_Returns0()
+        public void Add_IdAlreadyUsed_DoesNotAdd_Returns0()
         {
             // Arrange
             int id = 1674;
@@ -271,7 +271,7 @@ namespace testing_pharmacy_project.Tests
             OrderService service = new OrderService(list);
 
             // Act
-            int add = service.AddOrder(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(0, add);
@@ -280,7 +280,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddOrder_IdNotUsed_AddsOrder_Returns1()
+        public void Add_IdNotUsed_AddsOrder_Returns1()
         {
             // Arrange
             int id = 1674;
@@ -290,7 +290,7 @@ namespace testing_pharmacy_project.Tests
             OrderService service = new OrderService(list);
 
             // Act
-            int add = service.AddOrder(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(1, add);

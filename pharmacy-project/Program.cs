@@ -19,7 +19,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        LoginPanel login = new LoginPanel();
+        String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\manufacturers.txt";
+        ManufacturerService service = new ManufacturerService(path);
+        service.Display();
     }
 
 }

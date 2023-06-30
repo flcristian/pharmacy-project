@@ -1,5 +1,6 @@
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
+using pharmacy_project.abstract_classes;
 
 namespace pharmacy_project.panels
 {
@@ -11,7 +12,8 @@ namespace pharmacy_project.panels
 
         public LoginPanel()
         {
-            _service = new UserService();
+            String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt";
+            _service = new UserService(path);
             this.Run();
         }
         
@@ -101,7 +103,7 @@ namespace pharmacy_project.panels
             Customer customer = new Customer(_service.NewId(), name, email, password);
             
             // Adding account to _service
-            int add = _service.AddUser(customer);
+            int add = _service.Add(customer);
             
             // Checks if user was added and returns errors
             this.DrawLine();
@@ -117,7 +119,8 @@ namespace pharmacy_project.panels
             }
             
             // User has been added, saving list
-            _service.SaveList();
+            String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt";
+            _service.SaveList(path);
             Console.WriteLine("Account has been created!\n");
             return;
         }

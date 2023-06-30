@@ -355,10 +355,10 @@ namespace testing_pharmacy_project.Tests
             ManufacturerService service = new ManufacturerService(list);
 
             // Act
-            bool removed = service.RemoveById(id);
+            int removed = service.RemoveById(id);
 
             // Assert
-            Assert.True(removed);
+            Assert.Equal(1, removed);
             Assert.DoesNotContain(manufacturer, service.GetList());
         }
 
@@ -371,10 +371,10 @@ namespace testing_pharmacy_project.Tests
             ManufacturerService service = new ManufacturerService(list);
 
             // Act
-            bool removed = service.RemoveById(id);
+            int removed = service.RemoveById(id);
 
             // Assert
-            Assert.False(removed);
+            Assert.Equal(0, removed);
         }
 
         [Fact]
@@ -388,10 +388,10 @@ namespace testing_pharmacy_project.Tests
             ManufacturerService service = new ManufacturerService(list);
 
             // Act
-            bool removed = service.RemoveById(id);
+            int removed = service.RemoveById(id);
 
             // Assert
-            Assert.True(removed);
+            Assert.Equal(1, removed);
             Assert.DoesNotContain(manufacturer, service.GetList());
             Assert.Contains(another, service.GetList());
         }

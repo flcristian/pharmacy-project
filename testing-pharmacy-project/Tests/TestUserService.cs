@@ -381,7 +381,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddUser_IdAlreadyUsed_DoesNotAddUser_ReturnsNegative1()
+        public void Add_IdAlreadyUsed_DoesNotAdd_ReturnsNegative1()
         {
             // Arrange
             int id = 18417;
@@ -395,7 +395,7 @@ namespace testing_pharmacy_project.Tests
             UserService service = new UserService(list);
 
             // Act
-            int add = service.AddUser(customer);
+            int add = service.Add(customer);
 
             // Assert
             Assert.Equal(-1, add);
@@ -403,7 +403,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddUser_EmailAlreadyUsed_DoesNotAddUser_Returns0()
+        public void Add_EmailAlreadyUsed_DoesNotAdd_Returns0()
         {
             // Arrange
             string email = "sameemail";
@@ -417,7 +417,7 @@ namespace testing_pharmacy_project.Tests
             UserService service = new UserService(list);
 
             // Act
-            int add = service.AddUser(customer);
+            int add = service.Add(customer);
 
             // Assert
             Assert.Equal(0, add);
@@ -425,7 +425,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddUser_CanAdd_AddsUser_Returns1()
+        public void Add_CanAdd_AddsUser_Returns1()
         {
             // Arrange
             Customer customer = new Customer(123, "namecustomer", "emailcustomer", "passcustomer");
@@ -433,7 +433,7 @@ namespace testing_pharmacy_project.Tests
             UserService service = new UserService(list);
 
             // Act
-            int add = service.AddUser(customer);
+            int add = service.Add(customer);
 
             // Assert
             Assert.Equal(1, add);
