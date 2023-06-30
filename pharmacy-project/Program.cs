@@ -13,13 +13,13 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Linq.Expressions;
+using pharmacy_project.panels;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        MedicineService service = new MedicineService();
-        service.DisplayByDescendingPrice();
+        LoginPanel login = new LoginPanel();
     }
 
 }

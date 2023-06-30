@@ -59,7 +59,7 @@ namespace pharmacy_project.order_details.service
 
         public void Display()
         {
-            if (_list.Count() == 0)
+            if (!_list.Any())
             {
                 Console.WriteLine("There are no details.\n");
                 return;
