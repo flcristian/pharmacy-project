@@ -6,6 +6,7 @@ using pharmacy_project.order_details.model;
 using pharmacy_project.order_details;
 using pharmacy_project.order.model;
 using pharmacy_project.order.service;
+using pharmacy_project.abstract_classes;
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
 using System.Collections.Specialized;
@@ -19,9 +20,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\manufacturers.txt";
-        ManufacturerService service = new ManufacturerService(path);
-        service.Display();
+        String path = Directory.GetCurrentDirectory() + "\\..\\..\\..\\resources\\";
+        LoginPanel login = new LoginPanel(path);
     }
 
 }

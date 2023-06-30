@@ -108,7 +108,7 @@ namespace pharmacy_project.medicine.service
             }
         }
 
-        public List<Medicine> FindByName(string name)
+        public List<Medicine> FindByName(String name)
         {
             List<Medicine> list = new List<Medicine>();
             foreach(Medicine medicine in base.GetList())

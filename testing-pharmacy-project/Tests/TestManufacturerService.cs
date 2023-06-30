@@ -44,7 +44,7 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
         }
 
         [Fact]
@@ -80,10 +80,10 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
             Assert.NotEqual(another.Id, actual.Id);
             Assert.NotEqual(another.Name, actual.Name);
-            Assert.NotEqual(another.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.NotEqual(another.Email, actual.Email);
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
         }
 
         [Fact]
@@ -139,10 +139,10 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
             Assert.NotEqual(another.Id, actual.Id);
             Assert.NotEqual(another.Name, actual.Name);
-            Assert.NotEqual(another.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.NotEqual(another.Email, actual.Email);
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
         }
 
         [Fact]
@@ -198,10 +198,10 @@ namespace testing_pharmacy_project.Tests
             Assert.Equal(expected, actual);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.Equal(expected.Email, actual.Email);
             Assert.NotEqual(another.Id, actual.Id);
             Assert.NotEqual(another.Name, actual.Name);
-            Assert.NotEqual(another.ContactEmailAdress, actual.ContactEmailAdress);
+            Assert.NotEqual(another.Email, actual.Email);
         }
 
         [Fact]

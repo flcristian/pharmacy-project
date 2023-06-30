@@ -10,10 +10,9 @@ namespace pharmacy_project.panels
 
         // Constructors
 
-        public LoginPanel()
+        public LoginPanel(String path)
         {
-            String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt";
-            _service = new UserService(path);
+            _service = new UserService(path + "users.txt");
             this.Run();
         }
         
@@ -24,24 +23,24 @@ namespace pharmacy_project.panels
             Console.WriteLine("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
         }
         
-        public string ObtainName()
+        public String ObtainName()
         {
             Console.WriteLine("Enter your name:");
-            string name = Console.ReadLine();
+            String name = Console.ReadLine();
             return name;
         }
         
-        public string ObtainEmail()
+        public String ObtainEmail()
         {
             Console.WriteLine("Enter your email:");
-            string email = Console.ReadLine();
+            String email = Console.ReadLine();
             return email;
         }
         
-        public string ObtainPassword()
+        public String ObtainPassword()
         {
             Console.WriteLine("Enter your password:");
-            string password = Console.ReadLine();
+            String password = Console.ReadLine();
             return password;
         }
         
@@ -51,7 +50,7 @@ namespace pharmacy_project.panels
             Console.WriteLine("1 - Connect as admin");
             Console.WriteLine("2 - Connect as customer");
             
-            string choice = Console.ReadLine();
+            String choice = Console.ReadLine();
             this.DrawLine();
             switch(choice)
             {
@@ -69,8 +68,8 @@ namespace pharmacy_project.panels
         public void Login()
         {
             // Obtaining credentials
-            string email = this.ObtainEmail();
-            string password = this.ObtainPassword();
+            String email = this.ObtainEmail();
+            String password = this.ObtainPassword();
             this.DrawLine();
             
             // Checking if user exists
@@ -95,9 +94,9 @@ namespace pharmacy_project.panels
         public void Register()
         {
             // Obtaining credentials
-            string name = this.ObtainName();
-            string email = this.ObtainEmail();
-            string password = this.ObtainPassword();
+            String name = this.ObtainName();
+            String email = this.ObtainEmail();
+            String password = this.ObtainPassword();
             
             // Creating customer account
             Customer customer = new Customer(_service.NewId(), name, email, password);
@@ -138,7 +137,7 @@ namespace pharmacy_project.panels
             while(running)
             {
                 this.RunMessage();
-                string choice = Console.ReadLine();
+                String choice = Console.ReadLine();
                 
                 this.DrawLine();
                 switch(choice)

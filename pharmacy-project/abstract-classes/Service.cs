@@ -1,5 +1,4 @@
-﻿using pharmacy_project.manufacturer.model;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +26,10 @@ namespace pharmacy_project.abstract_classes
             _list = list;
         }
 
-        private T ClassConstructor<T>(string text)
+        private T ClassConstructor(String text)
         {
             Type type = typeof(T);
-            ConstructorInfo constructor = type.GetConstructor(new[] { typeof(string) });
+            ConstructorInfo constructor = type.GetConstructor(new[] { typeof(String) });
             return (T)constructor.Invoke(new object[] { text });
         }
 
@@ -44,7 +43,7 @@ namespace pharmacy_project.abstract_classes
             while (!sr.EndOfStream)
             {
                 String text = sr.ReadLine();
-                T t = ClassConstructor<T>(text);
+                T t = ClassConstructor(text);
                 _list.Add(t);
             }
 
@@ -54,9 +53,12 @@ namespace pharmacy_project.abstract_classes
         public void SaveList(String path)
         {
             String toSave = "";
+            Console.WriteLine("here");
+            Console.WriteLine(_list.Count());
             foreach (T t in _list)
             {
                 toSave += $"{t.ToSave()}\n";
+                Console.WriteLine("herewtf");
             }
 
             StreamWriter sw = new StreamWriter(path);
@@ -101,7 +103,7 @@ namespace pharmacy_project.abstract_classes
             Random rnd = new Random();
             int id = rnd.Next(1, 999999);
 
-            while (this.FindById(id) != null)
+            while (this.FindById(id) != null!)
             {
                 id = rnd.Next(1, 999999);
             }
@@ -119,7 +121,7 @@ namespace pharmacy_project.abstract_classes
             T t = this.FindById(id);
 
             // Checks if manufacturer exists. Returns 0 if not.
-            if (t == null)
+            if (t == null!)
             {
                 return 0;
             }
@@ -133,7 +135,7 @@ namespace pharmacy_project.abstract_classes
             // Checks if id is already used.
             T foundById = this.FindById(t.Id);
 
-            if (foundById != null)
+            if (foundById != null!)
             {
                 return 0;
             }

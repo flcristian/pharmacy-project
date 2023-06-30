@@ -54,7 +54,7 @@ namespace pharmacy_project.order.service
             return 1;
         }
 
-        public int DisplayByStatus(string status)
+        public int DisplayByStatus(String status)
         {
             List<Order> orders = new List<Order>();
             foreach(Order order in base.GetList())
@@ -78,7 +78,7 @@ namespace pharmacy_project.order.service
             return 1;
         }
 
-        public int DisplayByStatusSortedByDate(string status)
+        public int DisplayByStatusSortedByDate(String status)
         {
             List<Order> orders = new List<Order>();
             foreach (Order order in base.GetList())
@@ -96,10 +96,10 @@ namespace pharmacy_project.order.service
             }
 
             List<int> daysPassed = new List<int>();
-            List<string> statuses = new List<string> { "Submitted", "Sent", "Received", "Completed" };
+            List<String> statuses = new List<String> { "Submitted", "Sent", "Received", "Completed" };
             foreach (Order order in orders)
             {
-                string orderDate = order.StatusDates[statuses.IndexOf(status)];
+                String orderDate = order.StatusDates[statuses.IndexOf(status)];
                 DateTime date = DateTime.ParseExact(orderDate, "d.M.yyyy", CultureInfo.InvariantCulture);
                 DateTime current = DateTime.UtcNow;
 

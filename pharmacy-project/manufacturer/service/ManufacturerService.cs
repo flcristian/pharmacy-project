@@ -36,7 +36,7 @@ namespace pharmacy_project.manufacturer.service
         {
             Manufacturer manufacturer = base.FindById(id);
             // Checks if the order exists. Returns 0 if no.
-            if (manufacturer == null)
+            if (manufacturer == null!)
             {
                 return 0;
             }
@@ -48,13 +48,13 @@ namespace pharmacy_project.manufacturer.service
         public override int Add(Manufacturer manufacturer)
         {
             // Checks if the email is already used
-            if(this.FindByEmail(manufacturer.ContactEmailAdress) != null)
+            if(this.FindByEmail(manufacturer.Email) != null!)
             {
                 return -1;
             }
 
             // Checks if the name is already used
-            if(this.FindByName(manufacturer.Name) != null)
+            if(this.FindByName(manufacturer.Name) != null!)
             {
                 return 0;
             }
@@ -80,7 +80,7 @@ namespace pharmacy_project.manufacturer.service
         {
             foreach (Manufacturer manufacturer in base.GetList())
             {
-                if (manufacturer.ContactEmailAdress.Equals(email))
+                if (manufacturer.Email.Equals(email))
                 {
                     return manufacturer;
                 }

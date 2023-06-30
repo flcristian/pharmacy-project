@@ -22,7 +22,7 @@ namespace pharmacy_project.user.service
         {
             User user = base.FindById(id);
             // Checks if the order exists. Returns 0 if no.
-            if (user == null)
+            if (user == null!)
             {
                 return 0;
             }
@@ -31,7 +31,7 @@ namespace pharmacy_project.user.service
             return 1;
         }
 
-        public User FindByEmail(string email)
+        public User FindByEmail(String email)
         {
             foreach(User user in base.GetList())
             {
@@ -44,7 +44,7 @@ namespace pharmacy_project.user.service
             return null;
         }
 
-        public User FindByEmailAndPassword(string email, string password)
+        public User FindByEmailAndPassword(String email, String password)
         {
             foreach(User user in base.GetList())
             {
@@ -57,7 +57,7 @@ namespace pharmacy_project.user.service
             return null;
         }
 
-        public List<User> FindByName(string name)
+        public List<User> FindByName(String name)
         {
             List<User> users = new List<User>();
 
@@ -81,12 +81,12 @@ namespace pharmacy_project.user.service
             return false;
         }
 
-        public int RemoveByEmail(string email)
+        public int RemoveByEmail(String email)
         {
             User user = this.FindByEmail(email);
 
             // Checks if the user exists. Returns 0 if no.
-            if (user == null)
+            if (user == null!)
             {
                 return 0;
             }
@@ -98,13 +98,13 @@ namespace pharmacy_project.user.service
         public override int Add(User user)
         {
             // Checks if id is already used.
-            if(base.FindById(user.Id) != null)
+            if(base.FindById(user.Id) != null!)
             {
                 return -1;
             }
 
             // Checks if email is already used.
-            if(this.FindByEmail(user.Email) != null)
+            if(this.FindByEmail(user.Email) != null!)
             {
                 return 0;
             }

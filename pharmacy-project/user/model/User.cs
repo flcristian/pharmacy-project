@@ -8,17 +8,17 @@ using pharmacy_project.interfaces;
 
 namespace pharmacy_project.user.model
 {
-    public class User : IToSave, IHasId
+    public class User : IToSave, IHasId, IHasName, IHasEmail, IHasPassword, IHasType
     {
         private int _id;
-        private string _name;
-        private string _email;
-        private string _password;
-        private string _type;
+        private String _name;
+        private String _email;
+        private String _password;
+        private String _type;
 
         // Constructors
 
-        public User(int id, string name, string email, string password, string type)
+        public User(int id, String name, String email, String password, String type)
         {
             _id = id;
             _name = name;
@@ -27,9 +27,9 @@ namespace pharmacy_project.user.model
             _type = type;
         }
 
-        public User(string text)
+        public User(String text)
         {
-            string[] data = text.Split('/');
+            String[] data = text.Split('/');
 
             _type = data[0];
             _id = Int32.Parse(data[1]);
@@ -49,7 +49,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Name
+        public String Name
         {
             get { return _name; }
             set
@@ -58,7 +58,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Email
+        public String Email
         {
             get { return _email; }
             set
@@ -67,7 +67,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Password
+        public String Password
         {
             get { return _password; }
             set
@@ -76,7 +76,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Type
+        public String Type
         {
             get { return _type; }
             set
@@ -87,9 +87,9 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public override string ToString()
+        public override String ToString()
         {
-            string desc = "";
+            String desc = "";
 
             desc += "Name : " + _name + "\n";
             desc += "Email : " + _email + "\n";
@@ -97,11 +97,16 @@ namespace pharmacy_project.user.model
             return desc;
         }
 
-        public virtual string ToSave()
+        public virtual String ToSave()
         {
-            string save = $"{_type}/{_id}/{_name}/{_email}/{_password}";
+            String save = $"{_type}/{_id}/{_name}/{_email}/{_password}";
 
             return save;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return _id == (obj as User)._id && _name.Equals((obj as User)._name) && _email.Equals((obj as User)._email) && _password.Equals((obj as User)._password) && _type.Equals((obj as User)._type);
         }
     }
 }
