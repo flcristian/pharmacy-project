@@ -573,5 +573,35 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(list, returned);
         }
+
+        [Fact]
+        public void IsAdmin_UserIsAdmin_ReturnsTrue()
+        {
+            // Arrange
+            Admin admin = new Admin(1, "name", "emailadmin", "passwordadmin");
+            List<User> list = new List<User>{admin};
+            UserService service = new UserService(list);
+
+            // Act
+            bool isAdmin = service.IsAdmin(service.FindByEmailAndPassword("emailadmin", "passwordadmin"));
+
+            // Assert
+            Assert.True(isAdmin);
+        }
+
+        [Fact]
+        public void IsAdmin_UserIsNotAdmin_ReturnsFalse()
+        {
+            // Arrange
+            Customer customer = new Customer(1, "name", "email", "password");
+            List<User> list = new List<User>{customer};
+            UserService service = new UserService(list);
+
+            // Act
+            bool isAdmin = service.IsAdmin(service.FindByEmailAndPassword("email", "password"));
+
+            // Assert
+            Assert.False(isAdmin);
+        }
     }
 }

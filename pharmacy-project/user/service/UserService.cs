@@ -152,6 +152,17 @@ namespace pharmacy_project.user.service
             return users;
         }
 
+        // TODO : Test IsAdmin
+
+        public bool IsAdmin(User user)
+        {
+            if(user.Type.Equals("Admin"))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public int Count()
         {
             return _list.Count();
