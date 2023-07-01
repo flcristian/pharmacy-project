@@ -1,5 +1,6 @@
-namespace pharmacy_project.interfaces;
-
-public interface IHasPassword {
-    String Password {get;set;}
+namespace pharmacy_project.interfaces
+{
+    public interface IHasPassword {
+        String Password {get;set;}
+    }
 }

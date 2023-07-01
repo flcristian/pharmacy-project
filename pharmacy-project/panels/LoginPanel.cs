@@ -4,24 +4,20 @@ using pharmacy_project.abstract_classes;
 
 namespace pharmacy_project.panels
 {
-    public class LoginPanel
+    public class LoginPanel : Panel
     {
         private UserService _service;
+        private String _path;
 
         // Constructors
 
         public LoginPanel(String path)
         {
+            _path = path;
             _service = new UserService(path + "users.txt");
-            this.Run();
         }
         
         // Methods
-        
-        public void DrawLine()
-        {
-            Console.WriteLine("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-        }
         
         public String ObtainName()
         {
@@ -51,11 +47,13 @@ namespace pharmacy_project.panels
             Console.WriteLine("2 - Connect as customer");
             
             String choice = Console.ReadLine();
-            this.DrawLine();
+            base.DrawLine();
             switch(choice)
             {
                 case "1":
                     Console.WriteLine($"Logged in as admin.\nWelcome {user.Name}!\n");
+                    AdminPanel adminPanel = new AdminPanel(_path, user);
+                    adminPanel.Run();
                     return;
                 case "2":
                     Console.WriteLine($"Logged in as customer.\nWelcome {user.Name}!\n");
@@ -70,13 +68,13 @@ namespace pharmacy_project.panels
             // Obtaining credentials
             String email = this.ObtainEmail();
             String password = this.ObtainPassword();
-            this.DrawLine();
+            base.DrawLine();
             
             // Checking if user exists
             User user = _service.FindByEmailAndPassword(email, password);
-            if(user == null)
+            if(user == null!)
             {
-                Console.WriteLine("Wrong email or password.");
+                Console.WriteLine("Wrong email or password.\n");
                 return;
             }
             
@@ -88,7 +86,7 @@ namespace pharmacy_project.panels
             }
             
             // Log in user as customer
-            
+            Console.WriteLine($"Welcome {user.Name}!\n");
         }
         
         public void Register()
@@ -104,8 +102,8 @@ namespace pharmacy_project.panels
             // Adding account to _service
             int add = _service.Add(customer);
             
-            // Checks if user was added and returns errors
-            this.DrawLine();
+            // Checks if user was added or returns errors
+            base.DrawLine();
             if(add == -1)
             {    
                 Console.WriteLine("Id has already been used! Please try again or contact administrators.\n");
@@ -124,14 +122,14 @@ namespace pharmacy_project.panels
             return;
         }
         
-        public void RunMessage()
+        public override void RunMessage()
         {
             Console.WriteLine("Choose what you want to do:");
             Console.WriteLine("1 - Log into your account");
             Console.WriteLine("2 - Register a new account");
         }
         
-        public void Run()
+        public override void Run()
         {
             bool running = true;
             while(running)
@@ -139,7 +137,7 @@ namespace pharmacy_project.panels
                 this.RunMessage();
                 String choice = Console.ReadLine();
                 
-                this.DrawLine();
+                base.DrawLine();
                 switch(choice)
                 {
                     case "1":
