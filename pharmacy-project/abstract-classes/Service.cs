@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using pharmacy_project.interfaces;
+using pharmacy_project.user.model;
 
 namespace pharmacy_project.abstract_classes
 {
@@ -29,6 +30,11 @@ namespace pharmacy_project.abstract_classes
         private T ClassConstructor(String text)
         {
             Type type = typeof(T);
+            if(type == typeof(User) && text.Split('/').Count() == 6)
+            {
+                type = typeof(Customer);
+            }
+            Console.WriteLine(text);
             ConstructorInfo constructor = type.GetConstructor(new[] { typeof(String) });
             return (T)constructor.Invoke(new object[] { text });
         }
@@ -53,12 +59,9 @@ namespace pharmacy_project.abstract_classes
         public void SaveList(String path)
         {
             String toSave = "";
-            Console.WriteLine("here");
-            Console.WriteLine(_list.Count());
             foreach (T t in _list)
             {
                 toSave += $"{t.ToSave()}\n";
-                Console.WriteLine("herewtf");
             }
 
             StreamWriter sw = new StreamWriter(path);

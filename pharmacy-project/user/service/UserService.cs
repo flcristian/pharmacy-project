@@ -47,6 +47,7 @@ namespace pharmacy_project.user.service
             // Checks if there are any admins. If not, returns 0
             if(!admins.Any())
             {
+                Console.WriteLine("There are no admins.\n");
                 return 0;
             }
 
@@ -136,6 +137,62 @@ namespace pharmacy_project.user.service
             }
 
             base.Add(user);
+            return 1;
+        }
+
+        public int BlockById(int id)
+        {
+            User user = base.FindById(id);
+
+            // Checks if the user exists. Returns -2 if not
+            if(user == null!)
+            {
+                return -2;
+            }
+
+            // Checks if the user is a customer. Returns -1 if not
+            if(!(user is Customer))
+            {
+                return -1;
+            }
+
+            Customer customer = user as Customer;
+            // Checks if the customer is not blocked. Returns 0 if it isn't
+            if(customer.Locked)
+            {
+                return 0;
+            }
+
+            customer.Locked = true;
+            base.EditById(customer, customer.Id);
+            return 1;
+        }
+
+        public int UnblockById(int id)
+        {
+            User user = base.FindById(id);
+
+            // Checks if the user exists. Returns -2 if not
+            if(user == null!)
+            {
+                return -2;
+            }
+
+            // Checks if the user is a customer. Returns -1 if not
+            if(!(user is Customer))
+            {
+                return -1;
+            }
+
+            Customer customer = user as Customer;
+            // Checks if the customer is not blocked. Returns 0 if it isn't
+            if(!customer.Locked)
+            {
+                return 0;
+            }
+
+            customer.Locked = false;
+            base.EditById(customer, customer.Id);
             return 1;
         }
     }

@@ -584,5 +584,162 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.False(isAdmin);
         }
+
+        [Fact]
+        public void DisplayAdmins_ThereAreAdmins_Returns1()
+        {
+            // Arrange
+            User admin = new Admin(1, "name", "email", "password");
+            List<User> list = new List<User>{admin};
+            UserService service = new UserService(list);
+
+            // Act
+            int display = service.DisplayAdmins();
+
+            // Assert
+            Assert.Equal(1, display);
+        }
+
+        [Fact]
+        public void DisplayAdmin_ThereAreNoAdmins_Returns0()
+        {
+            // Arrange
+            List<User> list = new List<User>();
+            UserService service = new UserService(list);
+
+            // Act
+            int display = service.DisplayAdmins();
+
+            // Assert
+            Assert.Equal(0, display);
+        }
+
+        [Fact]
+        public void BlockById_UserNotFound_DoesNotBlockCustomer_ReturnsNegative2()
+        {
+            // Arrange
+            int id = 182;
+            List<User> list = new List<User>();
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.BlockById(id);
+
+            // Arrange
+            Assert.Equal(-2, block);
+        }
+
+        [Fact]
+        public void BlockById_UserIsNotCustomer_DoesNotBlockCustomer_ReturnsNegative1()
+        {
+            // Arrange
+            int id = 182;
+            User user = new User(id, "name", "email", "password", "type");
+            List<User> list = new List<User>{user};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.BlockById(id);
+
+            // Arrange
+            Assert.Equal(-1, block);
+        }
+
+        [Fact]
+        public void BlockById_CustomerIsBlocked_DoesNotBlockCustomer_Returns0()
+        {
+            // Arrange
+            int id = 182;
+            Customer customer = new Customer(id, "name", "email", "password");
+            customer.Locked = true;
+            List<User> list = new List<User>{customer};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.BlockById(id);
+
+            // Arrange
+            Assert.Equal(0, block);
+        }
+
+        [Fact]
+        public void BlockById_CustomerIsNotBlocked_BlocksCustomer_Returns1()
+        {
+            // Arrange
+            int id = 182;
+            Customer customer = new Customer(id, "name", "email", "password");
+            List<User> list = new List<User>{customer};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.BlockById(id);
+
+            // Arrange
+            Assert.Equal(1, block);
+        }
+
+        [Fact]
+        public void UnblockById_UserNotFound_DoesNotBlockCustomer_ReturnsNegative2()
+        {
+            // Arrange
+            int id = 182;
+            List<User> list = new List<User>();
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.UnblockById(id);
+
+            // Arrange
+            Assert.Equal(-2, block);
+        }
+
+        [Fact]
+        public void UnblockById_UserIsNotCustomer_DoesNotBlockCustomer_ReturnsNegative1()
+        {
+            // Arrange
+            int id = 182;
+            User user = new User(id, "name", "email", "password", "type");
+            List<User> list = new List<User>{user};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.UnblockById(id);
+
+            // Arrange
+            Assert.Equal(-1, block);
+        }
+
+        [Fact]
+        public void UnblockById_CustomerIsNotBlocked_DoesNotBlockCustomer_Returns0()
+        {
+            // Arrange
+            int id = 182;
+            Customer customer = new Customer(id, "name", "email", "password");
+            List<User> list = new List<User>{customer};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.UnblockById(id);
+
+            // Arrange
+            Assert.Equal(0, block);
+        }
+
+        [Fact]
+        public void UnblockById_CustomerIsBlocked_BlocksCustomer_Returns1()
+        {
+            // Arrange
+            int id = 182;
+            Customer customer = new Customer(id, "name", "email", "password");
+            customer.Locked = true;
+            List<User> list = new List<User>{customer};
+            UserService service = new UserService(list);
+
+            // Act
+            int block = service.UnblockById(id);
+
+            // Arrange
+            Assert.Equal(1, block);
+        }
     }
 }
