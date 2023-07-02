@@ -6,16 +6,10 @@ namespace pharmacy_project.panels
 {
     public class LoginPanel : Panel
     {
-        private UserService _service;
-        private String _path;
 
         // Constructors
 
-        public LoginPanel(String path)
-        {
-            _path = path;
-            _service = new UserService(path + "users.txt");
-        }
+        public LoginPanel(String path) : base(path) { }
         
         // Methods
         
@@ -47,12 +41,12 @@ namespace pharmacy_project.panels
             Console.WriteLine("2 - Connect as customer");
             
             String choice = Console.ReadLine();
-            base.DrawLine();
+            DrawLine();
             switch(choice)
             {
                 case "1":
                     Console.WriteLine($"Logged in as admin.\nWelcome {user.Name}!\n");
-                    AdminPanel adminPanel = new AdminPanel(_path, user);
+                    AdminPanel adminPanel = new AdminPanel(GetPath(), user);
                     adminPanel.Run();
                     return;
                 case "2":
@@ -66,12 +60,12 @@ namespace pharmacy_project.panels
         public void Login()
         {
             // Obtaining credentials
-            String email = this.ObtainEmail();
-            String password = this.ObtainPassword();
-            base.DrawLine();
+            String email = ObtainEmail();
+            String password = ObtainPassword();
+            DrawLine();
             
             // Checking if user exists
-            User user = _service.FindByEmailAndPassword(email, password);
+            User user = GetUserService().FindByEmailAndPassword(email, password);
             if(user == null!)
             {
                 Console.WriteLine("Wrong email or password.\n");
@@ -79,9 +73,9 @@ namespace pharmacy_project.panels
             }
             
             // Checking if user is admin
-            if(_service.IsAdmin(user))
+            if(GetUserService().IsAdmin(user))
             {
-                this.AdminChoice(user);
+                AdminChoice(user);
                 return;
             }
             
@@ -92,18 +86,18 @@ namespace pharmacy_project.panels
         public void Register()
         {
             // Obtaining credentials
-            String name = this.ObtainName();
-            String email = this.ObtainEmail();
-            String password = this.ObtainPassword();
+            String name = ObtainName();
+            String email = ObtainEmail();
+            String password = ObtainPassword();
             
             // Creating customer account
-            Customer customer = new Customer(_service.NewId(), name, email, password);
+            Customer customer = new Customer(GetUserService().NewId(), name, email, password);
             
             // Adding account to _service
-            int add = _service.Add(customer);
+            int add = GetUserService().Add(customer);
             
             // Checks if user was added or returns errors
-            base.DrawLine();
+            DrawLine();
             if(add == -1)
             {    
                 Console.WriteLine("Id has already been used! Please try again or contact administrators.\n");
@@ -116,8 +110,7 @@ namespace pharmacy_project.panels
             }
             
             // User has been added, saving list
-            String path = "D:\\mycode\\csharp\\projects\\pharmacy-project\\pharmacy-project\\resources\\users.txt";
-            _service.SaveList(path);
+            GetUserService().SaveList(GetPath());
             Console.WriteLine("Account has been created!\n");
             return;
         }
@@ -134,17 +127,17 @@ namespace pharmacy_project.panels
             bool running = true;
             while(running)
             {
-                this.RunMessage();
+                RunMessage();
                 String choice = Console.ReadLine();
                 
-                base.DrawLine();
+                DrawLine();
                 switch(choice)
                 {
                     case "1":
-                        this.Login();
+                        Login();
                         break;
                     case "2":
-                        this.Register();
+                        Register();
                         break;
                     default:
                         running = false;

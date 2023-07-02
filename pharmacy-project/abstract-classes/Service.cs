@@ -34,7 +34,6 @@ namespace pharmacy_project.abstract_classes
             {
                 type = typeof(Customer);
             }
-            Console.WriteLine(text);
             ConstructorInfo constructor = type.GetConstructor(new[] { typeof(String) });
             return (T)constructor.Invoke(new object[] { text });
         }

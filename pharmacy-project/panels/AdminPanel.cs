@@ -15,21 +15,15 @@ public class AdminPanel : Panel
     private MedicineService _medicineService;
     private OrderService _orderService;
     private OrderDetailsService _orderDetailsService;
-    private UserService _userService;
-    private User _user;
-    private String _path;
 
     // Constructors
 
-    public AdminPanel(String path, User admin)
+    public AdminPanel(String path, User admin) : base(path, admin)
     {
         _manufacturerService = new ManufacturerService(path + "manufacturers.txt");
         _medicineService = new MedicineService(path + "medicine.txt");
         _orderService = new OrderService(path + "orders.txt");
         _orderDetailsService = new OrderDetailsService(path + "order_details.txt");
-        _userService = new UserService(path + "users.txt");
-        _user = admin;
-        _path = path;
     }
 
     // Panel Methods
@@ -54,51 +48,50 @@ public class AdminPanel : Panel
         bool running = true;
         while(running)
         {
-            this.RunUsersMessage();
+            RunUsersMessage();
             String choice = Console.ReadLine();
 
+            DrawLine();
             switch(choice)
             {
                 case "1":
-                    this.SeeCustomerList();
+                    SeeCustomerList();
                     break;
                 case "2":
-                    this.SeeAdminList();
+                    SeeAdminList();
                     break;
                 case "3":
-                    this.EditCustomer();
+                    EditCustomer();
                     break;
                 case "4":
-                    this.RemoveCustomer();
+                    RemoveCustomer();
                     break;
                 case "5":
-                     this.BlockCustomer();
+                     BlockCustomer();
                     break;
                 case "6":
-                    this.UnblockCustomer();
+                    UnblockCustomer();
                     break;
                 case "7":
-                    this.MakeCustomerAdmin();
+                    MakeCustomerAdmin();
                     break;
                 case "8":
-                    this.RemoveAdmin();
+                    RemoveAdmin();
                     break;
                 case "9":
-                    this.SaveUserList();
+                    SaveUserList();
                     break;
                 case "10":
-                    this.ClearUserList();
+                    ClearUserList();
                     break;
                 default:
-                    running = false;
-                    break;
+                    return;
             }
         }
     }
 
     public override void RunMessage()
     {
-        base.DrawLine();
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - Edit manufacturers");
         Console.WriteLine("2 - Edit medicine");
@@ -110,18 +103,21 @@ public class AdminPanel : Panel
 
     public override void Run()
     {
-        if(!_userService.IsAdmin(_user))
+        // Checks if the user is an admin.
+        if(!GetUserService().IsAdmin(GetUser()))
         {
+            DrawLine();
+            Console.WriteLine("YOU DO NOT HAVE PERMISSION!\n");
             return;
         }
 
         bool running = true;
         while(running)
         {
-            this.RunMessage();
+            RunMessage();
             String choice = Console.ReadLine();
 
-            base.DrawLine();
+            DrawLine();
             switch (choice)
             {
                 case "1":
@@ -133,13 +129,13 @@ public class AdminPanel : Panel
                 case "4":
                     break;
                 case "5":
-                    this.RunUsers();
+                    RunUsers();
                     break;
                 case "6":
+                    RunAccount();
                     break;
                 default:
-                    running = false;
-                    break;
+                    return;
             }
         }
     }
@@ -148,32 +144,29 @@ public class AdminPanel : Panel
 
     private void SeeCustomerList()
     {
-        base.DrawLine();
-        _userService.Display();
-        base.WaitForKey();
+        GetUserService().Display();
+        WaitForKey();
     }
 
     private void SeeAdminList()
     {
-        base.DrawLine();
-        _userService.DisplayAdmins();
-        base.WaitForKey();
+        GetUserService().DisplayAdmins();
+        WaitForKey();
     }
 
     private void EditCustomer()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the customer you want to edit:");
         String email = Console.ReadLine();
 
-        User customer = _userService.FindByEmail(email);
+        User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || _userService.IsAdmin(customer))
+        if(customer == null! || GetUserService().IsAdmin(customer))
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been edited."))
             {
-                this.EditCustomer();
+                EditCustomer();
             }
             return;
         }
@@ -192,13 +185,23 @@ public class AdminPanel : Panel
             case "1":
                 Console.WriteLine("\nEnter the new name of the customer:");
                 editedName = Console.ReadLine();
+
+                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("You must imput a name!", "Do you want to try again?", "Account was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new name of the customer:");
+                    editedName = Console.ReadLine();
+                }
                 break;
             case "2":
                 Console.WriteLine("\nEnter the new email of the customer:");
                 editedEmail = Console.ReadLine();
-                while(_userService.FindByEmail(editedEmail) != null!)
+                while(GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("Email is already used.", "Do you want to try again?", "Customer has not been edited."))
+                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Customer was not edited."))
                     {
                         return;
                     }
@@ -209,9 +212,19 @@ public class AdminPanel : Panel
             case "3":
                 Console.WriteLine("\nEnter the new name of the customer:");
                 editedName = Console.ReadLine();
+                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("You must imput a name!", "Do you want to try again?", "Account was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new name of the customer:");
+                    editedName = Console.ReadLine();
+                }
+
                 Console.WriteLine("\nEnter the new email of the customer:");
                 editedEmail = Console.ReadLine();
-                while(_userService.FindByEmail(editedEmail) != null!)
+                while(GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
                     if(!YesNoChoice("Email is already used.", "Do you want to try again?", "Customer has not been edited."))
                     {
@@ -222,9 +235,9 @@ public class AdminPanel : Panel
                 }
                 break;
             default:
-                base.DrawLine();
+                DrawLine();
                 Console.WriteLine("Customer has not been edited.\n");
-                break;
+                return;
         }
 
         User editedCustomer = new Customer(customer.Id, editedName, editedEmail, customer.Password);
@@ -233,26 +246,25 @@ public class AdminPanel : Panel
         bool edit = YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited.");
         if(edit)
         {
-            _userService.EditById(editedCustomer, editedCustomer.Id);
-            base.DrawLine();
+            GetUserService().EditById(editedCustomer, editedCustomer.Id);
+            DrawLine();
             Console.WriteLine("Customer has been edited.\n");
         }
     }
 
     private void RemoveCustomer()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the customer you want to remove:");
         String email = Console.ReadLine();
 
-        User customer = _userService.FindByEmail(email);
+        User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || _userService.IsAdmin(customer))
+        if(customer == null! || GetUserService().IsAdmin(customer))
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been removed."))
             {
-                this.RemoveCustomer();
+                RemoveCustomer();
             }
             return;
         }
@@ -261,26 +273,25 @@ public class AdminPanel : Panel
         bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed.");
         if(remove)
         {
-            _userService.RemoveById(customer.Id);
-            base.DrawLine();
+            GetUserService().RemoveById(customer.Id);
+            DrawLine();
             Console.WriteLine("Customer was removed.\n");
         }
     }
 
     private void BlockCustomer()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the customer you want to block:");
         String email = Console.ReadLine();
 
-        User customer = _userService.FindByEmail(email);
+        User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || _userService.IsAdmin(customer))
+        if(customer == null! || GetUserService().IsAdmin(customer))
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been blocked."))
             {
-                this.BlockCustomer();
+                BlockCustomer();
             }
             return;
         }
@@ -290,26 +301,25 @@ public class AdminPanel : Panel
         bool block = YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked");
         if(block)
         {
-            _userService.BlockById(customer.Id);
-            base.DrawLine();
+            GetUserService().BlockById(customer.Id);
+            DrawLine();
             Console.WriteLine("Customer has been blocked.\n");
         }
     }
 
     private void UnblockCustomer()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the customer you want to unblock:");
         String email = Console.ReadLine();
 
-        User customer = _userService.FindByEmail(email);
+        User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || _userService.IsAdmin(customer))
+        if(customer == null! || GetUserService().IsAdmin(customer))
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been unblocked."))
             {
-                this.UnblockCustomer();
+                UnblockCustomer();
             }
             return;
         }
@@ -319,26 +329,25 @@ public class AdminPanel : Panel
         bool block = YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked");
         if(block)
         {
-            _userService.UnblockById(customer.Id);
-            base.DrawLine();
+            GetUserService().UnblockById(customer.Id);
+            DrawLine();
             Console.WriteLine("Customer has been unblocked.\n");
         }
     }
 
     private void MakeCustomerAdmin()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the customer you want to make admin:");
         String email = Console.ReadLine();
 
-        User customer = _userService.FindByEmail(email);
+        User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || _userService.IsAdmin(customer))
+        if(customer == null! || GetUserService().IsAdmin(customer))
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer was assigned as admin."))
             {
-                this.UnblockCustomer();
+                UnblockCustomer();
             }
             return;
         }
@@ -349,27 +358,26 @@ public class AdminPanel : Panel
         if(block)
         {
             Admin admin = new Admin(customer.Id, customer.Name, customer.Email, customer.Password);
-            _userService.RemoveById(customer.Id);
-            _userService.Add(admin);
-            base.DrawLine();
+            GetUserService().RemoveById(customer.Id);
+            GetUserService().Add(admin);
+            DrawLine();
             Console.WriteLine("Customer has been assigned as admin.\n");
         }
     }
 
     private void RemoveAdmin()
     {
-        base.DrawLine();
         Console.WriteLine("Enter the email of the admin you want to remove:");
         String email = Console.ReadLine();
 
-        User admin = _userService.FindByEmail(email);
+        User admin = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(admin == null! || !_userService.IsAdmin(admin))
+        if(admin == null! || !GetUserService().IsAdmin(admin))
         {
             if(YesNoChoice("No admin has been found with that email.", "Do you want to try again?", "No admin was removed."))
             {
-                this.UnblockCustomer();
+                UnblockCustomer();
             }
             return;
         }
@@ -380,9 +388,9 @@ public class AdminPanel : Panel
         if(block)
         {
             Customer customer = new Customer(admin.Id, admin.Name, admin.Email, admin.Password);
-            _userService.RemoveById(admin.Id);
-            _userService.Add(customer);
-            base.DrawLine();
+            GetUserService().RemoveById(admin.Id);
+            GetUserService().Add(customer);
+            DrawLine();
             Console.WriteLine("Admin was removed.\n");
         }
     }
@@ -390,12 +398,12 @@ public class AdminPanel : Panel
     private void SaveUserList()
     {
         // Confirms action
-        _userService.Display();
+        GetUserService().Display();
         bool save = YesNoChoice("New user list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved.");
         if(save)
         {
-            _userService.SaveList(_path + "users.txt");
-            base.DrawLine();
+            GetUserService().SaveList(GetPath() + "users.txt");
+            DrawLine();
             Console.WriteLine("User list has been saved!\n");
         }
     }
@@ -406,9 +414,9 @@ public class AdminPanel : Panel
         bool clear = YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared");
         if(clear)
         {
-            _userService.ClearList();
-            _userService.Add(_user);
-            base.DrawLine();
+            GetUserService().ClearList();
+            GetUserService().Add(GetUser());
+            DrawLine();
             Console.WriteLine("User list has been cleared!\n");
         }
     }
