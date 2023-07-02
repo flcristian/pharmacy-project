@@ -31,6 +31,32 @@ namespace pharmacy_project.user.service
             return 1;
         }
 
+        // TODO: Test display admins
+
+        public int DisplayAdmins()
+        {
+            List<User> admins = new List<User>();
+            foreach(User user in base.GetList())
+            {
+                if(this.IsAdmin(user))
+                {
+                    admins.Add(user);
+                }
+            }
+
+            // Checks if there are any admins. If not, returns 0
+            if(!admins.Any())
+            {
+                return 0;
+            }
+
+            foreach(User admin in admins)
+            {
+                Console.WriteLine(admin);
+            }
+            return 1;
+        }
+
         public User FindByEmail(String email)
         {
             foreach(User user in base.GetList())

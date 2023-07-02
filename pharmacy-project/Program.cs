@@ -21,8 +21,11 @@ internal class Program
     private static void Main(string[] args)
     {
         String path = Directory.GetCurrentDirectory() + "\\..\\..\\..\\resources\\";
-        LoginPanel login = new LoginPanel(path);
-        login.Run();
+        /*LoginPanel login = new LoginPanel(path);
+        login.Run();*/
+        Admin admin = new Admin(0,"name","email","password");
+        AdminPanel panel = new AdminPanel(path, admin);
+        panel.Run();
     }
 
 }

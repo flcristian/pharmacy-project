@@ -6,6 +6,12 @@ namespace pharmacy_project.abstract_classes
     {
         // Methods
         
+        public void WaitForKey()
+        {
+            Console.WriteLine("Enter anything to continue:");
+            Console.ReadLine();
+        }
+
         public void DrawLine()
         {
             Console.WriteLine("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
@@ -14,6 +20,6 @@ namespace pharmacy_project.abstract_classes
         public abstract void RunMessage();
         
         public abstract void Run();
-    }
+    }   
 }
 

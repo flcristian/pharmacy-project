@@ -30,16 +30,52 @@ public class AdminPanel : Panel
         _user = admin;
     }
 
-    // Methods
+    // Panel Methods
 
     public void RunUsersMessage()
     {
-
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See customer list");
+        Console.WriteLine("2 - See admin list");
+        Console.WriteLine("3 - Edit customer");
+        Console.WriteLine("4 - Remove customer");
+        Console.WriteLine("5 - Block customer");
+        Console.WriteLine("6 - Unblock customer");
+        Console.WriteLine("7 - Add customer as admin");
     }
 
     public void RunUsers()
     {
+        bool running = true;
+        while(running)
+        {
+            this.RunUsersMessage();
+            String choice = Console.ReadLine();
 
+            switch(choice)
+            {
+                case "1":
+                    this.SeeCustomerList();
+                    break;
+                case "2":
+                    this.SeeAdminList();
+                    break;
+                case "3":
+                    this.EditCustomer();
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                case "6":
+                    break;
+                case "7":
+                    break;
+                default:
+                    running = false;
+                    break;
+            }
+        }
     }
 
     public override void RunMessage()
@@ -66,6 +102,7 @@ public class AdminPanel : Panel
             this.RunMessage();
             String choice = Console.ReadLine();
 
+            base.DrawLine();
             switch (choice)
             {
                 case "1":
@@ -84,5 +121,69 @@ public class AdminPanel : Panel
                     break;
             }
         }
+    }
+
+    // User Service Methods
+
+    public void SeeCustomerList()
+    {
+        base.DrawLine();
+        _userService.Display();
+        base.WaitForKey();
+    }
+
+    public void SeeAdminList()
+    {
+        base.DrawLine();
+        _userService.DisplayAdmins();
+        base.WaitForKey();
+    }
+
+    public void EditCustomer()
+    {
+        base.DrawLine();
+        Console.WriteLine("Enter the email of the customer you want to edit:");
+        String email = Console.ReadLine();
+
+        User user = _userService.FindByEmail(email);
+
+        // Checks if the user exists.
+        if(user == null!)
+        {
+            Console.WriteLine("No user has been found with that email.");
+            Console.WriteLine("Do you want to try again? (Y/N)");
+            String wrongEmailChoice = Console.ReadLine().ToLower();
+            if(wrongEmailChoice.Equals("y") || wrongEmailChoice.Equals("yes"))
+            {
+                this.EditCustomer();
+                }else
+            {
+                base.DrawLine();
+                Console.WriteLine("No user has been edited.\n");
+            }
+            return;
+        }
+
+        User edited = new Customer(user.Id, user.Name, user.Email, user.Password);
+
+        // Choose what to edit
+        Console.WriteLine("\nChoose what you want to edit:");
+        Console.WriteLine("1 - Edit name of customer");
+        Console.WriteLine("2 - Edit email of customer");
+        Console.WriteLine("Anything else to cancel.");
+        String choice = Console.ReadLine();
+
+        switch(choice)
+        {
+            case "1":
+                break;
+            case "2":
+                break;
+            default:
+                base.DrawLine();
+                Console.WriteLine("User has not been edited.\n");
+                break;
+        }
+
     }
 }
