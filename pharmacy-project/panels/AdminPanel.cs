@@ -1,4 +1,5 @@
 using pharmacy_project.abstract_classes;
+using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
 using pharmacy_project.medicine.service;
 using pharmacy_project.order_details.service;
@@ -28,6 +29,51 @@ public class AdminPanel : Panel
 
     // Panel Methods
 
+    private void RunManufacturersMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See manufacturer list");
+        Console.WriteLine("2 - Add manufacturer");
+        Console.WriteLine("3 - Edit manufacturer");
+        Console.WriteLine("4 - Remove manufacturer");
+        Console.WriteLine("5 - Save manufacturer list");
+        Console.WriteLine("6 - Clear manufacturer list");
+    }
+
+    private void RunManufacturers()
+    {
+        while(true)
+        {
+            RunManufacturersMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeManufacturerList();
+                    break;
+                case "2":
+                    AddManufacturer();
+                    break;
+                case "3":
+                    EditManufacturer();
+                    break;
+                case "4":
+                    RemoveManufacturer();
+                    break;
+                case "5":
+                    SaveManufacturerList();
+                    break;
+                case "6":
+                    ClearManufacturerList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
     private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
@@ -45,8 +91,7 @@ public class AdminPanel : Panel
 
     private void RunUsers()
     {
-        bool running = true;
-        while(running)
+        while(true)
         {
             RunUsersMessage();
             String choice = Console.ReadLine();
@@ -67,7 +112,7 @@ public class AdminPanel : Panel
                     RemoveCustomer();
                     break;
                 case "5":
-                     BlockCustomer();
+                    BlockCustomer();
                     break;
                 case "6":
                     UnblockCustomer();
@@ -111,8 +156,7 @@ public class AdminPanel : Panel
             return;
         }
 
-        bool running = true;
-        while(running)
+        while(true)
         {
             RunMessage();
             String choice = Console.ReadLine();
@@ -121,6 +165,7 @@ public class AdminPanel : Panel
             switch (choice)
             {
                 case "1":
+                    RunManufacturers();
                     break;
                 case "2":
                     break;
@@ -140,7 +185,7 @@ public class AdminPanel : Panel
         }
     }
 
-    // User Service Methods
+    // User service methods
 
     private void SeeCustomerList()
     {
@@ -188,7 +233,7 @@ public class AdminPanel : Panel
 
                 if(editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must imput a name!", "Do you want to try again?", "Account was not edited."))
+                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
                     {
                         return;
                     }
@@ -214,7 +259,7 @@ public class AdminPanel : Panel
                 editedName = Console.ReadLine();
                 if(editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must imput a name!", "Do you want to try again?", "Account was not edited."))
+                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
                     {
                         return;
                     }
@@ -347,7 +392,7 @@ public class AdminPanel : Panel
         {
             if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer was assigned as admin."))
             {
-                UnblockCustomer();
+                MakeCustomerAdmin();
             }
             return;
         }
@@ -377,7 +422,7 @@ public class AdminPanel : Panel
         {
             if(YesNoChoice("No admin has been found with that email.", "Do you want to try again?", "No admin was removed."))
             {
-                UnblockCustomer();
+                RemoveAdmin();
             }
             return;
         }
@@ -418,6 +463,185 @@ public class AdminPanel : Panel
             GetUserService().Add(GetUser());
             DrawLine();
             Console.WriteLine("User list has been cleared!\n");
+        }
+    }
+
+    // Manufacturer service methods
+
+    private void SeeManufacturerList()
+    {
+        _manufacturerService.DisplayAdmin();
+        WaitForKey();
+    }
+
+    private void AddManufacturer()
+    {
+        // Creating manufacturer
+        Console.WriteLine("Enter the name of the manufacturer you want to add:");
+        String name = Console.ReadLine();
+        Console.WriteLine("Enter the email of the manufacturer you want to add:");
+        String email = Console.ReadLine();
+
+        Manufacturer manufacturer = new Manufacturer(_manufacturerService.NewId(), name, email);
+
+        // Confirms action
+        Console.WriteLine("\n" + manufacturer);
+        bool save = YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added.");
+        if(save)
+        {
+            _manufacturerService.Add(manufacturer);
+            DrawLine();
+            Console.WriteLine("Manufacturer was added!\n");
+        }
+    }
+
+    private void EditManufacturer()
+    {
+        Console.WriteLine("Enter the email of the manufacturer you want to edit:");
+        String email = Console.ReadLine();
+
+        Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
+
+        // Checks if the manufacturer exists.
+        if(manufacturer == null!)
+        {
+            if(YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
+            {
+                EditManufacturer();
+            }
+            return;
+        }
+
+        // Choose what to edit
+        Console.WriteLine("\nChoose what you want to edit:");
+        Console.WriteLine("1 - Edit name of manufacturer");
+        Console.WriteLine("2 - Edit email of manufacturer");
+        Console.WriteLine("3 - Name and email of manufacturer");
+        Console.WriteLine("Anything else to cancel.");
+        String choice = Console.ReadLine();
+
+        String editedName = manufacturer.Name, editedEmail = manufacturer.Email;
+        switch(choice)
+        {
+            case "1":
+                Console.WriteLine("\nEnter the new name of the manufacturer:");
+                editedName = Console.ReadLine();
+
+                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new name of the manufacturer:");
+                    editedName = Console.ReadLine();
+                }
+                break;
+            case "2":
+                Console.WriteLine("\nEnter the new email of the manufacturer:");
+                editedEmail = Console.ReadLine();
+                while(_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new email of the manufacturer:");
+                    editedEmail = Console.ReadLine();
+                }
+                break;
+            case "3":
+                Console.WriteLine("\nEnter the new name of the manufacturer:");
+                editedName = Console.ReadLine();
+                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new name of the manufacturer:");
+                    editedName = Console.ReadLine();
+                }
+
+                Console.WriteLine("\nEnter the new email of the manufacturer:");
+                editedEmail = Console.ReadLine();
+                while(_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                {
+                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
+                    {
+                        return;
+                    }
+                    Console.WriteLine("\nEnter the new email of the manufacturer:");
+                    editedEmail = Console.ReadLine();
+                }
+                break;
+            default:
+                DrawLine();
+                Console.WriteLine("Manufacturer has not been edited.\n");
+                return;
+        }
+
+        Manufacturer editedManufacturer = new Manufacturer(manufacturer.Id, editedName, editedEmail);
+
+        // Confirming action
+        bool edit = YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited.");
+        if(edit)
+        {
+            _manufacturerService.EditById(editedManufacturer, editedManufacturer.Id);
+            DrawLine();
+            Console.WriteLine("Manufacturer has been edited.\n");
+        }
+    }
+
+    private void RemoveManufacturer()
+    {
+        Console.WriteLine("Enter the email of the manufacturer you want to remove:");
+        String email = Console.ReadLine();
+
+        Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
+
+        // Checks if the manufacturer exists.
+        if(manufacturer == null!)
+        {
+            if(YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
+            {
+                RemoveManufacturer();
+            }
+            return;
+        }
+
+        // Confirming action
+        bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed.");
+        if(remove)
+        {
+            _manufacturerService.RemoveById(manufacturer.Id);
+            DrawLine();
+            Console.WriteLine("Manufacturer was removed.\n");
+        }
+    }
+
+    private void SaveManufacturerList()
+    {
+        // Confirms action
+        _manufacturerService.Display();
+        bool save = YesNoChoice("New manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved.");
+        if(save)
+        {
+            _manufacturerService.SaveList(GetPath() + "manufacturers.txt");
+            DrawLine();
+            Console.WriteLine("Manufacturer list has been saved!\n");
+        }
+    }
+
+    private void ClearManufacturerList()
+    {
+        // Confirms action
+        bool clear = YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared");
+        if(clear)
+        {
+            _manufacturerService.ClearList();
+            DrawLine();
+            Console.WriteLine("Manufacturer list has been cleared!\n");
         }
     }
 }

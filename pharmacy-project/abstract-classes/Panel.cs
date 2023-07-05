@@ -96,8 +96,7 @@ namespace pharmacy_project.abstract_classes
 
         public void RunAccount()
         {
-            bool running = true;
-            while(running)
+            while(true)
             {
                 RunAccountMessage();
                 String choice = Console.ReadLine();
