@@ -28,6 +28,5 @@ Customer/660306/Merrile Bulstrode/mbulstrodeq@census.gov/FeJSq4r2q/True
 Customer/57507/Ronda Tebbitt/rtebbittr@naver.com/sBZOJzHkMfs/False
 Customer/576256/Zacharia Timothy/ztimothys@reuters.com/xylRN9BE9/False
 Customer/534263/Myrtia Spohrmann/mspohrmannt@zdnet.com/SfI4cF/True
-Customer/43061/Andrei Georgescu/customer@email.com/parola/False
 Admin/126133/Catalin Marinescu/admin@email.com/parola
-Customer/341986/Florescu Cristian/qflorescucristian@gmail.com/Sibiului14a/False
+Customer/43061/Andrei Georgescu/customer@email.com/parola/False

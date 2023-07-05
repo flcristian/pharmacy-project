@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace pharmacy_project.user.model
 {
-    public class Admin:User
+    public class Admin : User
     {
         // Constructors
 
-        public Admin(int id, string name, string email, string password) : base(id, name, email, password, "Admin")
-        {
+        public Admin(int id, String name, String email, String password) : base(id, name, email, password, "Admin") { }
 
-        }
-
-        public Admin(string text) : base(text)
-        {
-
-        }
+        public Admin(String text) : base(text) { }
 
         // Accessors
 
@@ -32,7 +26,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Name
+        public String Name
         {
             get { return base.Name; }
             set
@@ -41,7 +35,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Email
+        public String Email
         {
             get { return base.Email; }
             set
@@ -50,7 +44,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Password
+        public String Password
         {
             get { return base.Password; }
             set
@@ -61,16 +55,16 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public override string ToString()
+        public override String ToString()
         {
-            string desc = base.ToString();
+            String desc = base.ToString();
 
             return desc;
         }
 
-        public override string ToSave()
+        public override String ToSave()
         {
-            string save = base.ToSave();
+            String save = base.ToSave();
 
             return save;
         }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order_details.model
 {
-    public class OrderDetails
+    public class OrderDetails : IHasId, IToSave
     {
         private int _id;
         private int _orderId;
@@ -23,9 +24,9 @@ namespace pharmacy_project.order_details.model
             _ammounts = ammounts;
         }
 
-        public OrderDetails(string text)
+        public OrderDetails(String text)
         {
-            string[] data = text.Split('/');
+            String[] data = text.Split('/');
 
             _id = Int32.Parse(data[0]);
             _orderId = Int32.Parse(data[1]);
@@ -79,13 +80,13 @@ namespace pharmacy_project.order_details.model
 
         // Methods
 
-        public override string ToString()
+        public override String ToString()
         {
             // This description is mainly for admins.
 
-            string desc = "";
+            String desc = "";
 
-            if(_medicineIds.Count() > 0)
+            if(_medicineIds.Any())
             {
                 desc += $"Order Id : {_orderId}\n";
                 
@@ -102,9 +103,9 @@ namespace pharmacy_project.order_details.model
             return desc;
         }
 
-        public string ToSave()
+        public String ToSave()
         {
-            string save = $"{_id}/{_orderId}/";
+            String save = $"{_id}/{_orderId}/";
 
             for(int i = 0; i < _medicineIds.Count(); i++)
             {
@@ -117,6 +118,11 @@ namespace pharmacy_project.order_details.model
             }
 
             return save;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return _id == (obj as OrderDetails)._id && _orderId == (obj as OrderDetails)._orderId && _medicineIds.Equals((obj as OrderDetails)._medicineIds) && _ammounts.Equals((obj as OrderDetails)._ammounts);
         }
     }
 }

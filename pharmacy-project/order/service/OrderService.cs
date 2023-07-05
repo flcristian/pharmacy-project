@@ -1,81 +1,26 @@
-﻿using pharmacy_project.order.model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.order.model;
+using pharmacy_project.abstract_classes;
 
 namespace pharmacy_project.order.service
 {
-    public class OrderService
+    public class OrderService : Service<Order>
     {
-        private List<Order> _list;
+        public OrderService(String path) : base(path) { }
 
-        // Constructors
-
-        public OrderService()
-        {
-            this.ReadList();
-        }
-
-        public OrderService(List<Order> list)
-        {
-            _list = list;
-        }
+        public OrderService(List<Order> list) : base(list) { }
 
         // Methods
 
-        public void ReadList()
-        {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\orders.txt";
-            StreamReader sr = new StreamReader(path);
-
-            _list = new List<Order>();
-            while (!sr.EndOfStream)
-            {
-                string text = sr.ReadLine();
-                Order order = new Order(text);
-                _list.Add(order);
-            }
-            sr.Close();
-        }
-
-        public void SaveList()
-        {
-            string toSave = "";
-            foreach (Order order in _list)
-            {
-                toSave += $"{order.ToSave()}\n";
-            }
-
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\orders.txt";
-
-            StreamWriter sw = new StreamWriter(path);
-            sw.Write(toSave);
-            sw.Close();
-        }
-
-        public void Display()
-        {
-            if (!_list.Any())
-            {
-                Console.WriteLine("There are no order.\n");
-                return;
-            }
-
-            foreach (Order order in _list)
-            {
-                Console.WriteLine(order);
-            }
-        }
-
         public int DisplayById(int id)
         {
-            Order order = this.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
+            Order order = base.FindById(id);
+            // Checks if the order exists. Returns 0 if not.
             if (order == null)
             {
                 return 0;
@@ -87,21 +32,32 @@ namespace pharmacy_project.order.service
 
         public int DisplayByIdCustomer(int id)
         {
-            Order order = this.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (order == null)
+            List<Order> orders = new List<Order>();
+            foreach(Order order in base.GetList())
+            {
+                if(order.CustomerId == id)
+                {
+                    orders.Add(order);
+                }
+            }
+
+            // Checks if any orders have been found. Returns 0 if none
+            if (!orders.Any())
             {
                 return 0;
             }
 
-            Console.WriteLine(order.CustomerDescription());
+            foreach(Order order in orders)
+            {
+                Console.WriteLine(order.CustomerDescription());
+            }
             return 1;
         }
 
-        public int DisplayByStatus(string status)
+        public int DisplayByStatus(String status)
         {
             List<Order> orders = new List<Order>();
-            foreach(Order order in _list)
+            foreach(Order order in base.GetList())
             {
                 if (order.Status.Equals(status))
                 {
@@ -122,10 +78,10 @@ namespace pharmacy_project.order.service
             return 1;
         }
 
-        public int DisplayByStatusSortedByDate(string status)
+        public int DisplayByStatusSortedByDate(String status)
         {
             List<Order> orders = new List<Order>();
-            foreach (Order order in _list)
+            foreach (Order order in base.GetList())
             {
                 if (order.Status.Equals(status))
                 {
@@ -140,10 +96,10 @@ namespace pharmacy_project.order.service
             }
 
             List<int> daysPassed = new List<int>();
-            List<string> statuses = new List<string> { "Submitted", "Sent", "Received", "Completed" };
+            List<String> statuses = new List<String> { "Submitted", "Sent", "Received", "Completed" };
             foreach (Order order in orders)
             {
-                string orderDate = order.StatusDates[statuses.IndexOf(status)];
+                String orderDate = order.StatusDates[statuses.IndexOf(status)];
                 DateTime date = DateTime.ParseExact(orderDate, "d.M.yyyy", CultureInfo.InvariantCulture);
                 DateTime current = DateTime.UtcNow;
 
@@ -192,83 +148,6 @@ namespace pharmacy_project.order.service
             }
 
             return 1;
-        }
-        
-        public Order FindById(int id)
-        {
-            foreach (Order order in _list)
-            {
-                if (order.Id == id)
-                {
-                    return order;
-                }
-            }
-
-            return null;
-        }
-
-        public void ClearList()
-        {
-            _list.Clear();
-        }
-
-        public int NewId()
-        {
-            Random rnd = new Random();
-            int id = rnd.Next(1, 999999);
-            while (this.FindById(id) != null)
-            {
-                id = rnd.Next(1, 999999);
-            }
-            return id;
-        }
-
-        public int Count()
-        {
-            return _list.Count();
-        }
-
-        public int AddOrder(Order order)
-        {
-            // Checks if the id is already used. Returns 0 if id is already used.
-            if (this.FindById(order.Id) != null)
-            {
-                return 0;
-            }
-
-            _list.Add(order);
-            return 1;
-        }
-
-        public int RemoveById(int id)
-        {
-            Order order = this.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (order == null)
-            {
-                return 0;
-            }
-
-            _list.Remove(order);
-            return 1;
-        }
-
-        public int EditById(Order edited, int id)
-        {
-            Order order = this.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (order == null)
-            {
-                return 0;
-            }
-
-            _list[_list.IndexOf(order)] = edited;
-            return 1;
-        }
-
-        public List<Order> GetList()
-        {
-            return _list;
         }
     }
 }

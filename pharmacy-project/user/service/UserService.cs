@@ -4,92 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using pharmacy_project.user.model;
+using pharmacy_project.abstract_classes;
 
 namespace pharmacy_project.user.service
 {
-    public class UserService
+    public class UserService : Service<User>
     {
-        private List<User> _list;
-
         // Constructors
 
-        public UserService()
-        {
-            this.ReadList();
-        }
+        public UserService(String path) : base(path) { }
 
-        public UserService(List<User> list)
-        {
-            _list = list;
-        }
+        public UserService(List<User> list) : base(list) { }
 
         // Methods
 
-        public void ReadList()
-        {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\users.txt";
-            StreamReader sr = new StreamReader(path);
-
-            _list = new List<User>();
-            while (!sr.EndOfStream)
-            {
-                string text = sr.ReadLine();
-                string type = text.Split('/')[0];
-
-                switch (type)
-                {
-                    case "Admin":
-                        Admin admin = new Admin(text);
-                        _list.Add(admin);
-                        break;
-                    case "Customer":
-                        Customer customer = new Customer(text);
-                        _list.Add(customer);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            sr.Close();
-        }
-
-        public void SaveList()
-        {
-            string toSave = "";
-            foreach(User user in _list)
-            {
-                toSave += $"{user.ToSave()}\n";
-            }
-
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\users.txt";
-
-            StreamWriter sw = new StreamWriter(path);
-            sw.Write(toSave);
-            sw.Close();
-        }
-
-        public void Display()
-        {
-            if (!_list.Any())
-            {
-                Console.WriteLine("There are no users.\n");
-                return;
-            }
-
-            foreach (User user in _list)
-            {
-                Console.WriteLine(user);
-            }
-        }
-
         public int DisplayById(int id)
         {
-            User user = this.FindById(id);
+            User user = base.FindById(id);
             // Checks if the order exists. Returns 0 if no.
-            if (user == null)
+            if (user == null!)
             {
                 return 0;
             }
@@ -98,22 +31,36 @@ namespace pharmacy_project.user.service
             return 1;
         }
 
-        public User FindById(int id)
+        // TODO: Test display admins
+
+        public int DisplayAdmins()
         {
-            foreach (User user in _list)
+            List<User> admins = new List<User>();
+            foreach(User user in base.GetList())
             {
-                if(user.Id == id)
+                if(this.IsAdmin(user))
                 {
-                    return user;
+                    admins.Add(user);
                 }
             }
 
-            return null;
+            // Checks if there are any admins. If not, returns 0
+            if(!admins.Any())
+            {
+                Console.WriteLine("There are no admins.\n");
+                return 0;
+            }
+
+            foreach(User admin in admins)
+            {
+                Console.WriteLine(admin);
+            }
+            return 1;
         }
 
-        public User FindByEmail(string email)
+        public User FindByEmail(String email)
         {
-            foreach(User user in _list)
+            foreach(User user in base.GetList())
             {
                 if (user.Email.Equals(email))
                 {
@@ -124,9 +71,9 @@ namespace pharmacy_project.user.service
             return null;
         }
 
-        public User FindByEmailAndPassword(string email, string password)
+        public User FindByEmailAndPassword(String email, String password)
         {
-            foreach(User user in _list)
+            foreach(User user in base.GetList())
             {
                 if(user.Email.Equals(email) && user.Password.Equals(password))
                 {
@@ -137,11 +84,11 @@ namespace pharmacy_project.user.service
             return null;
         }
 
-        public List<User> FindByName(string name)
+        public List<User> FindByName(String name)
         {
             List<User> users = new List<User>();
 
-            foreach(User user in _list)
+            foreach(User user in base.GetList())
             {
                 if (user.Name.Equals(name))
                 {
@@ -152,8 +99,6 @@ namespace pharmacy_project.user.service
             return users;
         }
 
-        // TODO : Test IsAdmin
-
         public bool IsAdmin(User user)
         {
             if(user.Type.Equals("Admin"))
@@ -163,90 +108,92 @@ namespace pharmacy_project.user.service
             return false;
         }
 
-        public int Count()
-        {
-            return _list.Count();
-        }
-
-        public void ClearList()
-        {
-            _list.Clear();
-        }
-
-        public int NewId()
-        {
-            Random rnd = new Random();
-            int id = rnd.Next(1, 999999);
-            while(this.FindById(id) != null)
-            {
-                id = rnd.Next(1, 999999);
-            }
-            return id;
-        }
-
-        public int AddUser(User user)
-        {
-            // Checks if the id has already been used. Returns -1 if id is already used.
-            if (this.FindById(user.Id) != null)
-            {
-                return -1;
-            }
-
-            // Checks if the email has been used. Returns 0 if email is already used.
-            if (this.FindByEmail(user.Email) != null)
-            {
-                return 0;
-            }
-
-            _list.Add(user);
-            return 1;
-        }
-
-        public int RemoveById(int id)
-        {
-            User user = this.FindById(id);
-
-            // Checks if the user exists. Returns 0 if no.
-            if(user == null)
-            {
-                return 0;
-            }
-
-            _list.Remove(user);
-            return 1;
-        }
-
-        public int RemoveByEmail(string email)
+        public int RemoveByEmail(String email)
         {
             User user = this.FindByEmail(email);
 
             // Checks if the user exists. Returns 0 if no.
-            if (user == null)
+            if (user == null!)
             {
                 return 0;
             }
 
-            _list.Remove(user);
+            base.RemoveById(user.Id);
             return 1;
         }
 
-        public int EditById(User edited, int id)
+        public override int Add(User user)
         {
-            User user = this.FindById(id);
+            // Checks if id is already used.
+            if(base.FindById(user.Id) != null!)
+            {
+                return -1;
+            }
 
-            // Checks if the user exists. Returns 0 if no.
-            if (user == null)
+            // Checks if email is already used.
+            if(this.FindByEmail(user.Email) != null!)
             {
                 return 0;
             }
 
-            _list[_list.IndexOf(user)] = edited;
+            base.Add(user);
             return 1;
         }
 
-        public List<User> GetList()
+        public int BlockById(int id)
         {
-            return _list;
+            User user = base.FindById(id);
+
+            // Checks if the user exists. Returns -2 if not
+            if(user == null!)
+            {
+                return -2;
+            }
+
+            // Checks if the user is a customer. Returns -1 if not
+            if(!(user is Customer))
+            {
+                return -1;
+            }
+
+            Customer customer = user as Customer;
+            // Checks if the customer is not blocked. Returns 0 if it isn't
+            if(customer.Locked)
+            {
+                return 0;
+            }
+
+            customer.Locked = true;
+            base.EditById(customer, customer.Id);
+            return 1;
+        }
+
+        public int UnblockById(int id)
+        {
+            User user = base.FindById(id);
+
+            // Checks if the user exists. Returns -2 if not
+            if(user == null!)
+            {
+                return -2;
+            }
+
+            // Checks if the user is a customer. Returns -1 if not
+            if(!(user is Customer))
+            {
+                return -1;
+            }
+
+            Customer customer = user as Customer;
+            // Checks if the customer is not blocked. Returns 0 if it isn't
+            if(!customer.Locked)
+            {
+                return 0;
+            }
+
+            customer.Locked = false;
+            base.EditById(customer, customer.Id);
+            return 1;
         }
     }
 }

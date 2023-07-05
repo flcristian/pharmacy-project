@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.manufacturer.model
 {
-    public class Manufacturer
+    public class Manufacturer : IToSave, IHasId, IHasName, IHasEmail
     {
         private int _id;
-        private string _name;
-        private string _contactEmailAdress;
+        private String _name;
+        private String _email;
 
         // Constructors
 
-        public Manufacturer(int id, string name, string contactEmailAdress)
+        public Manufacturer(int id, String name, String email)
         {
             _id = id;
             _name = name;
-            _contactEmailAdress = contactEmailAdress;
+            _email = email;
         }
 
-        public Manufacturer(string text)
+        public Manufacturer(String text)
         {
-            string[] data = text.Split('/');
+            String[] data = text.Split('/');
             _id = Int32.Parse(data[0]);
             _name = data[1];
-            _contactEmailAdress = data[2];
+            _email = data[2];
         }
 
         // Accessors
@@ -40,7 +41,7 @@ namespace pharmacy_project.manufacturer.model
             }
         }
 
-        public string Name
+        public String Name
         {
             get { return _name; }
             set
@@ -49,43 +50,48 @@ namespace pharmacy_project.manufacturer.model
             }
         }
 
-        public string ContactEmailAdress
+        public String Email
         {
-            get { return _contactEmailAdress; }
+            get { return _email; }
             set
             {
-                _contactEmailAdress = value;
+                _email = value;
             }
         }
 
         // Methods
 
-        public override string ToString()
+        public override String ToString()
         {
-            string desc = "";
+            String desc = "";
 
             desc += "Name : " + _name + "\n";
-            desc += "Contact Email Adress : " + _contactEmailAdress + "\n";
+            desc += "Contact Email Adress : " + _email + "\n";
 
             return desc;
         }
 
-        public string DescriptionAdmin()
+        public String DescriptionAdmin()
         {
-            string desc = "";
+            String desc = "";
 
             desc += "Id : " + _id + "\n";
             desc += "Name : " + _name + "\n";
-            desc += "Contact Email Adress : " + _contactEmailAdress + "\n";
+            desc += "Email Adress : " + _email + "\n";
 
             return desc;
         }
 
-        public string ToSave()
+        public String ToSave()
         {
-            string save = $"{_id}/{_name}/{_contactEmailAdress}";
+            String save = $"{_id}/{_name}/{_email}";
 
             return save;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return _id == (obj as Manufacturer)._id && _name.Equals((obj as Manufacturer)._name) && _email.Equals((obj as Manufacturer)._email);
         }
     }
 }

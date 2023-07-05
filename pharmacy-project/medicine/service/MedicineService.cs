@@ -1,4 +1,5 @@
 ﻿using pharmacy_project.medicine.model;
+using pharmacy_project.abstract_classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,79 +9,25 @@ using System.Threading.Tasks;
 
 namespace pharmacy_project.medicine.service
 {
-    public class MedicineService
+    public class MedicineService : Service<Medicine>
     {
-        private List<Medicine> _list;
-
         // Constructors
 
-        public MedicineService()
-        {
-            this.ReadList();
-        }
+        public MedicineService(String path) : base(path) { }
 
-        public MedicineService(List<Medicine> list)
-        {
-            _list = list;
-        }
+        public MedicineService(List<Medicine> list) : base(list) { }
 
         // Methods
 
-        public void ReadList()
-        {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\medicine.txt";
-            StreamReader sr = new StreamReader(path);
-
-            _list = new List<Medicine>();
-            while (!sr.EndOfStream)
-            {
-                string text = sr.ReadLine();
-                Medicine medicine = new Medicine(text);
-                _list.Add(medicine);
-            }
-            sr.Close();
-        }
-
-        public void SaveList()
-        {
-            string toSave = "";
-            foreach(Medicine medicine in _list)
-            {
-                toSave += $"{medicine.ToSave()}\n";
-            }
-
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += "..\\..\\..\\resources\\medicine.txt";
-
-            StreamWriter sw = new StreamWriter(path);
-            sw.Write(toSave);
-            sw.Close();
-        }
-
-        public void Display()
-        {
-            if(!_list.Any())
-            {
-                Console.WriteLine("There are no medicine.\n");
-                return;
-            }
-
-            foreach(Medicine medicine in _list)
-            {
-                Console.WriteLine(medicine);
-            }
-        }
-
         public void DisplayAdmin()
         {
-            if (!_list.Any())
+            if (!base.GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
-            foreach (Medicine medicine in _list)
+            foreach (Medicine medicine in base.GetList())
             {
                 Console.WriteLine(medicine.DescriptionForAdmin());
             }
@@ -88,7 +35,7 @@ namespace pharmacy_project.medicine.service
 
         public int DisplayById(int id)
         {
-            Medicine medicine = this.FindById(id);
+            Medicine medicine = base.FindById(id);
             // Checks if the order exists. Returns 0 if no.
             if (medicine == null)
             {
@@ -101,14 +48,14 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByAscendingPrice()
         {
-            if (!_list.Any())
+            if (!base.GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
             List<Medicine> list = new List<Medicine>();
-            list = _list.OrderBy(medicine => medicine.Price).ToList();
+            list = base.GetList().OrderBy(medicine => medicine.Price).ToList();
 
             foreach(Medicine medicine in list)
             {
@@ -118,14 +65,14 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByDescendingPrice()
         {
-            if (!_list.Any())
+            if (!base.GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
             List<Medicine> list = new List<Medicine>();
-            list = _list.OrderBy(medicine => medicine.Price).Reverse().ToList();
+            list = base.GetList().OrderBy(medicine => medicine.Price).Reverse().ToList();
 
             foreach (Medicine medicine in list)
             {
@@ -135,7 +82,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByList(List<Medicine> list)
         {
-            if (!_list.Any())
+            if (!base.GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -149,7 +96,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByListAdmin(List<Medicine> list)
         {
-            if (!list.Any())
+            if (!base.GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -161,23 +108,10 @@ namespace pharmacy_project.medicine.service
             }
         }
 
-        public Medicine FindById(int id)
-        {
-            foreach(Medicine medicine in _list)
-            {
-                if(medicine.Id == id)
-                {
-                    return medicine;
-                }
-            }
-
-            return null;
-        }
-
-        public List<Medicine> FindByName(string name)
+        public List<Medicine> FindByName(String name)
         {
             List<Medicine> list = new List<Medicine>();
-            foreach(Medicine medicine in _list)
+            foreach(Medicine medicine in base.GetList())
             {
                 if (medicine.Name.Equals(name))
                 {
@@ -186,70 +120,6 @@ namespace pharmacy_project.medicine.service
             }
 
             return list;
-        }
-
-        public void ClearList()
-        {
-            _list.Clear();
-        }
-
-        public int NewId()
-        {
-            Random rnd = new Random();
-            int id = rnd.Next(1, 999999);
-            while(this.FindById(id) != null)
-            {
-                id = rnd.Next(1, 999999);
-            }
-            return id;
-        }
-
-        public int Count()
-        {
-            return _list.Count();
-        }
-
-        public int AddMedicine(Medicine medicine)
-        {
-            // Checks if the id is already used. Returns 0 if id is already used.
-            if(this.FindById(medicine.Id) != null)
-            {
-                return 0;
-            }
-
-            _list.Add(medicine);
-            return 1;
-        }
-
-        public int RemoveById(int id)
-        {
-            Medicine medicine = this.FindById(id);
-            // Checks if the medicine exists. Returns 0 if no.
-            if (medicine == null)
-            {
-                return 0;
-            }
-
-            _list.Remove(medicine);
-            return 1;
-        }
-
-        public int EditById(Medicine edited, int id)
-        {
-            Medicine medicine = this.FindById(id);
-            // Checks if the medicine exists. Returns 0 if no.
-            if (medicine == null)
-            {
-                return 0;
-            }
-
-            _list[_list.IndexOf(medicine)] = edited;
-            return 1;
-        }
-
-        public List<Medicine> GetList()
-        {
-            return _list;
         }
     }
 }

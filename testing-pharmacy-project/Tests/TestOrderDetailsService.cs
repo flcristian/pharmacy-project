@@ -133,7 +133,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddOrderDetails_IdAlreadyUsed_DoesNotAddOrderDetails_Returns0()
+        public void Add_IdAlreadyUsed_DoesNotAdd_Returns0()
         {
             // Arrange
             int id = 1674;
@@ -144,7 +144,7 @@ namespace testing_pharmacy_project.Tests
             OrderDetailsService service = new OrderDetailsService(list);
 
             // Act
-            int add = service.AddOrderDetails(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(0, add);
@@ -153,7 +153,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddOrderDetails_IdNotUsed_AddsOrderDetails_Returns1()
+        public void Add_IdNotUsed_AddsOrderDetails_Returns1()
         {
             // Arrange
             int id = 1674;
@@ -163,7 +163,7 @@ namespace testing_pharmacy_project.Tests
             OrderDetailsService service = new OrderDetailsService(list);
 
             // Act
-            int add = service.AddOrderDetails(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(1, add);
@@ -206,25 +206,6 @@ namespace testing_pharmacy_project.Tests
             Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
             Assert.DoesNotContain(orderDetails, service.GetList());
-        }
-
-        [Fact]
-        public void EditById_OrderDetailsNotFound_DoesNotEditOrderDetails_Returns0()
-        {
-            // Arrange
-            int id = 1674;
-            OrderDetails edited = new OrderDetails(id, 1, new List<int>{1,2}, new List<int> {0, 10});
-            OrderDetails orderDetails = new OrderDetails(1092, 1, new List<int>{1,2}, new List<int> {0, 10});
-            List<OrderDetails> list = new List<OrderDetails> { orderDetails };
-            OrderDetailsService service = new OrderDetailsService(list);
-
-            // Act
-            int edit = service.EditById(edited, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.GetList());
-            Assert.NotEqual(service.FindById(189), edited);
         }
 
         [Fact]

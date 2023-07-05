@@ -1,45 +1,36 @@
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
+using pharmacy_project.abstract_classes;
 
 namespace pharmacy_project.panels
 {
-    public class LoginPanel
+    public class LoginPanel : Panel
     {
-        private UserService _service;
 
         // Constructors
 
-        public LoginPanel()
-        {
-            _service = new UserService();
-            this.Run();
-        }
+        public LoginPanel(String path) : base(path) { }
         
         // Methods
         
-        public void DrawLine()
-        {
-            Console.WriteLine("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-        }
-        
-        public string ObtainName()
+        public String ObtainName()
         {
             Console.WriteLine("Enter your name:");
-            string name = Console.ReadLine();
+            String name = Console.ReadLine();
             return name;
         }
         
-        public string ObtainEmail()
+        public String ObtainEmail()
         {
             Console.WriteLine("Enter your email:");
-            string email = Console.ReadLine();
+            String email = Console.ReadLine();
             return email;
         }
         
-        public string ObtainPassword()
+        public String ObtainPassword()
         {
             Console.WriteLine("Enter your password:");
-            string password = Console.ReadLine();
+            String password = Console.ReadLine();
             return password;
         }
         
@@ -49,12 +40,14 @@ namespace pharmacy_project.panels
             Console.WriteLine("1 - Connect as admin");
             Console.WriteLine("2 - Connect as customer");
             
-            string choice = Console.ReadLine();
-            this.DrawLine();
+            String choice = Console.ReadLine();
+            DrawLine();
             switch(choice)
             {
                 case "1":
                     Console.WriteLine($"Logged in as admin.\nWelcome {user.Name}!\n");
+                    AdminPanel adminPanel = new AdminPanel(GetPath(), user);
+                    adminPanel.Run();
                     return;
                 case "2":
                     Console.WriteLine($"Logged in as customer.\nWelcome {user.Name}!\n");
@@ -67,44 +60,44 @@ namespace pharmacy_project.panels
         public void Login()
         {
             // Obtaining credentials
-            string email = this.ObtainEmail();
-            string password = this.ObtainPassword();
-            this.DrawLine();
+            String email = ObtainEmail();
+            String password = ObtainPassword();
+            DrawLine();
             
             // Checking if user exists
-            User user = _service.FindByEmailAndPassword(email, password);
-            if(user == null)
+            User user = GetUserService().FindByEmailAndPassword(email, password);
+            if(user == null!)
             {
-                Console.WriteLine("Wrong email or password.");
+                Console.WriteLine("Wrong email or password.\n");
                 return;
             }
             
             // Checking if user is admin
-            if(_service.IsAdmin(user))
+            if(GetUserService().IsAdmin(user))
             {
-                this.AdminChoice(user);
+                AdminChoice(user);
                 return;
             }
             
             // Log in user as customer
-            
+            Console.WriteLine($"Welcome {user.Name}!\n");
         }
         
         public void Register()
         {
             // Obtaining credentials
-            string name = this.ObtainName();
-            string email = this.ObtainEmail();
-            string password = this.ObtainPassword();
+            String name = ObtainName();
+            String email = ObtainEmail();
+            String password = ObtainPassword();
             
             // Creating customer account
-            Customer customer = new Customer(_service.NewId(), name, email, password);
+            Customer customer = new Customer(GetUserService().NewId(), name, email, password);
             
             // Adding account to _service
-            int add = _service.AddUser(customer);
+            int add = GetUserService().Add(customer);
             
-            // Checks if user was added and returns errors
-            this.DrawLine();
+            // Checks if user was added or returns errors
+            DrawLine();
             if(add == -1)
             {    
                 Console.WriteLine("Id has already been used! Please try again or contact administrators.\n");
@@ -117,34 +110,34 @@ namespace pharmacy_project.panels
             }
             
             // User has been added, saving list
-            _service.SaveList();
+            GetUserService().SaveList(GetPath());
             Console.WriteLine("Account has been created!\n");
             return;
         }
         
-        public void RunMessage()
+        public override void RunMessage()
         {
             Console.WriteLine("Choose what you want to do:");
             Console.WriteLine("1 - Log into your account");
             Console.WriteLine("2 - Register a new account");
         }
         
-        public void Run()
+        public override void Run()
         {
             bool running = true;
             while(running)
             {
-                this.RunMessage();
-                string choice = Console.ReadLine();
+                RunMessage();
+                String choice = Console.ReadLine();
                 
-                this.DrawLine();
+                DrawLine();
                 switch(choice)
                 {
                     case "1":
-                        this.Login();
+                        Login();
                         break;
                     case "2":
-                        this.Register();
+                        Register();
                         break;
                     default:
                         running = false;

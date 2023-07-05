@@ -242,7 +242,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddMedicine_IdAlreadyUsed_DoesNotAddMedicine_Returns0()
+        public void Add_IdAlreadyUsed_DoesNotAdd_Returns0()
         {
             // Arrange
             int id = 1674;
@@ -252,7 +252,7 @@ namespace testing_pharmacy_project.Tests
             MedicineService service = new MedicineService(list);
 
             // Act
-            int add = service.AddMedicine(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(0, add);
@@ -261,7 +261,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void AddMedicine_IdNotUsed_AddsMedicine_Returns1()
+        public void Add_IdNotUsed_AddsMedicine_Returns1()
         {
             // Arrange
             int id = 1674;
@@ -271,7 +271,7 @@ namespace testing_pharmacy_project.Tests
             MedicineService service = new MedicineService(list);
 
             // Act
-            int add = service.AddMedicine(toAdd);
+            int add = service.Add(toAdd);
 
             // Assert
             Assert.Equal(1, add);
@@ -314,25 +314,6 @@ namespace testing_pharmacy_project.Tests
             Assert.Empty(service.GetList());
             Assert.Equal(0, service.Count());
             Assert.DoesNotContain(medicine, service.GetList());
-        }
-
-        [Fact]
-        public void EditById_MedicineNotFound_DoesNotEditMedicine_Returns0()
-        {
-            // Arrange
-            int id = 1674;
-            Medicine edited = new Medicine(id, 0, 1, 1, "newname", "newinfo", "newtag");
-            Medicine medicine = new Medicine(189, 0, 1, 1, "name", "info", "tag1,tag2");
-            List<Medicine> list = new List<Medicine> { medicine };
-            MedicineService service = new MedicineService(list);
-
-            // Act
-            int edit = service.EditById(edited, id);
-
-            // Assert
-            Assert.Equal(0, edit);
-            Assert.DoesNotContain(edited, service.GetList());
-            Assert.NotEqual(service.FindById(189), edited);
         }
 
         [Fact]

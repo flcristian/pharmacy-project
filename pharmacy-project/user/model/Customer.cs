@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using pharmacy_project.interfaces;
 
 namespace pharmacy_project.user.model
 {
-    public  class Customer:User
+    public  class Customer : User
     {
         private bool _locked;
 
         // Constructors
 
-        public Customer(int id, string name, string email, string password) : base(id, name, email, password, "Customer")
+        public Customer(int id, String name, String email, String password) : base(id, name, email, password, "Customer")
         {
             _locked = false;
         }
 
-        public Customer(string text) : base(text)
+        public Customer(String text) : base(text)
         {
             _locked = Boolean.Parse(text.Split('/')[5]);
         }
@@ -33,7 +34,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Name
+        public String Name
         {
             get { return base.Name; }
             set
@@ -42,7 +43,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Email
+        public String Email
         {
             get { return base.Email; }
             set
@@ -51,7 +52,7 @@ namespace pharmacy_project.user.model
             }
         }
 
-        public string Password
+        public String Password
         {
             get { return base.Password; }
             set
@@ -71,20 +72,25 @@ namespace pharmacy_project.user.model
 
         // Methods
 
-        public override string ToString()
+        public override String ToString()
         {
-            string desc = base.ToString();
+            String desc = base.ToString();
 
             return desc;
         }
 
-        public override string ToSave()
+        public override String ToSave()
         {
-            string save = base.ToSave();
+            String save = base.ToSave();
 
             save += $"/{_locked}";
 
             return save;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return base.Equals(obj) && _locked == (obj as Customer)._locked;
         }
     }
 }
