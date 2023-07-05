@@ -74,6 +74,48 @@ public class AdminPanel : Panel
         }
     }
 
+    private void RunMedicineMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See medicine list");
+        Console.WriteLine("2 - Add medicine");
+        Console.WriteLine("3 - Edit medicine");
+        Console.WriteLine("4 - Remove medicine");
+        Console.WriteLine("5 - Save medicine list");
+        Console.WriteLine("6 - Clear medicine list");
+    }
+
+    private void RunMedicine()
+    {
+        RunMedicineMessage();
+        String choice = Console.ReadLine();
+
+        DrawLine();
+        switch (choice)
+        {
+            case "1":
+                SeeMedicineList();
+                break;
+            case "2":
+                AddMedicine();
+                break;
+            case "3":
+                EditMedicine();
+                break;
+            case "4":
+                RemoveMedicine();
+                break;
+            case "5":
+                SaveMedicineList();
+                break;
+            case "6":
+                ClearMedicineList();
+                break;
+            default:
+                return;
+        }
+    }
+
     private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
@@ -146,6 +188,8 @@ public class AdminPanel : Panel
         Console.WriteLine("6 - Edit your account");
     }
 
+    // TODO: Make all medicine from a manufacturer be removed if it is removed.
+
     public override void Run()
     {
         // Checks if the user is an admin.
@@ -168,6 +212,7 @@ public class AdminPanel : Panel
                     RunManufacturers();
                     break;
                 case "2":
+                    RunMedicine();
                     break;
                 case "3":
                     break;
@@ -288,8 +333,7 @@ public class AdminPanel : Panel
         User editedCustomer = new Customer(customer.Id, editedName, editedEmail, customer.Password);
 
         // Confirming action
-        bool edit = YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited.");
-        if(edit)
+        if(YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited."))
         {
             GetUserService().EditById(editedCustomer, editedCustomer.Id);
             DrawLine();
@@ -315,8 +359,7 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed.");
-        if(remove)
+        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed."))
         {
             GetUserService().RemoveById(customer.Id);
             DrawLine();
@@ -343,8 +386,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked");
-        if(block)
+        if(YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked"))
         {
             GetUserService().BlockById(customer.Id);
             DrawLine();
@@ -371,8 +413,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked");
-        if(block)
+        if(YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked"))
         {
             GetUserService().UnblockById(customer.Id);
             DrawLine();
@@ -399,8 +440,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin.");
-        if(block)
+        if(YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin."))
         {
             Admin admin = new Admin(customer.Id, customer.Name, customer.Email, customer.Password);
             GetUserService().RemoveById(customer.Id);
@@ -429,8 +469,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(admin);
-        bool block = YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed.");
-        if(block)
+        if(YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed."))
         {
             Customer customer = new Customer(admin.Id, admin.Name, admin.Email, admin.Password);
             GetUserService().RemoveById(admin.Id);
@@ -444,8 +483,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         GetUserService().Display();
-        bool save = YesNoChoice("New user list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved.");
-        if(save)
+        if(YesNoChoice("New user list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
         {
             GetUserService().SaveList(GetPath() + "users.txt");
             DrawLine();
@@ -456,8 +494,7 @@ public class AdminPanel : Panel
     private void ClearUserList()
     {
         // Confirms action
-        bool clear = YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared");
-        if(clear)
+        if(YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared"))
         {
             GetUserService().ClearList();
             GetUserService().Add(GetUser());
@@ -486,8 +523,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine("\n" + manufacturer);
-        bool save = YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added.");
-        if(save)
+        if(YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added."))
         {
             _manufacturerService.Add(manufacturer);
             DrawLine();
@@ -583,9 +619,8 @@ public class AdminPanel : Panel
 
         Manufacturer editedManufacturer = new Manufacturer(manufacturer.Id, editedName, editedEmail);
 
-        // Confirming action
-        bool edit = YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited.");
-        if(edit)
+        // Confirming actions
+        if(YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited."))
         {
             _manufacturerService.EditById(editedManufacturer, editedManufacturer.Id);
             DrawLine();
@@ -611,12 +646,17 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed.");
-        if(remove)
+        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed."))
         {
             _manufacturerService.RemoveById(manufacturer.Id);
             DrawLine();
             Console.WriteLine("Manufacturer was removed.\n");
+            if(YesNoChoice("Manufacturer was removed.\n", "Do you also want to delete medicine related to this manufacturer?", "Only manufacturer was removed."))
+            {
+                _medicineService.RemoveByManufacturerId(manufacturer.Id);
+                DrawLine();
+                Console.WriteLine("Manufacturer and related medicine were removed.\n");
+            }
         }
     }
 
@@ -624,8 +664,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _manufacturerService.Display();
-        bool save = YesNoChoice("New manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved.");
-        if(save)
+        if(YesNoChoice("New manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
         {
             _manufacturerService.SaveList(GetPath() + "manufacturers.txt");
             DrawLine();
@@ -636,12 +675,63 @@ public class AdminPanel : Panel
     private void ClearManufacturerList()
     {
         // Confirms action
-        bool clear = YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared");
-        if(clear)
+        if(YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared"))
         {
             _manufacturerService.ClearList();
             DrawLine();
-            Console.WriteLine("Manufacturer list has been cleared!\n");
+
+            if(YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared"))
+            {
+                _medicineService.ClearList();
+                DrawLine();
+                Console.WriteLine("All medicine and manufacturers were removed!\n");
+            }
+        }
+    }
+
+    // Medicine service methods
+
+    private void SeeMedicineList()
+    {
+        _medicineService.DisplayAdmin();
+        WaitForKey();
+    }
+
+    private void AddMedicine()
+    {
+
+    }
+
+    private void EditMedicine()
+    {
+
+    }
+
+    private void RemoveMedicine()
+    {
+
+    }
+
+    private void SaveMedicineList()
+    {
+        // Confirms action
+        _medicineService.Display();
+        if(YesNoChoice("New medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
+        {
+            _medicineService.SaveList(GetPath() + "medicine.txt");
+            DrawLine();
+            Console.WriteLine("Medicine list has been saved!\n");
+        }
+    }
+
+    private void ClearMedicineList()
+    {
+        // Confirms action
+        if(YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared"))
+        {
+            _medicineService.ClearList();
+            DrawLine();
+            Console.WriteLine("Medicine list has been cleared!\n");
         }
     }
 }

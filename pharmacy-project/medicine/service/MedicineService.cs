@@ -121,5 +121,25 @@ namespace pharmacy_project.medicine.service
 
             return list;
         }
+
+        public int RemoveByManufacturerId(int id)
+        {
+            int count = 0;
+            for(int i = 0; i < Count(); i++)
+            {
+                if(GetList()[i].ManufacturerId == id)
+                {
+                    GetList().RemoveAt(i);
+                    count++;
+                }
+            }
+
+            // Checks if any medicine are from this manufacturers. Returns 0 if not
+            if(count == 0)
+            {
+                return 0;
+            }
+            return 1;
+        }
     }
 }
