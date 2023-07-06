@@ -1,6 +1,7 @@
 using pharmacy_project.abstract_classes;
 using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
+using pharmacy_project.medicine.model;
 using pharmacy_project.medicine.service;
 using pharmacy_project.order_details.service;
 using pharmacy_project.order.model;
@@ -87,32 +88,35 @@ public class AdminPanel : Panel
 
     private void RunMedicine()
     {
-        RunMedicineMessage();
-        String choice = Console.ReadLine();
-
-        DrawLine();
-        switch (choice)
+        while(true)
         {
-            case "1":
-                SeeMedicineList();
-                break;
-            case "2":
-                AddMedicine();
-                break;
-            case "3":
-                EditMedicine();
-                break;
-            case "4":
-                RemoveMedicine();
-                break;
-            case "5":
-                SaveMedicineList();
-                break;
-            case "6":
-                ClearMedicineList();
-                break;
-            default:
-                return;
+            RunMedicineMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeMedicineList();
+                    break;
+                case "2":
+                    AddMedicine();
+                    break;
+                case "3":
+                    EditMedicine();
+                    break;
+                case "4":
+                    RemoveMedicine();
+                    break;
+                case "5":
+                    SaveMedicineList();
+                    break;
+                case "6":
+                    ClearMedicineList();
+                    break;
+                default:
+                    return;
+            }
         }
     }
 
@@ -187,8 +191,6 @@ public class AdminPanel : Panel
         Console.WriteLine("5 - Edit users");
         Console.WriteLine("6 - Edit your account");
     }
-
-    // TODO: Make all medicine from a manufacturer be removed if it is removed.
 
     public override void Run()
     {
@@ -699,17 +701,175 @@ public class AdminPanel : Panel
 
     private void AddMedicine()
     {
+        Console.WriteLine("Enter the email of the manufacturer:");
+        String email = Console.ReadLine();
+        Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
+        int id = manufacturer == null! ? 0 : manufacturer.Id;
 
+        if(manufacturer == null! && !YesNoChoice("No manufacturer was found with that email.", "Do you still want to continue adding the medicine?\nThe manufacturer ID will be set to 0 in this case.", "No medicine was added.")){return;}
+
+        Console.WriteLine("Enter the price:");
+        Double price = Double.Parse(Console.ReadLine());
+        Console.WriteLine("Enter the stock ammount:");
+        int stock = Int32.Parse(Console.ReadLine());
+        Console.WriteLine("Enter the name:");
+        String name = Console.ReadLine();
+        Console.WriteLine("Enter the information:");
+        String info = Console.ReadLine();
+        Console.WriteLine("Enter all tags separated by a comma (no spaces):");
+        String tags = Console.ReadLine();
+
+        Medicine medicine = new Medicine(_medicineService.NewId(), id, price, stock, name, info, tags);
+
+        // Confirms actions
+        if(YesNoChoice($"\nHere is the medicine you created? {medicine}", "Do you want to add it?", "No medicine was added."))
+        {
+            _medicineService.Add(medicine);
+            DrawLine();
+            Console.WriteLine("Medicine was added.\n");
+        }
     }
 
     private void EditMedicine()
     {
+        Console.WriteLine("Enter the id of the medicine you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
 
+        Medicine medicine = _medicineService.FindById(id);
+        if(medicine == null!)
+        {
+            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was edited."))
+            {
+                RemoveMedicine();
+            }
+            return;
+        }
+
+        Console.WriteLine("Choose what you want to edit:");
+        Console.WriteLine("1 - Manufacturer");
+        Console.WriteLine("2 - Price");
+        Console.WriteLine("3 - Stock ammount");
+        Console.WriteLine("4 - Name");
+        Console.WriteLine("5 - Informations");
+        Console.WriteLine("6 - Tags");
+        Console.WriteLine("7 - Everything");
+
+        String editedName = medicine.Name, editedInfo = medicine.Information, email;
+        Double editedPrice = medicine.Price;
+        int editedId = medicine.ManufacturerId, editedStock = medicine.StockAmmount;
+        Manufacturer manufacturer;
+        String editedTags = "";
+        foreach(String tag in medicine.Tags)
+        {
+            editedTags += tag;
+            if(medicine.Tags.Last() != tag)
+            {
+                editedTags += ",";
+            }
+        }
+
+        String choice = Console.ReadLine();
+        switch (choice)
+        {
+            case "1":
+                Console.WriteLine("Enter the email of the manufacturer:");
+                email = Console.ReadLine();
+                manufacturer = _manufacturerService.FindByEmail(email);
+
+                while(manufacturer == null!)
+                {
+                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    {
+                        return;
+                    }
+                    email = Console.ReadLine();
+                    manufacturer = _manufacturerService.FindByEmail(email);
+                }
+                editedId = manufacturer.Id;
+                break;
+            case "2":
+                Console.WriteLine("Enter the new price:");
+                editedPrice = Double.Parse(Console.ReadLine());
+                break;
+            case "3":
+                Console.WriteLine("Enter the new stock ammount:");
+                editedStock = Int32.Parse(Console.ReadLine());
+                break;
+            case "4":
+                Console.WriteLine("Enter the new name:");
+                editedName = Console.ReadLine();
+                break;
+            case "5":
+                Console.WriteLine("Enter the new informations:");
+                editedInfo = Console.ReadLine();
+                break;
+            case "6":
+                Console.WriteLine("Enter the new tags separated by a commma (no spaces):");
+                editedTags = Console.ReadLine();
+                break;
+            case "7":
+                Console.WriteLine("Enter the email of the manufacturer:");
+                email = Console.ReadLine();
+                manufacturer = _manufacturerService.FindByEmail(email);
+
+                while(manufacturer == null!)
+                {
+                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    {
+                        return;
+                    }
+                    email = Console.ReadLine();
+                    manufacturer = _manufacturerService.FindByEmail(email);
+                }
+                editedId = manufacturer.Id;
+                Console.WriteLine("Enter the new price:");
+                editedPrice = Double.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the new stock ammount:");
+                editedStock = Int32.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the new name:");
+                editedName = Console.ReadLine();
+                Console.WriteLine("Enter the new informations:");
+                editedInfo = Console.ReadLine();
+                Console.WriteLine("Enter the new tags separated by a commma (no spaces):");
+                editedTags = Console.ReadLine();
+                break;
+            default:
+                return;
+        }
+
+        // Confirms actions
+        Medicine editedMedicine = new Medicine(medicine.Id, editedId, editedPrice, editedStock, editedName, editedInfo, editedTags);
+
+        if(YesNoChoice("\nDetails of the edited medicine:\n" + editedMedicine.DescriptionForAdmin(), "Are you sure you want to make these changes?", "Medicine was not edited."))
+        {
+            _medicineService.EditById(editedMedicine, editedMedicine.Id);
+            DrawLine();
+            Console.WriteLine("Medicine was edited.\n");
+        }
     }
 
     private void RemoveMedicine()
     {
+        Console.WriteLine("Enter the id of the medicine you want to remove:");
+        int id = Int32.Parse(Console.ReadLine());
 
+        Medicine medicine = _medicineService.FindById(id);
+        if(medicine == null!)
+        {
+            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was removed."))
+            {
+                RemoveMedicine();
+            }
+            return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed"))
+        {
+            _medicineService.RemoveById(medicine.Id);
+            DrawLine();
+            Console.WriteLine("The medicine was removed.");
+        }
     }
 
     private void SaveMedicineList()
