@@ -120,6 +120,47 @@ public class AdminPanel : Panel
         }
     }
 
+    private void RunOrdersMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See order list");
+        Console.WriteLine("2 - Edit status of order");
+        Console.WriteLine("3 - Remove order");
+        Console.WriteLine("4 - Save order list");
+        Console.WriteLine("5 - Clear order list");
+    }
+
+    private void RunOrders()
+    {
+        while(true)
+        {
+            RunOrdersMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeOrderList();
+                    break;
+                case "2":
+                    EditStatusOfOrder();
+                    break;
+                case "3":
+                    RemoveOrder();
+                    break;
+                case "4":
+                    SaveOrderList();
+                    break;
+                case "5":
+                    ClearOrderList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
     private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
@@ -217,6 +258,7 @@ public class AdminPanel : Panel
                     RunMedicine();
                     break;
                 case "3":
+                    RunOrders();
                     break;
                 case "4":
                     break;
@@ -485,7 +527,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         GetUserService().Display();
-        if(YesNoChoice("New user list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
+        if(YesNoChoice("User list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
         {
             GetUserService().SaveList(GetPath() + "users.txt");
             DrawLine();
@@ -496,7 +538,7 @@ public class AdminPanel : Panel
     private void ClearUserList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared"))
+        if(YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared."))
         {
             GetUserService().ClearList();
             GetUserService().Add(GetUser());
@@ -666,7 +708,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _manufacturerService.Display();
-        if(YesNoChoice("New manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
+        if(YesNoChoice("Manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
         {
             _manufacturerService.SaveList(GetPath() + "manufacturers.txt");
             DrawLine();
@@ -677,12 +719,12 @@ public class AdminPanel : Panel
     private void ClearManufacturerList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared"))
+        if(YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
         {
             _manufacturerService.ClearList();
             DrawLine();
 
-            if(YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared"))
+            if(YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
             {
                 _medicineService.ClearList();
                 DrawLine();
@@ -864,7 +906,7 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed"))
+        if(YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed."))
         {
             _medicineService.RemoveById(medicine.Id);
             DrawLine();
@@ -876,7 +918,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _medicineService.Display();
-        if(YesNoChoice("New medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
+        if(YesNoChoice("Medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
         {
             _medicineService.SaveList(GetPath() + "medicine.txt");
             DrawLine();
@@ -887,11 +929,151 @@ public class AdminPanel : Panel
     private void ClearMedicineList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared"))
+        if(YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared."))
         {
             _medicineService.ClearList();
             DrawLine();
             Console.WriteLine("Medicine list has been cleared!\n");
+        }
+    }
+
+    // Order service methods
+
+    private void SeeOrderList()
+    {
+        _orderService.Display();
+        WaitForKey();
+    }
+
+    private void EditStatusOfOrder()
+    {
+        Console.WriteLine("Enter the id of the order you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            {
+                RemoveOrder();
+            }
+            return;
+        }
+
+        Console.WriteLine("What status do you want to set?");
+        Console.WriteLine("(Submitted/Sent/Received/Completed)");
+        String[] statuses = {"Submitted","Sent","Received","Completed"};
+        DateTime dt = DateTime.UtcNow;
+        String date = dt.ToString("d.M.yyyy");
+
+        String choice = Console.ReadLine();
+        switch(choice.ToLower())
+        {
+            case "submitted":
+                for(int i = order.StatusDates.Length - 1; i > 0; i++)
+                {
+                    order.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 1; i++)
+                {
+                    if(order.StatusDates[i] == null!)
+                    {
+                        order.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "sent":
+                for(int i = order.StatusDates.Length - 1; i > 1; i++)
+                {
+                    order.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 2; i++)
+                {
+                    if(order.StatusDates[i] == null!)
+                    {
+                        order.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "received":
+                for(int i = order.StatusDates.Length - 1; i > 2; i++)
+                {
+                    order.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 3; i++)
+                {
+                    if(order.StatusDates[i] == null!)
+                    {
+                        order.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "completed":
+                for(int i = order.StatusDates.Length - 1; i > 3; i++)
+                {
+                    order.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 4; i++)
+                {
+                    if(order.StatusDates[i] == null!)
+                    {
+                        order.StatusDates[i] = date;
+                    }
+                }
+                break;
+            default:
+                return;
+        }
+    }
+
+    private void RemoveOrder()
+    {
+        Console.WriteLine("Enter the id of the order you want to remove:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were removed."))
+            {
+                RemoveOrder();
+            }
+            return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"This is the medicine: {order}", "Are you sure you want to remove it?", "No orders were removed."))
+        {
+            _orderService.RemoveById(order.Id);
+            DrawLine();
+            Console.WriteLine("The orders were removed.");
+        }
+    }
+
+    private void SaveOrderList()
+    {
+        // Confirms action
+        _orderService.Display();
+        if(YesNoChoice("Order list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
+        {
+            _orderService.SaveList(GetPath() + "orders.txt");
+            DrawLine();
+            Console.WriteLine("Order list has been saved!\n");
+        }
+    }
+
+    private void ClearOrderList()
+    {
+        // Confirms action
+        if(YesNoChoice("THIS WILL DELETE ALL ORDERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Order list was not cleared."))
+        {
+            _medicineService.ClearList();
+            DrawLine();
+            Console.WriteLine("Order list has been cleared!\n");
         }
     }
 }

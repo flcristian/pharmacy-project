@@ -225,7 +225,7 @@ namespace pharmacy_project.abstract_classes
         {
             // Confirms action
             Console.WriteLine(_user);
-            bool save = YesNoChoice("Your new details are above ^", "Are you sure you want to save it?", "Your account's details were not changed.");
+            bool save = YesNoChoice("Your details are above ^", "Are you sure you want to save it?", "Your account's details were not changed.");
             if(save)
             {
                 _userService.SaveList(GetPath() + "users.txt");
