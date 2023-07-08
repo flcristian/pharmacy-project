@@ -1,6 +1,7 @@
 using pharmacy_project.abstract_classes;
 using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
+using pharmacy_project.medicine.model;
 using pharmacy_project.medicine.service;
 using pharmacy_project.order_details.service;
 using pharmacy_project.order.model;
@@ -67,6 +68,92 @@ public class AdminPanel : Panel
                     break;
                 case "6":
                     ClearManufacturerList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
+    private void RunMedicineMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See medicine list");
+        Console.WriteLine("2 - Add medicine");
+        Console.WriteLine("3 - Edit medicine");
+        Console.WriteLine("4 - Remove medicine");
+        Console.WriteLine("5 - Save medicine list");
+        Console.WriteLine("6 - Clear medicine list");
+    }
+
+    private void RunMedicine()
+    {
+        while(true)
+        {
+            RunMedicineMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeMedicineList();
+                    break;
+                case "2":
+                    AddMedicine();
+                    break;
+                case "3":
+                    EditMedicine();
+                    break;
+                case "4":
+                    RemoveMedicine();
+                    break;
+                case "5":
+                    SaveMedicineList();
+                    break;
+                case "6":
+                    ClearMedicineList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
+    private void RunOrdersMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See order list");
+        Console.WriteLine("2 - Edit status of order");
+        Console.WriteLine("3 - Remove order");
+        Console.WriteLine("4 - Save order list");
+        Console.WriteLine("5 - Clear order list");
+    }
+
+    private void RunOrders()
+    {
+        while(true)
+        {
+            RunOrdersMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeOrderList();
+                    break;
+                case "2":
+                    EditStatusOfOrder();
+                    break;
+                case "3":
+                    RemoveOrder();
+                    break;
+                case "4":
+                    SaveOrderList();
+                    break;
+                case "5":
+                    ClearOrderList();
                     break;
                 default:
                     return;
@@ -168,8 +255,10 @@ public class AdminPanel : Panel
                     RunManufacturers();
                     break;
                 case "2":
+                    RunMedicine();
                     break;
                 case "3":
+                    RunOrders();
                     break;
                 case "4":
                     break;
@@ -288,8 +377,7 @@ public class AdminPanel : Panel
         User editedCustomer = new Customer(customer.Id, editedName, editedEmail, customer.Password);
 
         // Confirming action
-        bool edit = YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited.");
-        if(edit)
+        if(YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited."))
         {
             GetUserService().EditById(editedCustomer, editedCustomer.Id);
             DrawLine();
@@ -315,8 +403,7 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed.");
-        if(remove)
+        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed."))
         {
             GetUserService().RemoveById(customer.Id);
             DrawLine();
@@ -343,8 +430,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked");
-        if(block)
+        if(YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked"))
         {
             GetUserService().BlockById(customer.Id);
             DrawLine();
@@ -371,8 +457,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked");
-        if(block)
+        if(YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked"))
         {
             GetUserService().UnblockById(customer.Id);
             DrawLine();
@@ -399,8 +484,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        bool block = YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin.");
-        if(block)
+        if(YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin."))
         {
             Admin admin = new Admin(customer.Id, customer.Name, customer.Email, customer.Password);
             GetUserService().RemoveById(customer.Id);
@@ -429,8 +513,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(admin);
-        bool block = YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed.");
-        if(block)
+        if(YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed."))
         {
             Customer customer = new Customer(admin.Id, admin.Name, admin.Email, admin.Password);
             GetUserService().RemoveById(admin.Id);
@@ -444,8 +527,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         GetUserService().Display();
-        bool save = YesNoChoice("New user list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved.");
-        if(save)
+        if(YesNoChoice("User list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
         {
             GetUserService().SaveList(GetPath() + "users.txt");
             DrawLine();
@@ -456,8 +538,7 @@ public class AdminPanel : Panel
     private void ClearUserList()
     {
         // Confirms action
-        bool clear = YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared");
-        if(clear)
+        if(YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared."))
         {
             GetUserService().ClearList();
             GetUserService().Add(GetUser());
@@ -486,8 +567,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine("\n" + manufacturer);
-        bool save = YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added.");
-        if(save)
+        if(YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added."))
         {
             _manufacturerService.Add(manufacturer);
             DrawLine();
@@ -583,9 +663,8 @@ public class AdminPanel : Panel
 
         Manufacturer editedManufacturer = new Manufacturer(manufacturer.Id, editedName, editedEmail);
 
-        // Confirming action
-        bool edit = YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited.");
-        if(edit)
+        // Confirming actions
+        if(YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited."))
         {
             _manufacturerService.EditById(editedManufacturer, editedManufacturer.Id);
             DrawLine();
@@ -611,12 +690,17 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        bool remove = YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed.");
-        if(remove)
+        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed."))
         {
             _manufacturerService.RemoveById(manufacturer.Id);
             DrawLine();
             Console.WriteLine("Manufacturer was removed.\n");
+            if(YesNoChoice("Manufacturer was removed.\n", "Do you also want to delete medicine related to this manufacturer?", "Only manufacturer was removed."))
+            {
+                _medicineService.RemoveByManufacturerId(manufacturer.Id);
+                DrawLine();
+                Console.WriteLine("Manufacturer and related medicine were removed.\n");
+            }
         }
     }
 
@@ -624,8 +708,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _manufacturerService.Display();
-        bool save = YesNoChoice("New manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved.");
-        if(save)
+        if(YesNoChoice("Manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
         {
             _manufacturerService.SaveList(GetPath() + "manufacturers.txt");
             DrawLine();
@@ -636,12 +719,366 @@ public class AdminPanel : Panel
     private void ClearManufacturerList()
     {
         // Confirms action
-        bool clear = YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared");
-        if(clear)
+        if(YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
         {
             _manufacturerService.ClearList();
             DrawLine();
-            Console.WriteLine("Manufacturer list has been cleared!\n");
+
+            if(YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
+            {
+                _medicineService.ClearList();
+                DrawLine();
+                Console.WriteLine("All medicine and manufacturers were removed!\n");
+            }
+        }
+    }
+
+    // Medicine service methods
+
+    private void SeeMedicineList()
+    {
+        _medicineService.DisplayAdmin();
+        WaitForKey();
+    }
+
+    private void AddMedicine()
+    {
+        Console.WriteLine("Enter the email of the manufacturer:");
+        String email = Console.ReadLine();
+        Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
+        int id = manufacturer == null! ? 0 : manufacturer.Id;
+
+        if(manufacturer == null! && !YesNoChoice("No manufacturer was found with that email.", "Do you still want to continue adding the medicine?\nThe manufacturer ID will be set to 0 in this case.", "No medicine was added.")){return;}
+
+        Console.WriteLine("Enter the price:");
+        Double price = Double.Parse(Console.ReadLine());
+        Console.WriteLine("Enter the stock ammount:");
+        int stock = Int32.Parse(Console.ReadLine());
+        Console.WriteLine("Enter the name:");
+        String name = Console.ReadLine();
+        Console.WriteLine("Enter the information:");
+        String info = Console.ReadLine();
+        Console.WriteLine("Enter all tags separated by a comma (no spaces):");
+        String tags = Console.ReadLine();
+
+        Medicine medicine = new Medicine(_medicineService.NewId(), id, price, stock, name, info, tags);
+
+        // Confirms actions
+        if(YesNoChoice($"\nHere is the medicine you created? {medicine}", "Do you want to add it?", "No medicine was added."))
+        {
+            _medicineService.Add(medicine);
+            DrawLine();
+            Console.WriteLine("Medicine was added.\n");
+        }
+    }
+
+    private void EditMedicine()
+    {
+        Console.WriteLine("Enter the id of the medicine you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Medicine medicine = _medicineService.FindById(id);
+        if(medicine == null!)
+        {
+            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was edited."))
+            {
+                RemoveMedicine();
+            }
+            return;
+        }
+
+        Console.WriteLine("Choose what you want to edit:");
+        Console.WriteLine("1 - Manufacturer");
+        Console.WriteLine("2 - Price");
+        Console.WriteLine("3 - Stock ammount");
+        Console.WriteLine("4 - Name");
+        Console.WriteLine("5 - Informations");
+        Console.WriteLine("6 - Tags");
+        Console.WriteLine("7 - Everything");
+
+        String editedName = medicine.Name, editedInfo = medicine.Information, email;
+        Double editedPrice = medicine.Price;
+        int editedId = medicine.ManufacturerId, editedStock = medicine.StockAmmount;
+        Manufacturer manufacturer;
+        String editedTags = "";
+        foreach(String tag in medicine.Tags)
+        {
+            editedTags += tag;
+            if(medicine.Tags.Last() != tag)
+            {
+                editedTags += ",";
+            }
+        }
+
+        String choice = Console.ReadLine();
+        switch (choice)
+        {
+            case "1":
+                Console.WriteLine("Enter the email of the manufacturer:");
+                email = Console.ReadLine();
+                manufacturer = _manufacturerService.FindByEmail(email);
+
+                while(manufacturer == null!)
+                {
+                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    {
+                        return;
+                    }
+                    email = Console.ReadLine();
+                    manufacturer = _manufacturerService.FindByEmail(email);
+                }
+                editedId = manufacturer.Id;
+                break;
+            case "2":
+                Console.WriteLine("Enter the new price:");
+                editedPrice = Double.Parse(Console.ReadLine());
+                break;
+            case "3":
+                Console.WriteLine("Enter the new stock ammount:");
+                editedStock = Int32.Parse(Console.ReadLine());
+                break;
+            case "4":
+                Console.WriteLine("Enter the new name:");
+                editedName = Console.ReadLine();
+                break;
+            case "5":
+                Console.WriteLine("Enter the new informations:");
+                editedInfo = Console.ReadLine();
+                break;
+            case "6":
+                Console.WriteLine("Enter the new tags separated by a commma (no spaces):");
+                editedTags = Console.ReadLine();
+                break;
+            case "7":
+                Console.WriteLine("Enter the email of the manufacturer:");
+                email = Console.ReadLine();
+                manufacturer = _manufacturerService.FindByEmail(email);
+
+                while(manufacturer == null!)
+                {
+                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    {
+                        return;
+                    }
+                    email = Console.ReadLine();
+                    manufacturer = _manufacturerService.FindByEmail(email);
+                }
+                editedId = manufacturer.Id;
+                Console.WriteLine("Enter the new price:");
+                editedPrice = Double.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the new stock ammount:");
+                editedStock = Int32.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the new name:");
+                editedName = Console.ReadLine();
+                Console.WriteLine("Enter the new informations:");
+                editedInfo = Console.ReadLine();
+                Console.WriteLine("Enter the new tags separated by a commma (no spaces):");
+                editedTags = Console.ReadLine();
+                break;
+            default:
+                return;
+        }
+
+        // Confirms actions
+        Medicine editedMedicine = new Medicine(medicine.Id, editedId, editedPrice, editedStock, editedName, editedInfo, editedTags);
+
+        if(YesNoChoice("\nDetails of the edited medicine:\n" + editedMedicine.DescriptionForAdmin(), "Are you sure you want to make these changes?", "Medicine was not edited."))
+        {
+            _medicineService.EditById(editedMedicine, editedMedicine.Id);
+            DrawLine();
+            Console.WriteLine("Medicine was edited.\n");
+        }
+    }
+
+    private void RemoveMedicine()
+    {
+        Console.WriteLine("Enter the id of the medicine you want to remove:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Medicine medicine = _medicineService.FindById(id);
+        if(medicine == null!)
+        {
+            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was removed."))
+            {
+                RemoveMedicine();
+            }
+            return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed."))
+        {
+            _medicineService.RemoveById(medicine.Id);
+            DrawLine();
+            Console.WriteLine("The medicine was removed.");
+        }
+    }
+
+    private void SaveMedicineList()
+    {
+        // Confirms action
+        _medicineService.Display();
+        if(YesNoChoice("Medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
+        {
+            _medicineService.SaveList(GetPath() + "medicine.txt");
+            DrawLine();
+            Console.WriteLine("Medicine list has been saved!\n");
+        }
+    }
+
+    private void ClearMedicineList()
+    {
+        // Confirms action
+        if(YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared."))
+        {
+            _medicineService.ClearList();
+            DrawLine();
+            Console.WriteLine("Medicine list has been cleared!\n");
+        }
+    }
+
+    // Order service methods
+
+    private void SeeOrderList()
+    {
+        _orderService.Display();
+        WaitForKey();
+    }
+
+    private void EditStatusOfOrder()
+    {
+        Console.WriteLine("Enter the id of the order you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            {
+                RemoveOrder();
+            }
+            return;
+        }
+
+        Console.WriteLine("What status do you want to set?");
+        Console.WriteLine("(Submitted/Sent/Received/Completed)");
+        String[] statuses = {"Submitted","Sent","Received","Completed"};
+        DateTime dt = DateTime.UtcNow;
+        String date = dt.ToString("d.M.yyyy");
+        Order editedOrder = order.Duplicate();
+
+        String choice = Console.ReadLine();
+        switch(choice.ToLower())
+        {
+            case "submitted":
+                editedOrder.Status = "submitted";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i++)
+                {
+                    editedOrder.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 1; i++)
+                {
+                    if(editedOrder.StatusDates[i] == null!)
+                    {
+                        editedOrder.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "sent":
+                editedOrder.Status = "sent";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 1; i++)
+                {
+                    editedOrder.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 2; i++)
+                {
+                    if(editedOrder.StatusDates[i] == null!)
+                    {
+                        editedOrder.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "received":
+                editedOrder.Status = "received";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 2; i++)
+                {
+                    editedOrder.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 3; i++)
+                {
+                    if(editedOrder.StatusDates[i] == null!)
+                    {
+                        editedOrder.StatusDates[i] = date;
+                    }
+                }
+                break;
+            case "completed":
+                editedOrder.Status = "completed";
+                for(int i = editedOrder.StatusDates.Length - 1; i > 3; i++)
+                {
+                    editedOrder.StatusDates[i] = null!;
+                }
+
+                for(int i = 0; i < 4; i++)
+                {
+                    if(editedOrder.StatusDates[i] == null!)
+                    {
+                        editedOrder.StatusDates[i] = date;
+                    }
+                }
+                break;
+            default:
+                return;
+        }
+    }
+
+    private void RemoveOrder()
+    {
+        Console.WriteLine("Enter the id of the order you want to remove:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were removed."))
+            {
+                RemoveOrder();
+            }
+            return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"This is the medicine: {order}", "Are you sure you want to remove it?", "No orders were removed."))
+        {
+            _orderService.RemoveById(order.Id);
+            DrawLine();
+            Console.WriteLine("The orders were removed.");
+        }
+    }
+
+    private void SaveOrderList()
+    {
+        // Confirms action
+        _orderService.Display();
+        if(YesNoChoice("Order list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
+        {
+            _orderService.SaveList(GetPath() + "orders.txt");
+            DrawLine();
+            Console.WriteLine("Order list has been saved!\n");
+        }
+    }
+
+    private void ClearOrderList()
+    {
+        // Confirms action
+        if(YesNoChoice("THIS WILL DELETE ALL ORDERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Order list was not cleared."))
+        {
+            _medicineService.ClearList();
+            DrawLine();
+            Console.WriteLine("Order list has been cleared!\n");
         }
     }
 }

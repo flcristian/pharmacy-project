@@ -348,5 +348,39 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(list, returned);
         }
+
+        [Fact]
+        public void RemoveByManufacturerId_NoMedicineFound_Returns0()
+        {
+            // Arrange
+            int id = 1912;
+            Medicine medicine = new Medicine(1, 1, 1, 1, "name", "info", "tag1");
+            List<Medicine> list = new List<Medicine> { medicine };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            int remove = service.RemoveByManufacturerId(id);
+
+            // Arrange
+            Assert.Single(service.GetList());
+            Assert.Equal(0, remove);
+        }
+
+        [Fact]
+        public void RemoveByManufacturerId_MedicineFound_Returns1()
+        {
+            // Arrange
+            int id = 1912;
+            Medicine medicine = new Medicine(1, id, 1, 1, "name", "info", "tag1");
+            List<Medicine> list = new List<Medicine> { medicine };
+            MedicineService service = new MedicineService(list);
+
+            // Act
+            int remove = service.RemoveByManufacturerId(id);
+
+            // Arrange
+            Assert.Empty(service.GetList());
+            Assert.Equal(1, remove);
+        }
     }
 }
