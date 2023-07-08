@@ -17,3 +17,6 @@ dotnet_diagnostic.CS8603.severity = none
 
 # CS8602: Dereference of a possibly null reference.
 dotnet_diagnostic.CS8602.severity = silent
+
+# CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
+dotnet_diagnostic.CS0659.severity = silent

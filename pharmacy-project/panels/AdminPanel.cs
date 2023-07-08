@@ -965,63 +965,68 @@ public class AdminPanel : Panel
         String[] statuses = {"Submitted","Sent","Received","Completed"};
         DateTime dt = DateTime.UtcNow;
         String date = dt.ToString("d.M.yyyy");
+        Order editedOrder = order.Duplicate();
 
         String choice = Console.ReadLine();
         switch(choice.ToLower())
         {
             case "submitted":
-                for(int i = order.StatusDates.Length - 1; i > 0; i++)
+                editedOrder.Status = "submitted";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i++)
                 {
-                    order.StatusDates[i] = null!;
+                    editedOrder.StatusDates[i] = null!;
                 }
 
                 for(int i = 0; i < 1; i++)
                 {
-                    if(order.StatusDates[i] == null!)
+                    if(editedOrder.StatusDates[i] == null!)
                     {
-                        order.StatusDates[i] = date;
+                        editedOrder.StatusDates[i] = date;
                     }
                 }
                 break;
             case "sent":
-                for(int i = order.StatusDates.Length - 1; i > 1; i++)
+                editedOrder.Status = "sent";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 1; i++)
                 {
-                    order.StatusDates[i] = null!;
+                    editedOrder.StatusDates[i] = null!;
                 }
 
                 for(int i = 0; i < 2; i++)
                 {
-                    if(order.StatusDates[i] == null!)
+                    if(editedOrder.StatusDates[i] == null!)
                     {
-                        order.StatusDates[i] = date;
+                        editedOrder.StatusDates[i] = date;
                     }
                 }
                 break;
             case "received":
-                for(int i = order.StatusDates.Length - 1; i > 2; i++)
+                editedOrder.Status = "received";
+                for (int i = editedOrder.StatusDates.Length - 1; i > 2; i++)
                 {
-                    order.StatusDates[i] = null!;
+                    editedOrder.StatusDates[i] = null!;
                 }
 
                 for(int i = 0; i < 3; i++)
                 {
-                    if(order.StatusDates[i] == null!)
+                    if(editedOrder.StatusDates[i] == null!)
                     {
-                        order.StatusDates[i] = date;
+                        editedOrder.StatusDates[i] = date;
                     }
                 }
                 break;
             case "completed":
-                for(int i = order.StatusDates.Length - 1; i > 3; i++)
+                editedOrder.Status = "completed";
+                for(int i = editedOrder.StatusDates.Length - 1; i > 3; i++)
                 {
-                    order.StatusDates[i] = null!;
+                    editedOrder.StatusDates[i] = null!;
                 }
 
                 for(int i = 0; i < 4; i++)
                 {
-                    if(order.StatusDates[i] == null!)
+                    if(editedOrder.StatusDates[i] == null!)
                     {
-                        order.StatusDates[i] = date;
+                        editedOrder.StatusDates[i] = date;
                     }
                 }
                 break;

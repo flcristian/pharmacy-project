@@ -9,7 +9,7 @@ using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order.model
 {
-    public class Order : IToSave, IHasId
+    public class Order : IToSave, IHasId, IDuplicable<Order>
     {
         private int _id;
         private int _customerId;
@@ -19,6 +19,15 @@ namespace pharmacy_project.order.model
         // ORDER STATUSES = Submitted / Sent / Received / Completed
 
         // Constructors
+
+        public Order(int id, int customerId, String status, String[] statusDates)
+        {
+            _id = id;
+            _customerId = customerId;
+            _status = status;
+            _statusDates = statusDates;
+        }
+
         public Order(int id, int customerId, String status)
         {
             _id = id;
@@ -144,6 +153,11 @@ namespace pharmacy_project.order.model
         public override bool Equals(object? obj)
         {
             return _id == (obj as Order)._id && _customerId == (obj as Order)._customerId && _status.Equals((obj as Order)._status) && _statusDates.Equals((obj as Order)._statusDates);
+        }
+
+        public Order Duplicate()
+        {
+            return new Order(_id, _customerId, _status, _statusDates);
         }
     }
 }
