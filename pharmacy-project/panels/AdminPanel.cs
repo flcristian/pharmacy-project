@@ -3,11 +3,13 @@ using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
 using pharmacy_project.medicine.model;
 using pharmacy_project.medicine.service;
+using pharmacy_project.order_details.model;
 using pharmacy_project.order_details.service;
 using pharmacy_project.order.model;
 using pharmacy_project.order.service;
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
+using System.Globalization;
 
 namespace pharmacy_project.panels;
 
@@ -161,6 +163,39 @@ public class AdminPanel : Panel
         }
     }
 
+    private void RunOrderDetailsMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See order details list");
+        Console.WriteLine("2 - Edit order details");
+        Console.WriteLine("3 - Save order details list");
+    }
+
+    private void RunOrderDetails()
+    {
+        while(true)
+        {
+            RunOrderDetailsMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeOrderDetailsList();
+                    break;
+                case "2":
+                    EditOrderDetails();
+                    break;
+                case "3":
+                    SaveOrderDetailsList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
     private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
@@ -261,6 +296,7 @@ public class AdminPanel : Panel
                     RunOrders();
                     break;
                 case "4":
+                    RunOrderDetails();
                     break;
                 case "5":
                     RunUsers();
@@ -795,6 +831,7 @@ public class AdminPanel : Panel
         Console.WriteLine("5 - Informations");
         Console.WriteLine("6 - Tags");
         Console.WriteLine("7 - Everything");
+        Console.WriteLine("Anything else to cancel.");
 
         String editedName = medicine.Name, editedInfo = medicine.Information, email;
         Double editedPrice = medicine.Price;
@@ -962,6 +999,7 @@ public class AdminPanel : Panel
 
         Console.WriteLine("What status do you want to set?");
         Console.WriteLine("(Submitted/Sent/Received/Completed)");
+        Console.WriteLine("Anything else to cancel.");
         DateTime dt = DateTime.UtcNow;
         String date = dt.ToString("d.M.yyyy");
         Order editedOrder = order.Duplicate();
@@ -1091,18 +1129,103 @@ public class AdminPanel : Panel
 
     // Order details service methods
 
+    // Displays order details list with medicine names
+
+    // TODO : Test
+    private void DisplayOrderDetails(OrderDetails details)
+    {
+        String[] medicine = new String[details.MedicineIds.Count];
+
+        int i = 0;
+        foreach(int id in details.MedicineIds)
+        {
+            medicine[i] = _medicineService.FindById(details.MedicineIds[i]).Name;
+            i++;
+        }
+
+        Console.WriteLine(details.ToStringMedicine(medicine.ToList()));
+    }
+
+
+    // Displays order details with medicine names
+    private void DisplayOrderDetailsList()
+    {
+        String[][] medicine = new String[_orderDetailsService.Count()][];
+        int i = 0;
+        foreach (OrderDetails details in _orderDetailsService.GetList())
+        {
+            medicine[i] = new String[details.MedicineIds.Count];
+
+            int j = 0;
+            foreach (int id in details.MedicineIds)
+            {
+                medicine[i][j] = _medicineService.FindById(id).Name;
+                j++;
+            }
+            i++;
+        }
+
+        _orderDetailsService.DisplayWithMedicine(medicine);
+    }
+
     private void SeeOrderDetailsList()
     {
-
+        DisplayOrderDetailsList();
+        WaitForKey();
     }
 
     private void EditOrderDetails()
     {
+        Console.WriteLine("Enter the id of the order you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
 
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            {
+                RemoveOrder();
+            }
+            return;
+        }
+
+        OrderDetails details = _orderDetailsService.FindByOrderId(order.Id);
+        if(details == null!)
+        {
+            DrawLine();
+            Console.WriteLine("Order has no details?");
+            return;
+        }
+
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - Add medicine");
+        Console.WriteLine("2 - Remove medicine");
+        Console.WriteLine("3 - Edit medicine ammount");
+        Console.WriteLine("Anything else to cancel.");
+        String choice = Console.ReadLine();
+
+        switch(choice)
+        {
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            default:
+                return;
+        }
     }
 
     private void SaveOrderDetailsList()
     {
-
+        // Confirms action
+        DisplayOrderDetails();
+        if(YesNoChoice("Order details list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order details list was not saved."))
+        {
+            _orderDetailsService.SaveList(GetPath() + "order_details.txt");
+            DrawLine();
+            Console.WriteLine("Order details list has been saved!\n");
+        }
     }
 }

@@ -19,16 +19,32 @@ namespace pharmacy_project.order_details.service
 
         // Methods
 
+        public void DisplayWithMedicine(String[][] medicine)
+        {
+            if (!GetList().Any())
+            {
+                Console.WriteLine("There are no manufacturers.\n");
+                return;
+            }
+
+            int i = 0;
+            foreach (OrderDetails details in GetList())
+            {
+                Console.WriteLine(details.ToStringMedicine(medicine[i].ToList()));
+                i++;
+            }
+        }
+
         public OrderDetails FindByOrderId(int id)
         {
-                foreach(OrderDetails details in base.GetList())
+            foreach (OrderDetails details in GetList())
+            {
+                if (details.OrderId == id)
                 {
-                        if(details.OrderId == id)
-                        {
-                                return details;
-                        }
+                    return details;
                 }
-                return null;
+            }
+            return null;
         }
     }
 }

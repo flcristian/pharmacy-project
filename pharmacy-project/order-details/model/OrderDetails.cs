@@ -82,17 +82,37 @@ namespace pharmacy_project.order_details.model
 
         public override String ToString()
         {
-            // This description is mainly for admins.
-
             String desc = "";
 
             if(_medicineIds.Any())
             {
                 desc += $"Order Id : {_orderId}\n";
-                
+
                 foreach(int id in _medicineIds)
                 {
                     desc += $"Id x Ammount : {id} x {_ammounts[_medicineIds.IndexOf(id)]}\n";
+                }
+            }
+            else
+            {
+                desc = $"Order id {_orderId} is empty.";
+            }
+
+            return desc;
+        }
+
+        // TODO : Finish
+        public String ToStringMedicine(List<String> medicine)
+        {
+            String desc = "";
+
+            if(_medicineIds.Any())
+            {
+                desc += $"Order Id : {_orderId}\n";
+                foreach(int id in _medicineIds)
+                {
+                    int index = _medicineIds.IndexOf(id);
+                    desc += $"Id - Name x Ammount : {id} - {medicine[index]} x {_ammounts[index]}\n";
                 }
             }
             else

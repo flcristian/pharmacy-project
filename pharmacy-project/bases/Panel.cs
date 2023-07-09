@@ -60,6 +60,7 @@ namespace pharmacy_project.abstract_classes
         {
             Console.WriteLine("Enter anything to continue:");
             Console.ReadLine();
+            Console.WriteLine();
         }
 
         public void DrawLine()
