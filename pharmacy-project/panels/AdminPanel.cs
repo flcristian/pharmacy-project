@@ -962,7 +962,6 @@ public class AdminPanel : Panel
 
         Console.WriteLine("What status do you want to set?");
         Console.WriteLine("(Submitted/Sent/Received/Completed)");
-        String[] statuses = {"Submitted","Sent","Received","Completed"};
         DateTime dt = DateTime.UtcNow;
         String date = dt.ToString("d.M.yyyy");
         Order editedOrder = order.Duplicate();
@@ -972,7 +971,7 @@ public class AdminPanel : Panel
         {
             case "submitted":
                 editedOrder.Status = "submitted";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -987,7 +986,7 @@ public class AdminPanel : Panel
                 break;
             case "sent":
                 editedOrder.Status = "sent";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 1; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1002,7 +1001,7 @@ public class AdminPanel : Panel
                 break;
             case "received":
                 editedOrder.Status = "received";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 2; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1017,7 +1016,7 @@ public class AdminPanel : Panel
                 break;
             case "completed":
                 editedOrder.Status = "completed";
-                for(int i = editedOrder.StatusDates.Length - 1; i > 3; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1032,6 +1031,14 @@ public class AdminPanel : Panel
                 break;
             default:
                 return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"\nThis is the new order:\n {order}", "Are you sure you want to save it?", "No orders were edited."))
+        {
+            _orderService.EditById(editedOrder, order.Id);
+            DrawLine();
+            Console.WriteLine("Order was edited.");
         }
     }
 
@@ -1051,11 +1058,11 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"This is the medicine: {order}", "Are you sure you want to remove it?", "No orders were removed."))
+        if(YesNoChoice($"This is the order: {order}", "Are you sure you want to remove it?", "No orders were removed."))
         {
             _orderService.RemoveById(order.Id);
             DrawLine();
-            Console.WriteLine("The orders were removed.");
+            Console.WriteLine("The order was removed.");
         }
     }
 
@@ -1080,5 +1087,22 @@ public class AdminPanel : Panel
             DrawLine();
             Console.WriteLine("Order list has been cleared!\n");
         }
+    }
+
+    // Order details service methods
+
+    private void SeeOrderDetailsList()
+    {
+
+    }
+
+    private void EditOrderDetails()
+    {
+
+    }
+
+    private void SaveOrderDetailsList()
+    {
+
     }
 }

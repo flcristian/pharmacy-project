@@ -19,6 +19,16 @@ namespace pharmacy_project.order_details.service
 
         // Methods
 
-        // No methods yet.
+        public OrderDetails FindByOrderId(int id)
+        {
+                foreach(OrderDetails details in base.GetList())
+                {
+                        if(details.OrderId == id)
+                        {
+                                return details;
+                        }
+                }
+                return null;
+        }
     }
 }
