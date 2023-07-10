@@ -1131,7 +1131,6 @@ public class AdminPanel : Panel
 
     // Displays order details list with medicine names
 
-    // TODO : Test
     private void DisplayOrderDetails(OrderDetails details)
     {
         String[] medicine = new String[details.MedicineIds.Count];
@@ -1139,13 +1138,11 @@ public class AdminPanel : Panel
         int i = 0;
         foreach(int id in details.MedicineIds)
         {
-            medicine[i] = _medicineService.FindById(details.MedicineIds[i]).Name;
+            medicine[i] = _medicineService.FindById(id).Name;
             i++;
         }
-
         Console.WriteLine(details.ToStringMedicine(medicine.ToList()));
     }
-
 
     // Displays order details with medicine names
     private void DisplayOrderDetailsList()
@@ -1166,6 +1163,7 @@ public class AdminPanel : Panel
         }
 
         _orderDetailsService.DisplayWithMedicine(medicine);
+        Console.WriteLine();
     }
 
     private void SeeOrderDetailsList()
@@ -1184,7 +1182,7 @@ public class AdminPanel : Panel
         {
             if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
             {
-                RemoveOrder();
+                EditOrderDetails();
             }
             return;
         }
@@ -1197,30 +1195,146 @@ public class AdminPanel : Panel
             return;
         }
 
-        Console.WriteLine("Choose what you want to do:");
-        Console.WriteLine("1 - Add medicine");
-        Console.WriteLine("2 - Remove medicine");
-        Console.WriteLine("3 - Edit medicine ammount");
-        Console.WriteLine("Anything else to cancel.");
-        String choice = Console.ReadLine();
+        OrderDetails editedDetails = details.Duplicate();
 
-        switch(choice)
+        bool running = true;
+        while (running)
         {
-            case "1":
-                break;
-            case "2":
-                break;
-            case "3":
-                break;
-            default:
-                return;
+            Console.WriteLine("Choose what you want to do:");
+            Console.WriteLine("1 - Display order details");
+            Console.WriteLine("2 - Add medicine");
+            Console.WriteLine("3 - Remove medicine");
+            Console.WriteLine("4 - Edit medicine ammount");
+            Console.WriteLine("Anything else to stop and go to order save menu.");
+            String choice = Console.ReadLine();
+
+            Console.WriteLine();
+            int medId, ammount;
+            switch (choice)
+            {
+                case "1":
+                    DisplayOrderDetails(editedDetails);
+                    WaitForKey();
+                    break;
+                case "2":
+                    Console.WriteLine("Enter the id of the medicine you want to add:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    Medicine medicine = _medicineService.FindById(medId);
+
+                    bool addBreak = false;
+                    while(medicine == null!)
+                    {
+                        if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            addBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the id of the medicine you want to add:");
+                        medId = Int32.Parse(Console.ReadLine());
+                    }
+                    if (addBreak) { break; }
+
+                    Console.WriteLine("Enter the ammount:");
+                    ammount = Int32.Parse(Console.ReadLine());
+
+                    while (ammount <= 0)
+                    {
+                        if (!YesNoChoice("Ammount can't be negative or zero.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            addBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the ammount:");
+                        ammount = Int32.Parse(Console.ReadLine());
+                    }
+                    if (addBreak) { break; }
+
+                    editedDetails.MedicineIds.Add(medId);
+                    editedDetails.Ammounts.Add(ammount);
+                    Console.WriteLine("\nMedicine was added!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                case "3":
+                    Console.WriteLine("Enter the id of the medicine you want to remove:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    bool removeBreak = false;
+                    int removed = editedDetails.RemoveMedicineId(medId);
+                    while(removed == 0)
+                    {
+                        if (!YesNoChoice("Order details don't contain medicine with that id.", "Do you want to try again?", "No medicine ids were removed."))
+                        {
+                            removeBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the id of the medicine you want to remove:");
+                        medId = Int32.Parse(Console.ReadLine());
+                        removed = editedDetails.RemoveMedicineId(medId);
+                    }
+                    if (removeBreak) { break; }
+
+                    Console.WriteLine("\nMedicine was removed!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                case "4":
+                    Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    bool editBreak = false;
+                    int edited = editedDetails.IndexOfMedicine(medId);
+                    while (edited == -1)
+                    {
+                        if (!YesNoChoice("Order details don't contain medicine with that id.", "Do you want to try again?", "No ammounts were edited."))
+                        {
+                            editBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
+                        medId = Int32.Parse(Console.ReadLine());
+                        edited = editedDetails.IndexOfMedicine(medId);
+                    }
+                    if (editBreak) { break; }
+
+                    Console.WriteLine("Enter the new ammount:");
+                    ammount = Int32.Parse(Console.ReadLine());
+
+                    while (ammount <= 0)
+                    {
+                        if (!YesNoChoice("Ammount can't be negative or zero.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            editBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the ammount:");
+                        ammount = Int32.Parse(Console.ReadLine());
+                    }
+                    if (editBreak) { break; }
+
+                    editedDetails.EditAmmountByMedicineId(medId, ammount);
+                    Console.WriteLine("\nMedicine ammount was edited!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                default:
+                    running = false;
+                    break;
+            }
+        }
+
+        // Confirms actions
+        DisplayOrderDetails(editedDetails);
+        if (YesNoChoice("Order details are above ^", "Are you sure you want to save it?", "Order details were not saved."))
+        {
+            _orderDetailsService.EditById(editedDetails, details.Id);
+            DrawLine();
+            Console.WriteLine("Order details have been saved!\n");
         }
     }
 
     private void SaveOrderDetailsList()
     {
         // Confirms action
-        DisplayOrderDetails();
+        DisplayOrderDetailsList();
         if(YesNoChoice("Order details list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order details list was not saved."))
         {
             _orderDetailsService.SaveList(GetPath() + "order_details.txt");

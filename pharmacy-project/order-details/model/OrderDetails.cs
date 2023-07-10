@@ -7,7 +7,7 @@ using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order_details.model
 {
-    public class OrderDetails : IHasId, IToSave
+    public class OrderDetails : IHasId, IToSave, IDuplicable<OrderDetails>
     {
         private int _id;
         private int _orderId;
@@ -143,6 +143,53 @@ namespace pharmacy_project.order_details.model
         public override bool Equals(object? obj)
         {
             return _id == (obj as OrderDetails)._id && _orderId == (obj as OrderDetails)._orderId && _medicineIds.Equals((obj as OrderDetails)._medicineIds) && _ammounts.Equals((obj as OrderDetails)._ammounts);
+        }
+        
+        public OrderDetails Duplicate()
+        {
+            return new OrderDetails(ToSave());
+        }
+
+        // TODO : TEST METHODS
+        public int IndexOfMedicine(int id)
+        {
+            int index = -1;
+            for(int i = 0; i < MedicineIds.Count; i++)
+            {
+                if(MedicineIds[i] == id)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
+
+        public int RemoveMedicineId(int id)
+        {
+            int index = IndexOfMedicine(id);
+            // Checks if medicine exists
+            if (index == -1)
+            {
+                return 0;
+            }
+
+            MedicineIds.RemoveAt(index);
+            Ammounts.RemoveAt(index);
+            return 1;
+        }
+
+        public int EditAmmountByMedicineId(int id, int ammount)
+        {
+            int index = IndexOfMedicine(id);
+            // Checks if medicine exists
+            if (index == -1)
+            {
+                return 0;
+            }
+
+            Ammounts[index] = ammount;
+            return 1;
         }
     }
 }
