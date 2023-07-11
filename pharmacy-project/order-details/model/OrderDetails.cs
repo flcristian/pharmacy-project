@@ -101,8 +101,7 @@ namespace pharmacy_project.order_details.model
             return desc;
         }
 
-        // TODO : Finish
-        public String ToStringMedicine(List<String> medicine)
+        public String Description(List<String> medicine)
         {
             String desc = "";
 
@@ -150,19 +149,9 @@ namespace pharmacy_project.order_details.model
             return new OrderDetails(ToSave());
         }
 
-        // TODO : TEST METHODS
         public int IndexOfMedicine(int id)
         {
-            int index = -1;
-            for(int i = 0; i < MedicineIds.Count; i++)
-            {
-                if(MedicineIds[i] == id)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
+            return MedicineIds.IndexOf(id);
         }
 
         public int RemoveMedicineId(int id)

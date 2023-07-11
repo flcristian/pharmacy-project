@@ -17,23 +17,10 @@ namespace pharmacy_project.order.service
 
         // Methods
 
-        public int DisplayById(int id)
-        {
-            Order order = base.FindById(id);
-            // Checks if the order exists. Returns 0 if not.
-            if (order == null)
-            {
-                return 0;
-            }
-
-            Console.WriteLine(order);
-            return 1;
-        }
-
         public int DisplayByIdCustomer(int id)
         {
             List<Order> orders = new List<Order>();
-            foreach(Order order in base.GetList())
+            foreach(Order order in GetList())
             {
                 if(order.CustomerId == id)
                 {
@@ -57,7 +44,7 @@ namespace pharmacy_project.order.service
         public int DisplayByStatus(String status)
         {
             List<Order> orders = new List<Order>();
-            foreach(Order order in base.GetList())
+            foreach(Order order in GetList())
             {
                 if (order.Status.Equals(status))
                 {
@@ -81,7 +68,7 @@ namespace pharmacy_project.order.service
         public int DisplayByStatusSortedByDate(String status)
         {
             List<Order> orders = new List<Order>();
-            foreach (Order order in base.GetList())
+            foreach (Order order in GetList())
             {
                 if (order.Status.Equals(status))
                 {

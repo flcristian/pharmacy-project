@@ -21,41 +21,28 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayAdmin()
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
-            foreach (Medicine medicine in base.GetList())
+            foreach (Medicine medicine in GetList())
             {
                 Console.WriteLine(medicine.DescriptionForAdmin());
             }
         }
 
-        public int DisplayById(int id)
-        {
-            Medicine medicine = base.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (medicine == null)
-            {
-                return 0;
-            }
-
-            Console.WriteLine(medicine);
-            return 1;
-        }
-
         public void DisplayByAscendingPrice()
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
             List<Medicine> list = new List<Medicine>();
-            list = base.GetList().OrderBy(medicine => medicine.Price).ToList();
+            list = GetList().OrderBy(medicine => medicine.Price).ToList();
 
             foreach(Medicine medicine in list)
             {
@@ -65,14 +52,14 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByDescendingPrice()
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
             }
 
             List<Medicine> list = new List<Medicine>();
-            list = base.GetList().OrderBy(medicine => medicine.Price).Reverse().ToList();
+            list = GetList().OrderBy(medicine => medicine.Price).Reverse().ToList();
 
             foreach (Medicine medicine in list)
             {
@@ -82,7 +69,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByList(List<Medicine> list)
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -96,7 +83,7 @@ namespace pharmacy_project.medicine.service
 
         public void DisplayByListAdmin(List<Medicine> list)
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no medicine.\n");
                 return;
@@ -111,7 +98,7 @@ namespace pharmacy_project.medicine.service
         public List<Medicine> FindByName(String name)
         {
             List<Medicine> list = new List<Medicine>();
-            foreach(Medicine medicine in base.GetList())
+            foreach(Medicine medicine in GetList())
             {
                 if (medicine.Name.Equals(name))
                 {

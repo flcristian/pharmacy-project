@@ -30,7 +30,7 @@ namespace pharmacy_project.order_details.service
             int i = 0;
             foreach (OrderDetails details in GetList())
             {
-                Console.WriteLine(details.ToStringMedicine(medicine[i].ToList()));
+                Console.WriteLine(details.Description(medicine[i].ToList()));
                 i++;
             }
         }
@@ -45,6 +45,20 @@ namespace pharmacy_project.order_details.service
                 }
             }
             return null;
+        }
+
+        public int RemoveByOrderId(int id)
+        {
+            OrderDetails details = FindByOrderId(id);
+
+            // Checks if the order exists
+            if(details == null!)
+            {
+                return 0;
+            }
+
+            RemoveById(details.Id);
+            return 1;
         }
     }
 }

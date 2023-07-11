@@ -18,25 +18,10 @@ namespace pharmacy_project.user.service
 
         // Methods
 
-        public int DisplayById(int id)
-        {
-            User user = base.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (user == null!)
-            {
-                return 0;
-            }
-
-            Console.WriteLine(user);
-            return 1;
-        }
-
-        // TODO: Test display admins
-
         public int DisplayAdmins()
         {
             List<User> admins = new List<User>();
-            foreach(User user in base.GetList())
+            foreach(User user in GetList())
             {
                 if(this.IsAdmin(user))
                 {
@@ -60,7 +45,7 @@ namespace pharmacy_project.user.service
 
         public User FindByEmail(String email)
         {
-            foreach(User user in base.GetList())
+            foreach(User user in GetList())
             {
                 if (user.Email.Equals(email))
                 {
@@ -73,7 +58,7 @@ namespace pharmacy_project.user.service
 
         public User FindByEmailAndPassword(String email, String password)
         {
-            foreach(User user in base.GetList())
+            foreach(User user in GetList())
             {
                 if(user.Email.Equals(email) && user.Password.Equals(password))
                 {
@@ -88,7 +73,7 @@ namespace pharmacy_project.user.service
         {
             List<User> users = new List<User>();
 
-            foreach(User user in base.GetList())
+            foreach(User user in GetList())
             {
                 if (user.Name.Equals(name))
                 {
@@ -118,14 +103,14 @@ namespace pharmacy_project.user.service
                 return 0;
             }
 
-            base.RemoveById(user.Id);
+            RemoveById(user.Id);
             return 1;
         }
 
         public override int Add(User user)
         {
             // Checks if id is already used.
-            if(base.FindById(user.Id) != null!)
+            if(FindById(user.Id) != null!)
             {
                 return -1;
             }
@@ -136,13 +121,13 @@ namespace pharmacy_project.user.service
                 return 0;
             }
 
-            base.Add(user);
+            Add(user);
             return 1;
         }
 
         public int BlockById(int id)
         {
-            User user = base.FindById(id);
+            User user = FindById(id);
 
             // Checks if the user exists. Returns -2 if not
             if(user == null!)
@@ -164,13 +149,13 @@ namespace pharmacy_project.user.service
             }
 
             customer.Locked = true;
-            base.EditById(customer, customer.Id);
+            EditById(customer, customer.Id);
             return 1;
         }
 
         public int UnblockById(int id)
         {
-            User user = base.FindById(id);
+            User user = FindById(id);
 
             // Checks if the user exists. Returns -2 if not
             if(user == null!)
@@ -192,7 +177,7 @@ namespace pharmacy_project.user.service
             }
 
             customer.Locked = false;
-            base.EditById(customer, customer.Id);
+            EditById(customer, customer.Id);
             return 1;
         }
     }

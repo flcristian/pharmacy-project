@@ -1099,6 +1099,7 @@ public class AdminPanel : Panel
         if(YesNoChoice($"This is the order: {order}", "Are you sure you want to remove it?", "No orders were removed."))
         {
             _orderService.RemoveById(order.Id);
+            _orderDetailsService.RemoveByOrderId(order.Id);
             DrawLine();
             Console.WriteLine("The order was removed.");
         }
@@ -1108,9 +1109,10 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _orderService.Display();
-        if(YesNoChoice("Order list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
+        if(YesNoChoice("Order list is above ^\nTHIS ALSO SAVES ORDER DETAILS!", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
         {
             _orderService.SaveList(GetPath() + "orders.txt");
+            _orderDetailsService.SaveList(GetPath() + "order_details.txt");
             DrawLine();
             Console.WriteLine("Order list has been saved!\n");
         }
@@ -1130,7 +1132,6 @@ public class AdminPanel : Panel
     // Order details service methods
 
     // Displays order details list with medicine names
-
     private void DisplayOrderDetails(OrderDetails details)
     {
         String[] medicine = new String[details.MedicineIds.Count];
@@ -1141,7 +1142,7 @@ public class AdminPanel : Panel
             medicine[i] = _medicineService.FindById(id).Name;
             i++;
         }
-        Console.WriteLine(details.ToStringMedicine(medicine.ToList()));
+        Console.WriteLine(details.Description(medicine.ToList()));
     }
 
     // Displays order details with medicine names

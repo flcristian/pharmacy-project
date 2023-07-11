@@ -20,29 +20,16 @@ namespace pharmacy_project.manufacturer.service
 
         public void DisplayAdmin()
         {
-            if (!base.GetList().Any())
+            if (!GetList().Any())
             {
                 Console.WriteLine("There are no manufacturers.\n");
                 return;
             }
 
-            foreach (Manufacturer manufacturer in base.GetList())
+            foreach (Manufacturer manufacturer in GetList())
             {
                 Console.WriteLine(manufacturer.DescriptionAdmin());
             }
-        }
-
-        public int DisplayById(int id)
-        {
-            Manufacturer manufacturer = base.FindById(id);
-            // Checks if the order exists. Returns 0 if no.
-            if (manufacturer == null!)
-            {
-                return 0;
-            }
-
-            Console.WriteLine(manufacturer);
-            return 1;
         }
 
         public override int Add(Manufacturer manufacturer)
@@ -59,13 +46,13 @@ namespace pharmacy_project.manufacturer.service
                 return 0;
             }
 
-            base.Add(manufacturer);
+            Add(manufacturer);
             return 1;
         }
 
         public Manufacturer FindByName(String name)
         {
-            foreach(Manufacturer manufacturer in base.GetList())
+            foreach(Manufacturer manufacturer in GetList())
             {
                 if (manufacturer.Name.Equals(name))
                 {
@@ -78,7 +65,7 @@ namespace pharmacy_project.manufacturer.service
 
         public Manufacturer FindByEmail(String email)
         {
-            foreach (Manufacturer manufacturer in base.GetList())
+            foreach (Manufacturer manufacturer in GetList())
             {
                 if (manufacturer.Email.Equals(email))
                 {
