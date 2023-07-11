@@ -23,9 +23,9 @@ internal class Program
         String path = Directory.GetCurrentDirectory() + "\\..\\..\\..\\resources\\";
         /*LoginPanel login = new LoginPanel(path);
         login.Run();*/
-        Admin admin = new Admin("Admin/126133/Catalin Marinescu/admin@email.com/parola");
+        Customer customer = new Customer("Customer/43061/Andrei Georgescu/customer@email.com/parola/False");
         /*Customer customer = new Customer(1, "name", "email", "pass");*/
-        AdminPanel panel = new AdminPanel(path, admin);
+        CustomerPanel panel = new CustomerPanel(path, customer);
         panel.Run();
     }
 

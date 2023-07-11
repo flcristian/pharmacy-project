@@ -126,6 +126,7 @@ namespace pharmacy_project.medicine.model
         {
             String desc = "";
 
+            desc += "Id : " + _id + "\n";
             desc += "Name : " + _name + "\n";
             desc += "Information : " + _information + "\n";
             desc += "Price : " + _price + "$\n";
