@@ -70,6 +70,37 @@ namespace testing_pharmacy_project.Tests
             Assert.Null(found);
         }
 
-        // TEST REMOVE BY ORDER ID
+        [Fact]
+        public void RemoveByOrderId_NoMatch_DoesNotRemoveOrderDetails_Returns0()
+        {
+            // Arrange
+            int id = 712;
+            OrderDetails details = new OrderDetails(1, 2, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 3 });
+            List<OrderDetails> list = new List<OrderDetails> { details };
+            OrderDetailsService service = new OrderDetailsService(list);
+
+            // Act
+            int removed = service.RemoveByOrderId(id);
+
+            // Assert
+            Assert.Equal(0, removed);
+        }
+
+        [Fact]
+        public void RemoveByOrderId_ValidMatch_RemovesOrderDetails_Returns1()
+        {
+            // Arrange
+            int id = 712;
+            OrderDetails details = new OrderDetails(1, id, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 3 });
+            List<OrderDetails> list = new List<OrderDetails> { details };
+            OrderDetailsService service = new OrderDetailsService(list);
+
+            // Act
+            int removed = service.RemoveByOrderId(id);
+
+            // Assert
+            Assert.Equal(1, removed);
+            Assert.Empty(service.GetList());
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void FindById_ValidMatch_ReturnsManufacturer()
+        public void FindById_ValidMatch_ReturnsObject()
         {
             // Arrange
             int id = 121;
@@ -62,7 +62,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void FindById_MultipleManufacturers_ReturnsCorrectManufacturer()
+        public void FindById_MultipleObjects_ReturnsCorrectObject()
         {
             // Arrange
             int id = 101;
@@ -86,7 +86,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void DisplayById_ManufacturerNotFound_Returns0()
+        public void DisplayById_ObjectNotFound_Returns0()
         {
             // Arrange
             int id = 1674;
@@ -102,7 +102,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void DisplayById_ManufacturerFound_Returns1()
+        public void DisplayById_ObjectFound_Returns1()
         {
             // Arrange
             int id = 1674;
@@ -141,7 +141,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void ClearList_RemovesAllManufacturers()
+        public void ClearList_RemovesAllObjects()
         {
             // Arrange
             Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
@@ -157,7 +157,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void RemoveById_ValidMatch_RemovesManufacturer_ReturnsTrue()
+        public void RemoveById_ValidMatch_RemovesObject_ReturnsTrue()
         {
             // Arrange
             int id = 81719;
@@ -174,7 +174,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void RemoveById_NoMatch_DoesNotRemoveManufacturer_ReturnsFalse()
+        public void RemoveById_NoMatch_DoesNotRemoveObject_ReturnsFalse()
         {
             // Arrange
             int id = 81719;
@@ -189,7 +189,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void RemoveById_MultipleManufacturers_RemovesCorrectManufacturer_ReturnsTrue()
+        public void RemoveById_MultipleObjects_RemovesCorrectObject_ReturnsTrue()
         {
             // Arrange
             int id = 81719;
@@ -242,7 +242,7 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void Add_NoMatch_AddsManufacturer_Returns1()
+        public void Add_NoMatch_AddsObject_Returns1()
         {
             // Arrange
             Manufacturer toAdd = new Manufacturer(1, "name", "email");
@@ -258,9 +258,9 @@ namespace testing_pharmacy_project.Tests
         }
 
         [Fact]
-        public void EditById_NoMatch_ModifiedManufacturer_Returns1()
+        public void EditById_ValidMatch_ModifiesObject_Returns1()
         {
-            // Arrange
+            // Arrange 
             int id = 100;
             Manufacturer modified = new Manufacturer(id, "modified", "modified");
             Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
@@ -274,6 +274,25 @@ namespace testing_pharmacy_project.Tests
             // Assert
             Assert.Equal(1, edit);
             Assert.Equal(modified, service.FindById(id));
+        }
+
+        [Fact]
+        public void EditById_NoMatch_ModifiesObject_Returns1()
+        {
+            // Arrange
+            int id = 100;
+            Manufacturer modified = new Manufacturer(id, "modified", "modified");
+            Manufacturer toModify = new Manufacturer(200, "modifythis", "modifythis");
+            Manufacturer another = new Manufacturer(2, "name", "email");
+            List<Manufacturer> list = new List<Manufacturer> { toModify, another };
+            ManufacturerService service = new ManufacturerService(list);
+
+            // Act
+            int edit = service.EditById(modified, id);
+
+            // Assert
+            Assert.Equal(0, edit);
+            Assert.NotEqual(modified, service.FindById(id));
         }
 
         [Fact]

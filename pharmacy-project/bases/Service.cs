@@ -160,11 +160,13 @@ namespace pharmacy_project.abstract_classes
             return 1;
         }
 
-        // TODO: Modify and test edit by id in case there is not object found.
-
         public int EditById(T t, int id)
         {
             T found = FindById(id);
+            if(found == null!)
+            {
+                return 0;
+            }
 
             _list[_list.IndexOf(found)] = t;
             return 1;
