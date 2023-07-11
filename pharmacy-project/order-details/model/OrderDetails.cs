@@ -7,7 +7,7 @@ using pharmacy_project.interfaces;
 
 namespace pharmacy_project.order_details.model
 {
-    public class OrderDetails : IHasId, IToSave
+    public class OrderDetails : IHasId, IToSave, IDuplicable<OrderDetails>
     {
         private int _id;
         private int _orderId;
@@ -82,17 +82,36 @@ namespace pharmacy_project.order_details.model
 
         public override String ToString()
         {
-            // This description is mainly for admins.
-
             String desc = "";
 
             if(_medicineIds.Any())
             {
                 desc += $"Order Id : {_orderId}\n";
-                
+
                 foreach(int id in _medicineIds)
                 {
                     desc += $"Id x Ammount : {id} x {_ammounts[_medicineIds.IndexOf(id)]}\n";
+                }
+            }
+            else
+            {
+                desc = $"Order id {_orderId} is empty.";
+            }
+
+            return desc;
+        }
+
+        public String Description(List<String> medicine)
+        {
+            String desc = "";
+
+            if(_medicineIds.Any())
+            {
+                desc += $"Order Id : {_orderId}\n";
+                foreach(int id in _medicineIds)
+                {
+                    int index = _medicineIds.IndexOf(id);
+                    desc += $"Id - Name x Ammount : {id} - {medicine[index]} x {_ammounts[index]}\n";
                 }
             }
             else
@@ -123,6 +142,43 @@ namespace pharmacy_project.order_details.model
         public override bool Equals(object? obj)
         {
             return _id == (obj as OrderDetails)._id && _orderId == (obj as OrderDetails)._orderId && _medicineIds.Equals((obj as OrderDetails)._medicineIds) && _ammounts.Equals((obj as OrderDetails)._ammounts);
+        }
+        
+        public OrderDetails Duplicate()
+        {
+            return new OrderDetails(ToSave());
+        }
+
+        public int IndexOfMedicine(int id)
+        {
+            return MedicineIds.IndexOf(id);
+        }
+
+        public int RemoveMedicineId(int id)
+        {
+            int index = IndexOfMedicine(id);
+            // Checks if medicine exists
+            if (index == -1)
+            {
+                return 0;
+            }
+
+            MedicineIds.RemoveAt(index);
+            Ammounts.RemoveAt(index);
+            return 1;
+        }
+
+        public int EditAmmountByMedicineId(int id, int ammount)
+        {
+            int index = IndexOfMedicine(id);
+            // Checks if medicine exists
+            if (index == -1)
+            {
+                return 0;
+            }
+
+            Ammounts[index] = ammount;
+            return 1;
         }
     }
 }

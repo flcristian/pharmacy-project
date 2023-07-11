@@ -3,11 +3,13 @@ using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
 using pharmacy_project.medicine.model;
 using pharmacy_project.medicine.service;
+using pharmacy_project.order_details.model;
 using pharmacy_project.order_details.service;
 using pharmacy_project.order.model;
 using pharmacy_project.order.service;
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
+using System.Globalization;
 
 namespace pharmacy_project.panels;
 
@@ -161,6 +163,39 @@ public class AdminPanel : Panel
         }
     }
 
+    private void RunOrderDetailsMessage()
+    {
+        Console.WriteLine("Choose what you want to do:");
+        Console.WriteLine("1 - See order details list");
+        Console.WriteLine("2 - Edit order details");
+        Console.WriteLine("3 - Save order details list");
+    }
+
+    private void RunOrderDetails()
+    {
+        while(true)
+        {
+            RunOrderDetailsMessage();
+            String choice = Console.ReadLine();
+
+            DrawLine();
+            switch (choice)
+            {
+                case "1":
+                    SeeOrderDetailsList();
+                    break;
+                case "2":
+                    EditOrderDetails();
+                    break;
+                case "3":
+                    SaveOrderDetailsList();
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
     private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
@@ -261,6 +296,7 @@ public class AdminPanel : Panel
                     RunOrders();
                     break;
                 case "4":
+                    RunOrderDetails();
                     break;
                 case "5":
                     RunUsers();
@@ -795,6 +831,7 @@ public class AdminPanel : Panel
         Console.WriteLine("5 - Informations");
         Console.WriteLine("6 - Tags");
         Console.WriteLine("7 - Everything");
+        Console.WriteLine("Anything else to cancel.");
 
         String editedName = medicine.Name, editedInfo = medicine.Information, email;
         Double editedPrice = medicine.Price;
@@ -962,7 +999,7 @@ public class AdminPanel : Panel
 
         Console.WriteLine("What status do you want to set?");
         Console.WriteLine("(Submitted/Sent/Received/Completed)");
-        String[] statuses = {"Submitted","Sent","Received","Completed"};
+        Console.WriteLine("Anything else to cancel.");
         DateTime dt = DateTime.UtcNow;
         String date = dt.ToString("d.M.yyyy");
         Order editedOrder = order.Duplicate();
@@ -972,7 +1009,7 @@ public class AdminPanel : Panel
         {
             case "submitted":
                 editedOrder.Status = "submitted";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -987,7 +1024,7 @@ public class AdminPanel : Panel
                 break;
             case "sent":
                 editedOrder.Status = "sent";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 1; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1002,7 +1039,7 @@ public class AdminPanel : Panel
                 break;
             case "received":
                 editedOrder.Status = "received";
-                for (int i = editedOrder.StatusDates.Length - 1; i > 2; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1017,7 +1054,7 @@ public class AdminPanel : Panel
                 break;
             case "completed":
                 editedOrder.Status = "completed";
-                for(int i = editedOrder.StatusDates.Length - 1; i > 3; i++)
+                for (int i = editedOrder.StatusDates.Length - 1; i > 0; i--)
                 {
                     editedOrder.StatusDates[i] = null!;
                 }
@@ -1032,6 +1069,14 @@ public class AdminPanel : Panel
                 break;
             default:
                 return;
+        }
+
+        // Confirms choice
+        if(YesNoChoice($"\nThis is the new order:\n {order}", "Are you sure you want to save it?", "No orders were edited."))
+        {
+            _orderService.EditById(editedOrder, order.Id);
+            DrawLine();
+            Console.WriteLine("Order was edited.");
         }
     }
 
@@ -1051,11 +1096,12 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"This is the medicine: {order}", "Are you sure you want to remove it?", "No orders were removed."))
+        if(YesNoChoice($"This is the order: {order}", "Are you sure you want to remove it?", "No orders were removed."))
         {
             _orderService.RemoveById(order.Id);
+            _orderDetailsService.RemoveByOrderId(order.Id);
             DrawLine();
-            Console.WriteLine("The orders were removed.");
+            Console.WriteLine("The order was removed.");
         }
     }
 
@@ -1063,9 +1109,10 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _orderService.Display();
-        if(YesNoChoice("Order list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
+        if(YesNoChoice("Order list is above ^\nTHIS ALSO SAVES ORDER DETAILS!", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
         {
             _orderService.SaveList(GetPath() + "orders.txt");
+            _orderDetailsService.SaveList(GetPath() + "order_details.txt");
             DrawLine();
             Console.WriteLine("Order list has been saved!\n");
         }
@@ -1079,6 +1126,221 @@ public class AdminPanel : Panel
             _medicineService.ClearList();
             DrawLine();
             Console.WriteLine("Order list has been cleared!\n");
+        }
+    }
+
+    // Order details service methods
+
+    // Displays order details list with medicine names
+    private void DisplayOrderDetails(OrderDetails details)
+    {
+        String[] medicine = new String[details.MedicineIds.Count];
+
+        int i = 0;
+        foreach(int id in details.MedicineIds)
+        {
+            medicine[i] = _medicineService.FindById(id).Name;
+            i++;
+        }
+        Console.WriteLine(details.Description(medicine.ToList()));
+    }
+
+    // Displays order details with medicine names
+    private void DisplayOrderDetailsList()
+    {
+        String[][] medicine = new String[_orderDetailsService.Count()][];
+        int i = 0;
+        foreach (OrderDetails details in _orderDetailsService.GetList())
+        {
+            medicine[i] = new String[details.MedicineIds.Count];
+
+            int j = 0;
+            foreach (int id in details.MedicineIds)
+            {
+                medicine[i][j] = _medicineService.FindById(id).Name;
+                j++;
+            }
+            i++;
+        }
+
+        _orderDetailsService.DisplayWithMedicine(medicine);
+        Console.WriteLine();
+    }
+
+    private void SeeOrderDetailsList()
+    {
+        DisplayOrderDetailsList();
+        WaitForKey();
+    }
+
+    private void EditOrderDetails()
+    {
+        Console.WriteLine("Enter the id of the order you want to edit:");
+        int id = Int32.Parse(Console.ReadLine());
+
+        Order order = _orderService.FindById(id);
+        if(order == null!)
+        {
+            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            {
+                EditOrderDetails();
+            }
+            return;
+        }
+
+        OrderDetails details = _orderDetailsService.FindByOrderId(order.Id);
+        if(details == null!)
+        {
+            DrawLine();
+            Console.WriteLine("Order has no details?");
+            return;
+        }
+
+        OrderDetails editedDetails = details.Duplicate();
+
+        bool running = true;
+        while (running)
+        {
+            Console.WriteLine("Choose what you want to do:");
+            Console.WriteLine("1 - Display order details");
+            Console.WriteLine("2 - Add medicine");
+            Console.WriteLine("3 - Remove medicine");
+            Console.WriteLine("4 - Edit medicine ammount");
+            Console.WriteLine("Anything else to stop and go to order save menu.");
+            String choice = Console.ReadLine();
+
+            Console.WriteLine();
+            int medId, ammount;
+            switch (choice)
+            {
+                case "1":
+                    DisplayOrderDetails(editedDetails);
+                    WaitForKey();
+                    break;
+                case "2":
+                    Console.WriteLine("Enter the id of the medicine you want to add:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    Medicine medicine = _medicineService.FindById(medId);
+
+                    bool addBreak = false;
+                    while(medicine == null!)
+                    {
+                        if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            addBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the id of the medicine you want to add:");
+                        medId = Int32.Parse(Console.ReadLine());
+                    }
+                    if (addBreak) { break; }
+
+                    Console.WriteLine("Enter the ammount:");
+                    ammount = Int32.Parse(Console.ReadLine());
+
+                    while (ammount <= 0)
+                    {
+                        if (!YesNoChoice("Ammount can't be negative or zero.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            addBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the ammount:");
+                        ammount = Int32.Parse(Console.ReadLine());
+                    }
+                    if (addBreak) { break; }
+
+                    editedDetails.MedicineIds.Add(medId);
+                    editedDetails.Ammounts.Add(ammount);
+                    Console.WriteLine("\nMedicine was added!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                case "3":
+                    Console.WriteLine("Enter the id of the medicine you want to remove:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    bool removeBreak = false;
+                    int removed = editedDetails.RemoveMedicineId(medId);
+                    while(removed == 0)
+                    {
+                        if (!YesNoChoice("Order details don't contain medicine with that id.", "Do you want to try again?", "No medicine ids were removed."))
+                        {
+                            removeBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the id of the medicine you want to remove:");
+                        medId = Int32.Parse(Console.ReadLine());
+                        removed = editedDetails.RemoveMedicineId(medId);
+                    }
+                    if (removeBreak) { break; }
+
+                    Console.WriteLine("\nMedicine was removed!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                case "4":
+                    Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
+                    medId = Int32.Parse(Console.ReadLine());
+
+                    bool editBreak = false;
+                    int edited = editedDetails.IndexOfMedicine(medId);
+                    while (edited == -1)
+                    {
+                        if (!YesNoChoice("Order details don't contain medicine with that id.", "Do you want to try again?", "No ammounts were edited."))
+                        {
+                            editBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
+                        medId = Int32.Parse(Console.ReadLine());
+                        edited = editedDetails.IndexOfMedicine(medId);
+                    }
+                    if (editBreak) { break; }
+
+                    Console.WriteLine("Enter the new ammount:");
+                    ammount = Int32.Parse(Console.ReadLine());
+
+                    while (ammount <= 0)
+                    {
+                        if (!YesNoChoice("Ammount can't be negative or zero.", "Do you want to try again?", "No medicine ids were added."))
+                        {
+                            editBreak = true;
+                            break;
+                        }
+                        Console.WriteLine("Enter the ammount:");
+                        ammount = Int32.Parse(Console.ReadLine());
+                    }
+                    if (editBreak) { break; }
+
+                    editedDetails.EditAmmountByMedicineId(medId, ammount);
+                    Console.WriteLine("\nMedicine ammount was edited!\nThese are the new order details:");
+                    DisplayOrderDetails(editedDetails);
+                    break;
+                default:
+                    running = false;
+                    break;
+            }
+        }
+
+        // Confirms actions
+        DisplayOrderDetails(editedDetails);
+        if (YesNoChoice("Order details are above ^", "Are you sure you want to save it?", "Order details were not saved."))
+        {
+            _orderDetailsService.EditById(editedDetails, details.Id);
+            DrawLine();
+            Console.WriteLine("Order details have been saved!\n");
+        }
+    }
+
+    private void SaveOrderDetailsList()
+    {
+        // Confirms action
+        DisplayOrderDetailsList();
+        if(YesNoChoice("Order details list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order details list was not saved."))
+        {
+            _orderDetailsService.SaveList(GetPath() + "order_details.txt");
+            DrawLine();
+            Console.WriteLine("Order details list has been saved!\n");
         }
     }
 }

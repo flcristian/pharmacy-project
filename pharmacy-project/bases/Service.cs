@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using pharmacy_project.interfaces;
+using pharmacy_project.order.model;
 using pharmacy_project.user.model;
 
 namespace pharmacy_project.abstract_classes
@@ -19,7 +20,7 @@ namespace pharmacy_project.abstract_classes
         public Service(String path)
         {
             _list = new List<T>();
-            this.ReadList(path);
+            ReadList(path);
         }
 
         public Service(List<T> list)
@@ -100,12 +101,25 @@ namespace pharmacy_project.abstract_classes
             return (T)(object)null!;
         }
 
+        public int DisplayById(int id)
+        {
+            T t = FindById(id);
+            // Checks if the order exists. Returns 0 if not.
+            if (t == null)
+            {
+                return 0;
+            }
+
+            Console.WriteLine(t);
+            return 1;
+        }
+
         public int NewId()
         {
             Random rnd = new Random();
             int id = rnd.Next(1, 999999);
 
-            while (this.FindById(id) != null!)
+            while (FindById(id) != null!)
             {
                 id = rnd.Next(1, 999999);
             }
@@ -120,7 +134,7 @@ namespace pharmacy_project.abstract_classes
 
         public int RemoveById(int id)
         {
-            T t = this.FindById(id);
+            T t = FindById(id);
 
             // Checks if manufacturer exists. Returns 0 if not.
             if (t == null!)
@@ -135,7 +149,7 @@ namespace pharmacy_project.abstract_classes
         public virtual int Add(T t)
         {
             // Checks if id is already used.
-            T foundById = this.FindById(t.Id);
+            T foundById = FindById(t.Id);
 
             if (foundById != null!)
             {
@@ -148,7 +162,11 @@ namespace pharmacy_project.abstract_classes
 
         public int EditById(T t, int id)
         {
-            T found = this.FindById(id);
+            T found = FindById(id);
+            if(found == null!)
+            {
+                return 0;
+            }
 
             _list[_list.IndexOf(found)] = t;
             return 1;
