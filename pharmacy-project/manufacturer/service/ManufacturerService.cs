@@ -46,7 +46,7 @@ namespace pharmacy_project.manufacturer.service
                 return 0;
             }
 
-            Add(manufacturer);
+            base.Add(manufacturer);
             return 1;
         }
 

@@ -121,7 +121,7 @@ namespace pharmacy_project.user.service
                 return 0;
             }
 
-            Add(user);
+            base.Add(user);
             return 1;
         }
 
