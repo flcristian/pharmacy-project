@@ -1,15 +1,9 @@
-﻿using pharmacy_project.interfaces;
-using pharmacy_project.order_details.model;
-using pharmacy_project.abstract_classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using pharmacy_project.order_details.model;
+using pharmacy_project.bases.service_base;
 
 namespace pharmacy_project.order_details.service
 {
-    public class OrderDetailsService : Service<OrderDetails>
+    public class OrderDetailsService : Service<OrderDetails>, IOrderDetailsService
     {
         // Constructors
 

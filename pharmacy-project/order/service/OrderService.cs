@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using pharmacy_project.order.model;
-using pharmacy_project.abstract_classes;
+using pharmacy_project.bases.service_base;
 
 namespace pharmacy_project.order.service
 {
-    public class OrderService : Service<Order>
+    public class OrderService : Service<Order>, IOrderService
     {
         public OrderService(String path) : base(path) { }
 

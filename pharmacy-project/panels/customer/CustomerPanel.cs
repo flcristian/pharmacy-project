@@ -1,14 +1,14 @@
-using pharmacy_project.abstract_classes;
 using pharmacy_project.medicine.service;
 using pharmacy_project.order.model;
 using pharmacy_project.order.service;
 using pharmacy_project.order_details.model;
 using pharmacy_project.order_details.service;
 using pharmacy_project.user.model;
+using pharmacy_project.bases.panel_base;
 
-namespace pharmacy_project.panels;
+namespace pharmacy_project.panels.customer;
 
-public class CustomerPanel : Panel
+public class CustomerPanel : Panel, ICustomerPanel
 {
     private MedicineService _medicineService;
     private OrderService _orderService;
@@ -18,7 +18,7 @@ public class CustomerPanel : Panel
 
     // Constructors
 
-    public CustomerPanel(String path, Customer customer) : base(path, customer)
+    public CustomerPanel(string path, Customer customer) : base(path, customer)
     {
         _medicineService = new MedicineService(path + "medicine.txt");
         _orderService = new OrderService(path + "orders.txt");
@@ -48,7 +48,7 @@ public class CustomerPanel : Panel
         while (true)
         {
             RunMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using pharmacy_project.interfaces;
-using pharmacy_project.order.model;
 using pharmacy_project.user.model;
 
-namespace pharmacy_project.abstract_classes
+namespace pharmacy_project.bases.service_base
 {
     public abstract class Service<T> : IService<T> where T : IToSave, IHasId
     {
