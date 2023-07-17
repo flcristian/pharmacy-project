@@ -17,7 +17,7 @@ namespace testing_pharmacy_project.Tests
             string email = "email";
             Customer customer = new Customer(142, "name", email, "password");
             List<User> list = new List<User> { customer };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmail(email);
@@ -39,7 +39,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             string email = "email";
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmail(email);
@@ -56,7 +56,7 @@ namespace testing_pharmacy_project.Tests
             Customer customer = new Customer(142, "name", email, "password");
             Admin admin = new Admin(95784, "admin", "admin", "admin");
             List<User> list = new List<User> { customer, admin };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmail(email);
@@ -79,7 +79,7 @@ namespace testing_pharmacy_project.Tests
             string email = "email", password = "password";
             Customer customer = new Customer(142, "name", email, password);
             List<User> list = new List<User> { customer };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmailAndPassword(email, password);
@@ -101,7 +101,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             string email = "email", password = "password";
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmailAndPassword(email, password);
@@ -118,7 +118,7 @@ namespace testing_pharmacy_project.Tests
             Customer customer = new Customer(142, "name", email, password);
             Admin admin = new Admin(95784, "admin", "admin", "admin");
             List<User> list = new List<User> { customer, admin };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             User found = service.FindByEmailAndPassword(email, password);
@@ -145,7 +145,7 @@ namespace testing_pharmacy_project.Tests
             Admin a2 = new Admin(4, name, "email", "password");
             List<User> users = new List<User> { c1, c2, a1, a2 };
             List<User> list = new List<User> { c1, c2, a1, a2 };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             List<User> found = service.FindByName(name);
@@ -179,7 +179,7 @@ namespace testing_pharmacy_project.Tests
             string name = "name";
             List<User> users = new List<User>();
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             List<User> found = service.FindByName(name);
@@ -200,7 +200,7 @@ namespace testing_pharmacy_project.Tests
             Admin a3 = new Admin(5, "george", "emailgeorge", "parolageorge");
             List<User> users = new List<User> { c1, c2, a1, a2 };
             List<User> list = new List<User> { c1, c2, a1, a2, a3 };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             List<User> found = service.FindByName(name);
@@ -239,7 +239,7 @@ namespace testing_pharmacy_project.Tests
                 new Customer(1, "name1","email1","pass1"),
                 new Admin(2, "name2","email2","pass2")
             };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int add = service.Add(customer);
@@ -261,7 +261,7 @@ namespace testing_pharmacy_project.Tests
                 new Customer(1, "name1",email,"pass1"),
                 new Admin(2, "name2","email2","pass2")
             };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int add = service.Add(customer);
@@ -277,7 +277,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             Customer customer = new Customer(123, "namecustomer", "emailcustomer", "passcustomer");
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int add = service.Add(customer);
@@ -296,7 +296,7 @@ namespace testing_pharmacy_project.Tests
             Customer u2 = new Customer(1, "name1", "email1", "pass1");
             Admin u3 = new Admin(2, "name2", "email2", "pass2");
             List<User> list = new List<User> { u1, u2, u3 };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int remove = service.RemoveByEmail(email);
@@ -315,7 +315,7 @@ namespace testing_pharmacy_project.Tests
             Customer u2 = new Customer(1, "name1", "email1", "pass1");
             Admin u3 = new Admin(2, "name2", "email2", "pass2");
             List<User> list = new List<User> { u1, u2, u3 };
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int remove = service.RemoveByEmail(email);
@@ -333,7 +333,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             Admin admin = new Admin(1, "name", "emailadmin", "passwordadmin");
             List<User> list = new List<User>{admin};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             bool isAdmin = service.IsAdmin(service.FindByEmailAndPassword("emailadmin", "passwordadmin"));
@@ -348,7 +348,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             Customer customer = new Customer(1, "name", "email", "password");
             List<User> list = new List<User>{customer};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             bool isAdmin = service.IsAdmin(service.FindByEmailAndPassword("email", "password"));
@@ -363,7 +363,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             User admin = new Admin(1, "name", "email", "password");
             List<User> list = new List<User>{admin};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int display = service.DisplayAdmins();
@@ -377,7 +377,7 @@ namespace testing_pharmacy_project.Tests
         {
             // Arrange
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int display = service.DisplayAdmins();
@@ -392,7 +392,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             int id = 182;
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.BlockById(id);
@@ -408,7 +408,7 @@ namespace testing_pharmacy_project.Tests
             int id = 182;
             User user = new User(id, "name", "email", "password", "type");
             List<User> list = new List<User>{user};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.BlockById(id);
@@ -425,7 +425,7 @@ namespace testing_pharmacy_project.Tests
             Customer customer = new Customer(id, "name", "email", "password");
             customer.Locked = true;
             List<User> list = new List<User>{customer};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.BlockById(id);
@@ -441,7 +441,7 @@ namespace testing_pharmacy_project.Tests
             int id = 182;
             Customer customer = new Customer(id, "name", "email", "password");
             List<User> list = new List<User>{customer};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.BlockById(id);
@@ -456,7 +456,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             int id = 182;
             List<User> list = new List<User>();
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.UnblockById(id);
@@ -472,7 +472,7 @@ namespace testing_pharmacy_project.Tests
             int id = 182;
             User user = new User(id, "name", "email", "password", "type");
             List<User> list = new List<User>{user};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.UnblockById(id);
@@ -488,7 +488,7 @@ namespace testing_pharmacy_project.Tests
             int id = 182;
             Customer customer = new Customer(id, "name", "email", "password");
             List<User> list = new List<User>{customer};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.UnblockById(id);
@@ -505,7 +505,7 @@ namespace testing_pharmacy_project.Tests
             Customer customer = new Customer(id, "name", "email", "password");
             customer.Locked = true;
             List<User> list = new List<User>{customer};
-            UserService service = new UserService(list);
+            IUserService service = new UserService(list);
 
             // Act
             int block = service.UnblockById(id);

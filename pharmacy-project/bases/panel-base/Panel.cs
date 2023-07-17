@@ -1,4 +1,5 @@
 using System.Reflection;
+using pharmacy_project.order_details.model;
 using pharmacy_project.user.model;
 using pharmacy_project.user.service;
 
@@ -39,7 +40,7 @@ public abstract class Panel : IPanel
 
     // In case entered email or something is wrong
     // Ususally a "do you want to try again?" question
-    public bool YesNoChoice(String startMessage, String choiceMessage, String endMessage)
+    protected bool YesNoChoice(String startMessage, String choiceMessage, String endMessage)
     {
         Console.WriteLine(startMessage);
         Console.WriteLine(choiceMessage + " (Y/N)");
@@ -55,35 +56,35 @@ public abstract class Panel : IPanel
         return false;
     }
 
-    public void WaitForKey()
+    protected void WaitForKey()
     {
         Console.WriteLine("Enter anything to continue:");
         Console.ReadLine();
     }
 
-    public void DrawLine()
+    protected void DrawLine()
     {
         Console.WriteLine("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     }
     
-    public User GetUser()
+    protected User GetUser()
     {
         return _user;
     }
 
-    public String GetPath()
+    protected String GetPath()
     {
         return _path;
     }
 
-    public UserService GetUserService()
+    protected UserService GetUserService()
     {
         return _userService;
     }
 
     // Panel methods
 
-    public void RunAccountMessage()
+    protected void RunAccountMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See your account details");
@@ -93,7 +94,7 @@ public abstract class Panel : IPanel
         Console.WriteLine("5 - Save changes");
     }
 
-    public void RunAccount()
+    protected void RunAccount()
     {
         while(true)
         {
@@ -124,8 +125,8 @@ public abstract class Panel : IPanel
         }
     }
 
-    public abstract void RunMessage();
-    
+    protected abstract void RunMessage();
+
     public abstract void Run();
 
     // Account methods

@@ -1,5 +1,5 @@
 ﻿using pharmacy_project.user.model;
-using pharmacy_project.panels.customer;
+using pharmacy_project.panels;
 
 internal class Program
 {

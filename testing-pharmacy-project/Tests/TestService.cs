@@ -17,7 +17,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
             Manufacturer m2 = new Manufacturer(2, "anotherone", "site@domain.com");
             List<Manufacturer> list = new List<Manufacturer> { m1, m2 };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int count = service.Count();
@@ -33,7 +33,7 @@ namespace testing_pharmacy_project.Tests
             int id = 121;
             Manufacturer expected = new Manufacturer(id, "manufacturer", "email@email.com");
             List<Manufacturer> list = new List<Manufacturer> { expected };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindById(id);
@@ -52,7 +52,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             int id = 121;
             List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindById(id);
@@ -69,7 +69,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer expected = new Manufacturer(id, "manufacturer", "email@email.com");
             Manufacturer another = new Manufacturer(2, "anotherone", "site@domain.com");
             List<Manufacturer> list = new List<Manufacturer> { expected, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindById(id);
@@ -92,7 +92,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1674;
             Manufacturer manufacturer = new Manufacturer(1241, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int display = service.DisplayById(id);
@@ -108,7 +108,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1674;
             Manufacturer manufacturer = new Manufacturer(id, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int display = service.DisplayById(id);
@@ -127,7 +127,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer m4 = new Manufacturer(333224, "test", "test");
             Manufacturer m5 = new Manufacturer(576765, "another", "another");
             List<Manufacturer> list = new List<Manufacturer> { m1, m2, m3, m4, m5 };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int id = service.NewId();
@@ -147,7 +147,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer m1 = new Manufacturer(1, "manufacturer", "email@email.com");
             Manufacturer m2 = new Manufacturer(2, "anotherone", "site@domain.com");
             List<Manufacturer> list = new List<Manufacturer> { m1, m2 };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             service.ClearList();
@@ -163,7 +163,7 @@ namespace testing_pharmacy_project.Tests
             int id = 81719;
             Manufacturer manufacturer = new Manufacturer(id, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int removed = service.RemoveById(id);
@@ -179,7 +179,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             int id = 81719;
             List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int removed = service.RemoveById(id);
@@ -196,7 +196,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer manufacturer = new Manufacturer(id, "name", "email");
             Manufacturer another = new Manufacturer(181, "anothername", "anotheremail");
             List<Manufacturer> list = new List<Manufacturer> { manufacturer, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int removed = service.RemoveById(id);
@@ -214,7 +214,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer toAdd = new Manufacturer(1, "name", "email");
             Manufacturer hasSameEmail = new Manufacturer(2, "anothername", "email");
             List<Manufacturer> list = new List<Manufacturer> { hasSameEmail };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int add = service.Add(toAdd);
@@ -231,7 +231,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer toAdd = new Manufacturer(1, "name", "email");
             Manufacturer hasSameName = new Manufacturer(2, "name", "anotheremail");
             List<Manufacturer> list = new List<Manufacturer> { hasSameName };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int add = service.Add(toAdd);
@@ -247,7 +247,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             Manufacturer toAdd = new Manufacturer(1, "name", "email");
             List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int add = service.Add(toAdd);
@@ -266,7 +266,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer toModify = new Manufacturer(id, "modifythis", "modifythis");
             Manufacturer another = new Manufacturer(2, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int edit = service.EditById(modified, id);
@@ -285,7 +285,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer toModify = new Manufacturer(200, "modifythis", "modifythis");
             Manufacturer another = new Manufacturer(2, "name", "email");
             List<Manufacturer> list = new List<Manufacturer> { toModify, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             int edit = service.EditById(modified, id);
@@ -300,7 +300,7 @@ namespace testing_pharmacy_project.Tests
         {
             // Arrange
             List<Manufacturer> list = new List<Manufacturer> { new Manufacturer(1, "name", "email") };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             List<Manufacturer> returned = service.GetList();

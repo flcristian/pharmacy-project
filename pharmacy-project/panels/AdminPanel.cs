@@ -9,14 +9,14 @@ using pharmacy_project.order.service;
 using pharmacy_project.user.model;
 using pharmacy_project.bases.panel_base;
 
-namespace pharmacy_project.panels.admin;
+namespace pharmacy_project.panels;
 
-public class AdminPanel : Panel, IAdminPanel
+public class AdminPanel : Panel, IPanel
 {
-    public IManufacturerService _manufacturerService;
-    public IMedicineService _medicineService;
-    public IOrderService _orderService;
-    public IOrderDetailsService _orderDetailsService;
+    private IManufacturerService _manufacturerService;
+    private IMedicineService _medicineService;
+    private IOrderService _orderService;
+    private IOrderDetailsService _orderDetailsService;
 
     // Constructors
 
@@ -30,7 +30,7 @@ public class AdminPanel : Panel, IAdminPanel
 
     // Panel Methods
 
-    public void RunManufacturersMessage()
+    private void RunManufacturersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See manufacturer list");
@@ -41,7 +41,7 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine("6 - Clear manufacturer list");
     }
 
-    public void RunManufacturers()
+    private void RunManufacturers()
     {
         while (true)
         {
@@ -75,7 +75,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RunMedicineMessage()
+    private void RunMedicineMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See medicine list");
@@ -86,7 +86,7 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine("6 - Clear medicine list");
     }
 
-    public void RunMedicine()
+    private void RunMedicine()
     {
         while (true)
         {
@@ -120,7 +120,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RunOrdersMessage()
+    private void RunOrdersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See order list");
@@ -130,7 +130,7 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine("5 - Clear order list");
     }
 
-    public void RunOrders()
+    private void RunOrders()
     {
         while (true)
         {
@@ -161,7 +161,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RunOrderDetailsMessage()
+    private void RunOrderDetailsMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See order details list");
@@ -169,7 +169,7 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine("3 - Save order details list");
     }
 
-    public void RunOrderDetails()
+    private void RunOrderDetails()
     {
         while (true)
         {
@@ -194,7 +194,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RunUsersMessage()
+    private void RunUsersMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See customer list");
@@ -209,7 +209,7 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine("10 - Clear user list");
     }
 
-    public void RunUsers()
+    private void RunUsers()
     {
         while (true)
         {
@@ -255,7 +255,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public override void RunMessage()
+    protected override void RunMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - Edit manufacturers");
@@ -310,19 +310,19 @@ public class AdminPanel : Panel, IAdminPanel
 
     // User service methods
 
-    public void SeeCustomerList()
+    private void SeeCustomerList()
     {
         GetUserService().Display();
         WaitForKey();
     }
 
-    public void SeeAdminList()
+    private void SeeAdminList()
     {
         GetUserService().DisplayAdmins();
         WaitForKey();
     }
 
-    public void EditCustomer()
+    private void EditCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to edit:");
         string email = Console.ReadLine();
@@ -419,7 +419,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RemoveCustomer()
+    private void RemoveCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to remove:");
         string email = Console.ReadLine();
@@ -445,7 +445,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void BlockCustomer()
+    private void BlockCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to block:");
         string email = Console.ReadLine();
@@ -472,7 +472,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void UnblockCustomer()
+    private void UnblockCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to unblock:");
         string email = Console.ReadLine();
@@ -499,7 +499,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void MakeCustomerAdmin()
+    private void MakeCustomerAdmin()
     {
         Console.WriteLine("Enter the email of the customer you want to make admin:");
         string email = Console.ReadLine();
@@ -528,7 +528,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RemoveAdmin()
+    private void RemoveAdmin()
     {
         Console.WriteLine("Enter the email of the admin you want to remove:");
         string email = Console.ReadLine();
@@ -557,7 +557,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void SaveUserList()
+    private void SaveUserList()
     {
         // Confirms action
         GetUserService().Display();
@@ -569,7 +569,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void ClearUserList()
+    private void ClearUserList()
     {
         // Confirms action
         if (YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared."))
@@ -583,13 +583,13 @@ public class AdminPanel : Panel, IAdminPanel
 
     // Manufacturer service methods
 
-    public void SeeManufacturerList()
+    private void SeeManufacturerList()
     {
         _manufacturerService.DisplayAdmin();
         WaitForKey();
     }
 
-    public void AddManufacturer()
+    private void AddManufacturer()
     {
         // Creating manufacturer
         Console.WriteLine("Enter the name of the manufacturer you want to add:");
@@ -609,7 +609,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void EditManufacturer()
+    private void EditManufacturer()
     {
         Console.WriteLine("Enter the email of the manufacturer you want to edit:");
         string email = Console.ReadLine();
@@ -706,7 +706,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RemoveManufacturer()
+    private void RemoveManufacturer()
     {
         Console.WriteLine("Enter the email of the manufacturer you want to remove:");
         string email = Console.ReadLine();
@@ -738,7 +738,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void SaveManufacturerList()
+    private void SaveManufacturerList()
     {
         // Confirms action
         _manufacturerService.Display();
@@ -750,7 +750,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void ClearManufacturerList()
+    private void ClearManufacturerList()
     {
         // Confirms action
         if (YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
@@ -769,13 +769,13 @@ public class AdminPanel : Panel, IAdminPanel
 
     // Medicine service methods
 
-    public void SeeMedicineList()
+    private void SeeMedicineList()
     {
         _medicineService.DisplayAdmin();
         WaitForKey();
     }
 
-    public void AddMedicine()
+    private void AddMedicine()
     {
         Console.WriteLine("Enter the email of the manufacturer:");
         string email = Console.ReadLine();
@@ -806,7 +806,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void EditMedicine()
+    private void EditMedicine()
     {
         Console.WriteLine("Enter the id of the medicine you want to edit:");
         int id = int.Parse(Console.ReadLine());
@@ -925,7 +925,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RemoveMedicine()
+    private void RemoveMedicine()
     {
         Console.WriteLine("Enter the id of the medicine you want to remove:");
         int id = int.Parse(Console.ReadLine());
@@ -949,7 +949,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void SaveMedicineList()
+    private void SaveMedicineList()
     {
         // Confirms action
         _medicineService.Display();
@@ -961,7 +961,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void ClearMedicineList()
+    private void ClearMedicineList()
     {
         // Confirms action
         if (YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared."))
@@ -974,13 +974,13 @@ public class AdminPanel : Panel, IAdminPanel
 
     // Order service methods
 
-    public void SeeOrderList()
+    private void SeeOrderList()
     {
         _orderService.Display();
         WaitForKey();
     }
 
-    public void EditStatusOfOrder()
+    private void EditStatusOfOrder()
     {
         Console.WriteLine("Enter the id of the order you want to edit:");
         int id = int.Parse(Console.ReadLine());
@@ -1078,7 +1078,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void RemoveOrder()
+    private void RemoveOrder()
     {
         Console.WriteLine("Enter the id of the order you want to remove:");
         int id = int.Parse(Console.ReadLine());
@@ -1103,7 +1103,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void SaveOrderList()
+    private void SaveOrderList()
     {
         // Confirms action
         _orderService.Display();
@@ -1116,7 +1116,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void ClearOrderList()
+    private void ClearOrderList()
     {
         // Confirms action
         if (YesNoChoice("THIS WILL DELETE ALL ORDERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Order list was not cleared."))
@@ -1130,7 +1130,7 @@ public class AdminPanel : Panel, IAdminPanel
     // Order details service methods
 
     // Displays order details list with medicine names
-    public void DisplayOrderDetails(OrderDetails details)
+    private void DisplayOrderDetails(OrderDetails details)
     {
         string[] medicine = new string[details.MedicineIds.Count];
 
@@ -1144,7 +1144,7 @@ public class AdminPanel : Panel, IAdminPanel
     }
 
     // Displays order details with medicine names
-    public void DisplayOrderDetailsList()
+    private void DisplayOrderDetailsList()
     {
         string[][] medicine = new string[_orderDetailsService.Count()][];
         int i = 0;
@@ -1165,13 +1165,13 @@ public class AdminPanel : Panel, IAdminPanel
         Console.WriteLine();
     }
 
-    public void SeeOrderDetailsList()
+    private void SeeOrderDetailsList()
     {
         DisplayOrderDetailsList();
         WaitForKey();
     }
 
-    public void EditOrderDetails()
+    private void EditOrderDetails()
     {
         Console.WriteLine("Enter the id of the order you want to edit:");
         int id = int.Parse(Console.ReadLine());
@@ -1330,7 +1330,7 @@ public class AdminPanel : Panel, IAdminPanel
         }
     }
 
-    public void SaveOrderDetailsList()
+    private void SaveOrderDetailsList()
     {
         // Confirms action
         DisplayOrderDetailsList();

@@ -18,7 +18,7 @@ namespace testing_pharmacy_project.Tests
             string email = "thisemail@gog.com";
             Manufacturer expected = new Manufacturer(1, "name", email);
             List<Manufacturer> list = new List<Manufacturer> { expected };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByEmail(email);
@@ -37,7 +37,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             string email = "thisemail@gog.com";
             List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
+            IIManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByEmail(email);
@@ -54,7 +54,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer expected = new Manufacturer(1, "name", email);
             Manufacturer another = new Manufacturer(2, "anotherone", "site@domain.com");
             List<Manufacturer> list = new List<Manufacturer> { expected, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByEmail(email);
@@ -77,7 +77,7 @@ namespace testing_pharmacy_project.Tests
             string name = "manuname";
             Manufacturer expected = new Manufacturer(1, name, "thisemail@gog.com");
             List<Manufacturer> list = new List<Manufacturer> { expected };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByName(name);
@@ -96,7 +96,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             string name = "manuname";
             List<Manufacturer> list = new List<Manufacturer>();
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByName(name);
@@ -113,7 +113,7 @@ namespace testing_pharmacy_project.Tests
             Manufacturer expected = new Manufacturer(1, name, "thisemail@gog.com");
             Manufacturer another = new Manufacturer(2, "anotherone", "site@domain.com");
             List<Manufacturer> list = new List<Manufacturer> { expected, another };
-            ManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByName(name);

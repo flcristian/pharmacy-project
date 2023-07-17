@@ -22,7 +22,7 @@ namespace testing_pharmacy_project.Tests
             Medicine m4 = new Medicine(4, 1, 1, 1, "name", "info", "tag");
             List<Medicine> medicines = new List<Medicine> { m1, m2, m3, m4 };
             List<Medicine> list = new List<Medicine> { m1, m2, m3, m4 };
-            MedicineService service = new MedicineService(list);
+            IMedicineService service = new MedicineService(list);
 
             // Act
             List<Medicine> found = service.FindByName(name);
@@ -40,7 +40,7 @@ namespace testing_pharmacy_project.Tests
             string name = "name";
             List<Medicine> medicines = new List<Medicine>();
             List<Medicine> list = new List<Medicine>();
-            MedicineService service = new MedicineService(list);
+            IMedicineService service = new MedicineService(list);
 
             // Act
             List<Medicine> found = service.FindByName(name);
@@ -61,7 +61,7 @@ namespace testing_pharmacy_project.Tests
             Medicine m5 = new Medicine(5, 4, 2, 4, "anothername", "info", "anothertag");
             List<Medicine> medicines = new List<Medicine> { m1, m2, m3, m4 };
             List<Medicine> list = new List<Medicine> { m1, m2, m3, m4, m5 };
-            MedicineService service = new MedicineService(list);
+            IMedicineService service = new MedicineService(list);
 
             // Act
             List<Medicine> found = service.FindByName(name);
@@ -79,7 +79,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1912;
             Medicine medicine = new Medicine(1, 1, 1, 1, "name", "info", "tag1");
             List<Medicine> list = new List<Medicine> { medicine };
-            MedicineService service = new MedicineService(list);
+            IMedicineService service = new MedicineService(list);
 
             // Act
             int remove = service.RemoveByManufacturerId(id);
@@ -96,7 +96,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1912;
             Medicine medicine = new Medicine(1, id, 1, 1, "name", "info", "tag1");
             List<Medicine> list = new List<Medicine> { medicine };
-            MedicineService service = new MedicineService(list);
+            IMedicineService service = new MedicineService(list);
 
             // Act
             int remove = service.RemoveByManufacturerId(id);

@@ -6,9 +6,9 @@ using pharmacy_project.order_details.service;
 using pharmacy_project.user.model;
 using pharmacy_project.bases.panel_base;
 
-namespace pharmacy_project.panels.customer;
+namespace pharmacy_project.panels;
 
-public class CustomerPanel : Panel, ICustomerPanel
+public class CustomerPanel : Panel, IPanel
 {
     private MedicineService _medicineService;
     private OrderService _orderService;
@@ -30,7 +30,7 @@ public class CustomerPanel : Panel, ICustomerPanel
 
     // Panel Methods
 
-    public override void RunMessage()
+    protected override void RunMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - See medicine list");

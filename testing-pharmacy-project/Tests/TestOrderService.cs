@@ -17,7 +17,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1674;
             Order order = new Order(1, 182, "Submitted");
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByIdCustomer(id);
@@ -33,7 +33,7 @@ namespace testing_pharmacy_project.Tests
             int id = 1674;
             Order order = new Order(1, id, "Submitted");
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByIdCustomer(id);
@@ -49,7 +49,7 @@ namespace testing_pharmacy_project.Tests
             string status = "Completed";
             Order order = new Order(182, 1, "Submitted");
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByStatus(status);
@@ -65,7 +65,7 @@ namespace testing_pharmacy_project.Tests
             string status = "Completed";
             Order order = new Order(182, 1, status);
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByStatus(status);
@@ -81,7 +81,7 @@ namespace testing_pharmacy_project.Tests
             string status = "Submitted";
             Order order = new Order(182, 1, "status");
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByStatusSortedByDate(status);
@@ -97,7 +97,7 @@ namespace testing_pharmacy_project.Tests
             string status = "Submitted";
             Order order = new Order(182, 1, status);
             List<Order> list = new List<Order> { order };
-            OrderService service = new OrderService(list);
+            IOrderService service = new OrderService(list);
 
             // Act
             int display = service.DisplayByStatusSortedByDate(status);

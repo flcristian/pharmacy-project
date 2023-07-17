@@ -1,10 +1,9 @@
 using pharmacy_project.user.model;
-using pharmacy_project.panels.admin;
 using pharmacy_project.bases.panel_base;
 
-namespace pharmacy_project.panels.login
+namespace pharmacy_project.panels
 {
-    public class LoginPanel : Panel, ILoginPanel
+    public class LoginPanel : Panel, IPanel
     {
         // Constructors
 
@@ -12,7 +11,7 @@ namespace pharmacy_project.panels.login
 
         // Panel Methods
 
-        public override void RunMessage()
+        protected override void RunMessage()
         {
             Console.WriteLine("Choose what you want to do:");
             Console.WriteLine("1 - Log into your account");
@@ -45,28 +44,28 @@ namespace pharmacy_project.panels.login
 
         // Methods
 
-        public string ObtainName()
+        private string ObtainName()
         {
             Console.WriteLine("Enter your name:");
             string name = Console.ReadLine();
             return name;
         }
 
-        public string ObtainEmail()
+        private string ObtainEmail()
         {
             Console.WriteLine("Enter your email:");
             string email = Console.ReadLine();
             return email;
         }
 
-        public string ObtainPassword()
+        private string ObtainPassword()
         {
             Console.WriteLine("Enter your password:");
             string password = Console.ReadLine();
             return password;
         }
 
-        public void AdminChoice(User user)
+        private void AdminChoice(User user)
         {
             Console.WriteLine("Seems like this is an admin account, how do you want to proceed?:");
             Console.WriteLine("1 - Connect as admin");
@@ -89,7 +88,7 @@ namespace pharmacy_project.panels.login
             }
         }
 
-        public void Login()
+        private void Login()
         {
             // Obtaining credentials
             string email = ObtainEmail();
@@ -115,7 +114,7 @@ namespace pharmacy_project.panels.login
             Console.WriteLine($"Welcome {user.Name}!\n");
         }
 
-        public void Register()
+        private void Register()
         {
             // Obtaining credentials
             string name = ObtainName();

@@ -17,7 +17,7 @@ namespace testing_pharmacy_project.Tests
             int id = 712;
             OrderDetails details = new OrderDetails(1, id, new List<int>{1, 2, 3}, new List<int>{1, 2, 3});
             List<OrderDetails> list = new List<OrderDetails>{details};
-            OrderDetailsService service = new OrderDetailsService(list);
+            IOrderDetailsService service = new OrderDetailsService(list);
 
             // Act
             OrderDetails found = service.FindByOrderId(id);
@@ -39,7 +39,7 @@ namespace testing_pharmacy_project.Tests
             OrderDetails details = new OrderDetails(1, id, new List<int>{1, 2, 3}, new List<int>{1, 2, 3});
             OrderDetails another = new OrderDetails(2, 91, new List<int>{4, 2, 3}, new List<int>{5, 9, 3});
             List<OrderDetails> list = new List<OrderDetails>{details};
-            OrderDetailsService service = new OrderDetailsService(list);
+            IOrderDetailsService service = new OrderDetailsService(list);
 
             // Act
             OrderDetails found = service.FindByOrderId(id);
@@ -61,7 +61,7 @@ namespace testing_pharmacy_project.Tests
             int id = 712;
             OrderDetails details = new OrderDetails(1, 2, new List<int>{1, 2, 3}, new List<int>{1, 2, 3});
             List<OrderDetails> list = new List<OrderDetails>{details};
-            OrderDetailsService service = new OrderDetailsService(list);
+            IOrderDetailsService service = new OrderDetailsService(list);
 
             // Act
             OrderDetails found = service.FindByOrderId(id);
@@ -77,7 +77,7 @@ namespace testing_pharmacy_project.Tests
             int id = 712;
             OrderDetails details = new OrderDetails(1, 2, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 3 });
             List<OrderDetails> list = new List<OrderDetails> { details };
-            OrderDetailsService service = new OrderDetailsService(list);
+            IOrderDetailsService service = new OrderDetailsService(list);
 
             // Act
             int removed = service.RemoveByOrderId(id);
@@ -93,7 +93,7 @@ namespace testing_pharmacy_project.Tests
             int id = 712;
             OrderDetails details = new OrderDetails(1, id, new List<int> { 1, 2, 3 }, new List<int> { 1, 2, 3 });
             List<OrderDetails> list = new List<OrderDetails> { details };
-            OrderDetailsService service = new OrderDetailsService(list);
+            IOrderDetailsService service = new OrderDetailsService(list);
 
             // Act
             int removed = service.RemoveByOrderId(id);
