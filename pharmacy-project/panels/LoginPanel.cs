@@ -141,7 +141,7 @@ namespace pharmacy_project.panels
             }
 
             // User has been added, saving list
-            GetUserService().SaveList(GetPath());
+            GetUserService().SaveList(GetPath() + "users.txt");
             Console.WriteLine("Account has been created!\n");
             return;
         }

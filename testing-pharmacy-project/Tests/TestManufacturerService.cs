@@ -37,7 +37,7 @@ namespace testing_pharmacy_project.Tests
             // Arrange
             string email = "thisemail@gog.com";
             List<Manufacturer> list = new List<Manufacturer>();
-            IIManufacturerService service = new ManufacturerService(list);
+            IManufacturerService service = new ManufacturerService(list);
 
             // Act
             Manufacturer actual = service.FindByEmail(email);

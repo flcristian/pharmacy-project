@@ -122,6 +122,41 @@ namespace pharmacy_project.order_details.model
             return desc;
         }
 
+        public String Description(List<String> medicine, bool isCart)
+        {
+            string hasProductsMessage = "";
+            string noProductsMessage = "";
+            if (!isCart)
+            {
+                hasProductsMessage = $"Order Id : {_orderId}\n";
+                noProductsMessage = $"Order id {_orderId} is empty.\n";
+            }
+            else
+            {
+                hasProductsMessage = "Your cart :\n";
+                noProductsMessage = "Your cart is empty.\n";
+            }
+
+
+            String desc = "";
+
+            if (_medicineIds.Any())
+            {
+                desc += hasProductsMessage;
+                foreach (int id in _medicineIds)
+                {
+                    int index = _medicineIds.IndexOf(id);
+                    desc += $"Id - Name x Ammount : {id} - {medicine[index]} x {_ammounts[index]}\n";
+                }
+            }
+            else
+            {
+                desc = noProductsMessage;
+            }
+
+            return desc;
+        }
+
         public String ToSave()
         {
             String save = $"{_id}/{_orderId}/";

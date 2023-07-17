@@ -41,6 +41,7 @@ public class CustomerPanel : Panel, IPanel
         Console.WriteLine("6 - Clear cart");
         Console.WriteLine("7 - Place order");
         Console.WriteLine("8 - Edit your account details");
+        Console.WriteLine("9 - See your orders");
     }
 
     public override void Run()
@@ -57,10 +58,13 @@ public class CustomerPanel : Panel, IPanel
                     SeeMedicineList();
                     break;
                 case "2":
+                    SeeCart();
                     break;
                 case "3":
+                    AddMedicine();
                     break;
                 case "4":
+                    RemoveMedicine();
                     break;
                 case "5":
                     break;
@@ -70,6 +74,8 @@ public class CustomerPanel : Panel, IPanel
                     break;
                 case "8":
                     RunAccount();
+                    break;
+                case "9":
                     break;
                 default:
                     return;
@@ -83,5 +89,77 @@ public class CustomerPanel : Panel, IPanel
     {
         _medicineService.Display();
         WaitForKey();
+    }
+
+    // Displays cart details
+    private void DisplayCartDetails()
+    {
+        string[] medicine = new string[_cartDetails.MedicineIds.Count];
+
+        int i = 0;
+        foreach (int id in _cartDetails.MedicineIds)
+        {
+            medicine[i] = _medicineService.FindById(id).Name;
+            i++;
+        }
+        Console.WriteLine(_cartDetails.Description(medicine.ToList(), true));
+    }
+
+    private void SeeCart()
+    {
+        DisplayCartDetails();
+        WaitForKey();
+    }
+
+    private void AddMedicine()
+    {
+        int id;
+        Console.WriteLine("Enter the id of the medicine:");
+        Int32.TryParse(Console.ReadLine(), out id);
+        while(id == 0 || _medicineService.FindById(id) == null!)
+        {
+            if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine were added."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the id of the medicine:");
+            Int32.TryParse(Console.ReadLine(), out id);
+        }
+
+        int ammount;
+        Console.WriteLine("Enter the ammount:");
+        Int32.TryParse(Console.ReadLine(), out ammount);
+        while (ammount < 1)
+        {
+            if (!YesNoChoice("Ammount must be at least equal to 1.", "Do you want to try again?", "No medicine were added."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the ammount:");
+            Int32.TryParse(Console.ReadLine(), out ammount);
+        }
+
+        _cartDetails.MedicineIds.Add(id);
+        _cartDetails.Ammounts.Add(ammount);
+        Console.WriteLine("Medicine was added!\n");
+    }
+
+    private void RemoveMedicine()
+    {
+        int id;
+        Console.WriteLine("Enter the id of the medicine:");
+        Int32.TryParse(Console.ReadLine(), out id);
+        while (id == 0 || _cartDetails.IndexOfMedicine(id) == -1)
+        {
+            if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine were added."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the id of the medicine:");
+            Int32.TryParse(Console.ReadLine(), out id);
+        }
+
+        _cartDetails.RemoveMedicineId(id);
+        Console.WriteLine("Medicine was removed!\n");
     }
 }

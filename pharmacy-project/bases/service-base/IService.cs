@@ -26,6 +26,8 @@ public interface IService<T>
 
     int EditById(T t, int id);
 
+    int DisplayById(int id);
+
     T FindById(int id);
 
     List<T> GetList();

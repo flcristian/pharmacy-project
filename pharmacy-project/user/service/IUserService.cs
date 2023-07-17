@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using pharmacy_project.bases.service_base;
 using pharmacy_project.user.model;
 
 namespace pharmacy_project.user.service
 {
-    public interface IUserService
+    public interface IUserService : IService<User>
     {
         int DisplayAdmins();
 
