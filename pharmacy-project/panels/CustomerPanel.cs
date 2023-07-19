@@ -76,6 +76,7 @@ public class CustomerPanel : Panel, IPanel
                     RunAccount();
                     break;
                 case "9":
+                    SeeOrders();
                     break;
                 default:
                     return;
@@ -91,17 +92,23 @@ public class CustomerPanel : Panel, IPanel
         WaitForKey();
     }
 
-    // Displays cart details
-    private void DisplayCartDetails()
+    // Finds medicine names from order details medicine id list
+    private string[] ObtainMedicineArray(OrderDetails details)
     {
-        string[] medicine = new string[_cartDetails.MedicineIds.Count];
-
+        string[] medicine = new string[details.MedicineIds.Count];
         int i = 0;
-        foreach (int id in _cartDetails.MedicineIds)
+        foreach (int id in details.MedicineIds)
         {
             medicine[i] = _medicineService.FindById(id).Name;
             i++;
         }
+        return medicine;
+    }
+
+    // Displays cart details
+    private void DisplayCartDetails()
+    {
+        string[] medicine = ObtainMedicineArray(_cartDetails);
         Console.WriteLine(_cartDetails.Description(medicine.ToList(), true));
     }
 
@@ -161,5 +168,30 @@ public class CustomerPanel : Panel, IPanel
 
         _cartDetails.RemoveMedicineId(id);
         Console.WriteLine("Medicine was removed!\n");
+    }
+    
+    // Displays all order details from customer
+    private void DisplayCustomerOrders()
+    {
+        List<Order> orders = _orderService.FindByCustomerId(GetUser().Id);
+        if (!orders.Any())
+        {
+            Console.WriteLine("You have no orders.\n");
+            return;
+        }
+
+        foreach(Order order in orders)
+        {
+            OrderDetails orderDetails = _orderDetailsService.FindByOrderId(order.Id);
+            string[] medicine = ObtainMedicineArray(orderDetails);
+            Console.WriteLine(orderDetails.Description(medicine.ToList(), false));
+            Console.WriteLine(order.CustomerDescription());
+        }
+    }
+
+    private void SeeOrders()
+    {
+        DisplayCustomerOrders();
+        WaitForKey();
     }
 }

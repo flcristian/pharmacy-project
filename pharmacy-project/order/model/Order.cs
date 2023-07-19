@@ -117,7 +117,6 @@ namespace pharmacy_project.order.model
         {
             String desc = "";
 
-            desc += "Id : " + _id + "\n";
             desc += "Status : " + _status + "\n";
 
             String[] statuses = new String[4] { "Submitted", "Sent", "Received", "Completed" };

@@ -5,7 +5,7 @@ namespace pharmacy_project.order.service;
 
 public interface IOrderService : IService<Order>
 {
-    int DisplayByIdCustomer(int id);
+    List<Order> FindByCustomerId(int id);
 
     int DisplayByStatus(String status);
 

@@ -12,9 +12,10 @@ namespace pharmacy_project.order.service
 
         // Methods
 
-        public int DisplayByIdCustomer(int id)
+        public List<Order> FindByCustomerId(int id)
         {
             List<Order> orders = new List<Order>();
+
             foreach(Order order in GetList())
             {
                 if(order.CustomerId == id)
@@ -23,17 +24,7 @@ namespace pharmacy_project.order.service
                 }
             }
 
-            // Checks if any orders have been found. Returns 0 if none
-            if (!orders.Any())
-            {
-                return 0;
-            }
-
-            foreach(Order order in orders)
-            {
-                Console.WriteLine(order.CustomerDescription());
-            }
-            return 1;
+            return orders;
         }
 
         public int DisplayByStatus(String status)

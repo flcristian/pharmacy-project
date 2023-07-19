@@ -1129,17 +1129,23 @@ public class AdminPanel : Panel, IPanel
 
     // Order details service methods
 
-    // Displays order details list with medicine names
-    private void DisplayOrderDetails(OrderDetails details)
+    // Finds medicine names from order details medicine id list
+    private string[] ObtainMedicineArray(OrderDetails details)
     {
         string[] medicine = new string[details.MedicineIds.Count];
-
         int i = 0;
         foreach (int id in details.MedicineIds)
         {
             medicine[i] = _medicineService.FindById(id).Name;
             i++;
         }
+        return medicine;
+    }
+
+    // Displays order details list with medicine names
+    private void DisplayOrderDetails(OrderDetails details)
+    {
+        string[] medicine = ObtainMedicineArray(details);
         Console.WriteLine(details.Description(medicine.ToList()));
     }
 
@@ -1150,14 +1156,7 @@ public class AdminPanel : Panel, IPanel
         int i = 0;
         foreach (OrderDetails details in _orderDetailsService.GetList())
         {
-            medicine[i] = new string[details.MedicineIds.Count];
-
-            int j = 0;
-            foreach (int id in details.MedicineIds)
-            {
-                medicine[i][j] = _medicineService.FindById(id).Name;
-                j++;
-            }
+            medicine[i] = ObtainMedicineArray(details);
             i++;
         }
 
