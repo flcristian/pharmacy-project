@@ -1130,7 +1130,7 @@ public class AdminPanel : Panel, IPanel
     // Order details service methods
 
     // Finds medicine names from order details medicine id list
-    private string[] ObtainMedicineArray(OrderDetails details)
+    private String[] ObtainMedicineArray(OrderDetails details)
     {
         string[] medicine = new string[details.MedicineIds.Count];
         int i = 0;
@@ -1145,14 +1145,14 @@ public class AdminPanel : Panel, IPanel
     // Displays order details list with medicine names
     private void DisplayOrderDetails(OrderDetails details)
     {
-        string[] medicine = ObtainMedicineArray(details);
+        String[] medicine = ObtainMedicineArray(details);
         Console.WriteLine(details.Description(medicine.ToList()));
     }
 
     // Displays order details with medicine names
     private void DisplayOrderDetailsList()
     {
-        string[][] medicine = new string[_orderDetailsService.Count()][];
+        String[][] medicine = new string[_orderDetailsService.Count()][];
         int i = 0;
         foreach (OrderDetails details in _orderDetailsService.GetList())
         {

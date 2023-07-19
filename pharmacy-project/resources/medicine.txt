@@ -17,4 +17,4 @@
 302609/988820/19.13/74/Bupivacaine Hydrochloride/BUPIVACAINE HYDROCHLORIDE/dolor,vel
 390447/320482/78.85/64/Lisinopril/Lisinopril/sollicitudin,ut,suscipit,a
 935530/320482/19.62/72/AMITRIPTYLINE HYDROCHLORIDE/AMITRIPTYLINE HYDROCHLORIDE/bibendum,felis
-257218/457482/29.79/94/Telmisartan/Telmisartan/mauris,laoreet,ut,rhoncus
+111111/457482/29.79/94/Telmisartan/Telmisartan/mauris,laoreet,ut,rhoncus

@@ -69,8 +69,10 @@ public class CustomerPanel : Panel, IPanel
                 case "5":
                     break;
                 case "6":
+                    ClearCart();
                     break;
                 case "7":
+                    PlaceOrder();
                     break;
                 case "8":
                     RunAccount();
@@ -93,9 +95,9 @@ public class CustomerPanel : Panel, IPanel
     }
 
     // Finds medicine names from order details medicine id list
-    private string[] ObtainMedicineArray(OrderDetails details)
+    private String[] ObtainMedicineArray(OrderDetails details)
     {
-        string[] medicine = new string[details.MedicineIds.Count];
+        String[] medicine = new String[details.MedicineIds.Count];
         int i = 0;
         foreach (int id in details.MedicineIds)
         {
@@ -108,7 +110,7 @@ public class CustomerPanel : Panel, IPanel
     // Displays cart details
     private void DisplayCartDetails()
     {
-        string[] medicine = ObtainMedicineArray(_cartDetails);
+        String[] medicine = ObtainMedicineArray(_cartDetails);
         Console.WriteLine(_cartDetails.Description(medicine.ToList(), true));
     }
 
@@ -148,6 +150,7 @@ public class CustomerPanel : Panel, IPanel
 
         _cartDetails.MedicineIds.Add(id);
         _cartDetails.Ammounts.Add(ammount);
+        DrawLine();
         Console.WriteLine("Medicine was added!\n");
     }
 
@@ -167,7 +170,46 @@ public class CustomerPanel : Panel, IPanel
         }
 
         _cartDetails.RemoveMedicineId(id);
+        DrawLine();
         Console.WriteLine("Medicine was removed!\n");
+    }
+
+    private void ClearCart()
+    {
+        if (!YesNoChoice("This will clear every item in your cart.", "Are you sure you want to do this?", "Your cart was not cleared."))
+        {
+            return;
+        }
+
+        _cart = new Order(_cart.Id, GetUser().Id, "Cart");
+        _cartDetails = new OrderDetails(_cartDetails.Id, _cart.Id, new List<int>(), new List<int>());
+        DrawLine();
+        Console.WriteLine("Cart was succesfully cleared!\n");
+    }
+
+    private void PlaceOrder()
+    {
+        if(_cartDetails.MedicineIds.Count() == 0)
+        {
+            Console.WriteLine("Can't place an empty order!\n");
+            return;
+        }
+
+        DisplayCartDetails();
+        if(!YesNoChoice("Make sure you have checked everything before placing the order.", "Are you sure you want to place the order?", "No order was placed."))
+        {
+            return;
+        }
+
+        Order order = new Order(_cart.Id, _cart.CustomerId, "Submitted");
+        _orderService.Add(order);
+        _orderService.SaveList(GetPath() + "orders.txt");
+        _orderDetailsService.Add(_cartDetails);
+        _orderDetailsService.SaveList(GetPath() + "order_details.txt");
+        _cart = new Order(_cart.Id, GetUser().Id, "Cart");
+        _cartDetails = new OrderDetails(_cartDetails.Id, _cart.Id, new List<int>(), new List<int>());
+        DrawLine();
+        Console.WriteLine("Your order was succesfully placed!\n");
     }
     
     // Displays all order details from customer
@@ -183,9 +225,13 @@ public class CustomerPanel : Panel, IPanel
         foreach(Order order in orders)
         {
             OrderDetails orderDetails = _orderDetailsService.FindByOrderId(order.Id);
-            string[] medicine = ObtainMedicineArray(orderDetails);
+            String[] medicine = ObtainMedicineArray(orderDetails);
             Console.WriteLine(orderDetails.Description(medicine.ToList(), false));
             Console.WriteLine(order.CustomerDescription());
+            if(orders.Last() != order)
+            {
+                Console.WriteLine("----------------\n");
+            }
         }
     }
 

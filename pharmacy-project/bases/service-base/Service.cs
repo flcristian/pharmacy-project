@@ -139,21 +139,21 @@ namespace pharmacy_project.bases.service_base
             return 1;
         }
 
-        public virtual int Add(T t)
+        public virtual int Add(T item)
         {
             // Checks if id is already used.
-            T foundById = FindById(t.Id);
+            T foundById = FindById(item.Id);
 
             if (foundById != null!)
             {
                 return 0;
             }
 
-            _list.Add(t);
+            _list.Add(item);
             return 1;
         }
 
-        public int EditById(T t, int id)
+        public int EditById(T item, int id)
         {
             T found = FindById(id);
             if(found == null!)
@@ -161,7 +161,7 @@ namespace pharmacy_project.bases.service_base
                 return 0;
             }
 
-            _list[_list.IndexOf(found)] = t;
+            _list[_list.IndexOf(found)] = item;
             return 1;
         }
 

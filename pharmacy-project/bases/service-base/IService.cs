@@ -20,11 +20,11 @@ public interface IService<T>
 
     void ClearList();
 
-    int Add(T t);
+    int Add(T item);
 
     int RemoveById(int id);
 
-    int EditById(T t, int id);
+    int EditById(T item, int id);
 
     int DisplayById(int id);
 
