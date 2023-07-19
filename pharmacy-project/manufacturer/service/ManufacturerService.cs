@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using pharmacy_project.abstract_classes;
-using pharmacy_project.manufacturer.model;
+﻿using pharmacy_project.manufacturer.model;
+using pharmacy_project.bases.service_base;
 
 namespace pharmacy_project.manufacturer.service
 {
-    public class ManufacturerService : Service<Manufacturer>
+    public class ManufacturerService : Service<Manufacturer>, IManufacturerService
     {
         // Constructors
 

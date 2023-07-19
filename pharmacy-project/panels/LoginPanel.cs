@@ -1,48 +1,79 @@
 using pharmacy_project.user.model;
-using pharmacy_project.user.service;
-using pharmacy_project.abstract_classes;
+using pharmacy_project.bases.panel_base;
 
 namespace pharmacy_project.panels
 {
-    public class LoginPanel : Panel
+    public class LoginPanel : Panel, IPanel
     {
-
         // Constructors
 
-        public LoginPanel(String path) : base(path) { }
-        
+        public LoginPanel(string path) : base(path) { }
+
+        // Panel Methods
+
+        protected override void RunMessage()
+        {
+            Console.WriteLine("Choose what you want to do:");
+            Console.WriteLine("1 - Log into your account");
+            Console.WriteLine("2 - Register a new account");
+        }
+
+        public override void Run()
+        {
+            bool running = true;
+            while (running)
+            {
+                RunMessage();
+                string choice = Console.ReadLine();
+
+                DrawLine();
+                switch (choice)
+                {
+                    case "1":
+                        Login();
+                        break;
+                    case "2":
+                        Register();
+                        break;
+                    default:
+                        running = false;
+                        break;
+                }
+            }
+        }
+
         // Methods
-        
-        public String ObtainName()
+
+        private string ObtainName()
         {
             Console.WriteLine("Enter your name:");
-            String name = Console.ReadLine();
+            string name = Console.ReadLine();
             return name;
         }
-        
-        public String ObtainEmail()
+
+        private string ObtainEmail()
         {
             Console.WriteLine("Enter your email:");
-            String email = Console.ReadLine();
+            string email = Console.ReadLine();
             return email;
         }
-        
-        public String ObtainPassword()
+
+        private string ObtainPassword()
         {
             Console.WriteLine("Enter your password:");
-            String password = Console.ReadLine();
+            string password = Console.ReadLine();
             return password;
         }
-        
-        public void AdminChoice(User user)
+
+        private void AdminChoice(User user)
         {
             Console.WriteLine("Seems like this is an admin account, how do you want to proceed?:");
             Console.WriteLine("1 - Connect as admin");
             Console.WriteLine("2 - Connect as customer");
-            
-            String choice = Console.ReadLine();
+
+            string choice = Console.ReadLine();
             DrawLine();
-            switch(choice)
+            switch (choice)
             {
                 case "1":
                     Console.WriteLine($"Logged in as admin.\nWelcome {user.Name}!\n");
@@ -56,94 +87,63 @@ namespace pharmacy_project.panels
                     return;
             }
         }
-        
-        public void Login()
+
+        private void Login()
         {
             // Obtaining credentials
-            String email = ObtainEmail();
-            String password = ObtainPassword();
+            string email = ObtainEmail();
+            string password = ObtainPassword();
             DrawLine();
-            
+
             // Checking if user exists
             User user = GetUserService().FindByEmailAndPassword(email, password);
-            if(user == null!)
+            if (user == null!)
             {
                 Console.WriteLine("Wrong email or password.\n");
                 return;
             }
-            
+
             // Checking if user is admin
-            if(GetUserService().IsAdmin(user))
+            if (GetUserService().IsAdmin(user))
             {
                 AdminChoice(user);
                 return;
             }
-            
+
             // Log in user as customer
             Console.WriteLine($"Welcome {user.Name}!\n");
         }
-        
-        public void Register()
+
+        private void Register()
         {
             // Obtaining credentials
-            String name = ObtainName();
-            String email = ObtainEmail();
-            String password = ObtainPassword();
-            
+            string name = ObtainName();
+            string email = ObtainEmail();
+            string password = ObtainPassword();
+
             // Creating customer account
             Customer customer = new Customer(GetUserService().NewId(), name, email, password);
-            
+
             // Adding account to _service
             int add = GetUserService().Add(customer);
-            
+
             // Checks if user was added or returns errors
             DrawLine();
-            if(add == -1)
-            {    
+            if (add == -1)
+            {
                 Console.WriteLine("Id has already been used! Please try again or contact administrators.\n");
                 return;
             }
-            if(add == 0)
+            if (add == 0)
             {
                 Console.WriteLine("Email has already been used.\n");
                 return;
             }
-            
+
             // User has been added, saving list
-            GetUserService().SaveList(GetPath());
+            GetUserService().SaveList(GetPath() + "users.txt");
             Console.WriteLine("Account has been created!\n");
             return;
-        }
-        
-        public override void RunMessage()
-        {
-            Console.WriteLine("Choose what you want to do:");
-            Console.WriteLine("1 - Log into your account");
-            Console.WriteLine("2 - Register a new account");
-        }
-        
-        public override void Run()
-        {
-            bool running = true;
-            while(running)
-            {
-                RunMessage();
-                String choice = Console.ReadLine();
-                
-                DrawLine();
-                switch(choice)
-                {
-                    case "1":
-                        Login();
-                        break;
-                    case "2":
-                        Register();
-                        break;
-                    default:
-                        running = false;
-                        break;
-                }
-            }
         }
     }
 }

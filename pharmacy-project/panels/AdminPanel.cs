@@ -1,4 +1,3 @@
-using pharmacy_project.abstract_classes;
 using pharmacy_project.manufacturer.model;
 using pharmacy_project.manufacturer.service;
 using pharmacy_project.medicine.model;
@@ -8,21 +7,20 @@ using pharmacy_project.order_details.service;
 using pharmacy_project.order.model;
 using pharmacy_project.order.service;
 using pharmacy_project.user.model;
-using pharmacy_project.user.service;
-using System.Globalization;
+using pharmacy_project.bases.panel_base;
 
 namespace pharmacy_project.panels;
 
-public class AdminPanel : Panel
+public class AdminPanel : Panel, IPanel
 {
-    private ManufacturerService _manufacturerService;
-    private MedicineService _medicineService;
-    private OrderService _orderService;
-    private OrderDetailsService _orderDetailsService;
+    private IManufacturerService _manufacturerService;
+    private IMedicineService _medicineService;
+    private IOrderService _orderService;
+    private IOrderDetailsService _orderDetailsService;
 
     // Constructors
 
-    public AdminPanel(String path, User admin) : base(path, admin)
+    public AdminPanel(string path, User admin) : base(path, admin)
     {
         _manufacturerService = new ManufacturerService(path + "manufacturers.txt");
         _medicineService = new MedicineService(path + "medicine.txt");
@@ -45,10 +43,10 @@ public class AdminPanel : Panel
 
     private void RunManufacturers()
     {
-        while(true)
+        while (true)
         {
             RunManufacturersMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)
@@ -90,10 +88,10 @@ public class AdminPanel : Panel
 
     private void RunMedicine()
     {
-        while(true)
+        while (true)
         {
             RunMedicineMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)
@@ -134,10 +132,10 @@ public class AdminPanel : Panel
 
     private void RunOrders()
     {
-        while(true)
+        while (true)
         {
             RunOrdersMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)
@@ -173,10 +171,10 @@ public class AdminPanel : Panel
 
     private void RunOrderDetails()
     {
-        while(true)
+        while (true)
         {
             RunOrderDetailsMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)
@@ -213,13 +211,13 @@ public class AdminPanel : Panel
 
     private void RunUsers()
     {
-        while(true)
+        while (true)
         {
             RunUsersMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
-            switch(choice)
+            switch (choice)
             {
                 case "1":
                     SeeCustomerList();
@@ -257,7 +255,7 @@ public class AdminPanel : Panel
         }
     }
 
-    public override void RunMessage()
+    protected override void RunMessage()
     {
         Console.WriteLine("Choose what you want to do:");
         Console.WriteLine("1 - Edit manufacturers");
@@ -271,17 +269,17 @@ public class AdminPanel : Panel
     public override void Run()
     {
         // Checks if the user is an admin.
-        if(!GetUserService().IsAdmin(GetUser()))
+        if (!GetUserService().IsAdmin(GetUser()))
         {
             DrawLine();
             Console.WriteLine("YOU DO NOT HAVE PERMISSION!\n");
             return;
         }
 
-        while(true)
+        while (true)
         {
             RunMessage();
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             DrawLine();
             switch (choice)
@@ -327,14 +325,14 @@ public class AdminPanel : Panel
     private void EditCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to edit:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || GetUserService().IsAdmin(customer))
+        if (customer == null! || GetUserService().IsAdmin(customer))
         {
-            if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been edited."))
+            if (YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been edited."))
             {
                 EditCustomer();
             }
@@ -347,18 +345,18 @@ public class AdminPanel : Panel
         Console.WriteLine("2 - Edit email of customer");
         Console.WriteLine("3 - Name and email of customer");
         Console.WriteLine("Anything else to cancel.");
-        String choice = Console.ReadLine();
+        string choice = Console.ReadLine();
 
-        String editedName = customer.Name, editedEmail = customer.Email;
-        switch(choice)
+        string editedName = customer.Name, editedEmail = customer.Email;
+        switch (choice)
         {
             case "1":
                 Console.WriteLine("\nEnter the new name of the customer:");
                 editedName = Console.ReadLine();
 
-                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                if (editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
+                    if (!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
                     {
                         return;
                     }
@@ -369,9 +367,9 @@ public class AdminPanel : Panel
             case "2":
                 Console.WriteLine("\nEnter the new email of the customer:");
                 editedEmail = Console.ReadLine();
-                while(GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                while (GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Customer was not edited."))
+                    if (!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Customer was not edited."))
                     {
                         return;
                     }
@@ -382,9 +380,9 @@ public class AdminPanel : Panel
             case "3":
                 Console.WriteLine("\nEnter the new name of the customer:");
                 editedName = Console.ReadLine();
-                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                if (editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
+                    if (!YesNoChoice("You must input a name!", "Do you want to try again?", "Account was not edited."))
                     {
                         return;
                     }
@@ -394,9 +392,9 @@ public class AdminPanel : Panel
 
                 Console.WriteLine("\nEnter the new email of the customer:");
                 editedEmail = Console.ReadLine();
-                while(GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                while (GetUserService().FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("Email is already used.", "Do you want to try again?", "Customer has not been edited."))
+                    if (!YesNoChoice("Email is already used.", "Do you want to try again?", "Customer has not been edited."))
                     {
                         return;
                     }
@@ -413,7 +411,7 @@ public class AdminPanel : Panel
         User editedCustomer = new Customer(customer.Id, editedName, editedEmail, customer.Password);
 
         // Confirming action
-        if(YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited."))
+        if (YesNoChoice("\nDetails of the edited customer:\n" + editedCustomer, "Are you sure you want to make these changes?", "Customer has not been edited."))
         {
             GetUserService().EditById(editedCustomer, editedCustomer.Id);
             DrawLine();
@@ -424,14 +422,14 @@ public class AdminPanel : Panel
     private void RemoveCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to remove:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || GetUserService().IsAdmin(customer))
+        if (customer == null! || GetUserService().IsAdmin(customer))
         {
-            if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been removed."))
+            if (YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been removed."))
             {
                 RemoveCustomer();
             }
@@ -439,7 +437,7 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed."))
+        if (YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this customer?", "Customer was not removed."))
         {
             GetUserService().RemoveById(customer.Id);
             DrawLine();
@@ -450,14 +448,14 @@ public class AdminPanel : Panel
     private void BlockCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to block:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || GetUserService().IsAdmin(customer))
+        if (customer == null! || GetUserService().IsAdmin(customer))
         {
-            if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been blocked."))
+            if (YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been blocked."))
             {
                 BlockCustomer();
             }
@@ -466,7 +464,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        if(YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked"))
+        if (YesNoChoice("This is the customer you want to block ^", "Are you sure you want to block this customer?", "Customer was not blocked"))
         {
             GetUserService().BlockById(customer.Id);
             DrawLine();
@@ -477,14 +475,14 @@ public class AdminPanel : Panel
     private void UnblockCustomer()
     {
         Console.WriteLine("Enter the email of the customer you want to unblock:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || GetUserService().IsAdmin(customer))
+        if (customer == null! || GetUserService().IsAdmin(customer))
         {
-            if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been unblocked."))
+            if (YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer has been unblocked."))
             {
                 UnblockCustomer();
             }
@@ -493,7 +491,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        if(YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked"))
+        if (YesNoChoice("This is the customer you want to unblock ^", "Are you sure you want to unblock this customer?", "Customer was not unblocked"))
         {
             GetUserService().UnblockById(customer.Id);
             DrawLine();
@@ -504,14 +502,14 @@ public class AdminPanel : Panel
     private void MakeCustomerAdmin()
     {
         Console.WriteLine("Enter the email of the customer you want to make admin:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User customer = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(customer == null! || GetUserService().IsAdmin(customer))
+        if (customer == null! || GetUserService().IsAdmin(customer))
         {
-            if(YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer was assigned as admin."))
+            if (YesNoChoice("No customer has been found with that email.", "Do you want to try again?", "No customer was assigned as admin."))
             {
                 MakeCustomerAdmin();
             }
@@ -520,7 +518,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(customer);
-        if(YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin."))
+        if (YesNoChoice("This is the customer you want to make admin ^", "Are you sure you want to make this customer admin?", "Customer was not assigned as admin."))
         {
             Admin admin = new Admin(customer.Id, customer.Name, customer.Email, customer.Password);
             GetUserService().RemoveById(customer.Id);
@@ -533,14 +531,14 @@ public class AdminPanel : Panel
     private void RemoveAdmin()
     {
         Console.WriteLine("Enter the email of the admin you want to remove:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         User admin = GetUserService().FindByEmail(email);
 
         // Checks if the customer exists.
-        if(admin == null! || !GetUserService().IsAdmin(admin))
+        if (admin == null! || !GetUserService().IsAdmin(admin))
         {
-            if(YesNoChoice("No admin has been found with that email.", "Do you want to try again?", "No admin was removed."))
+            if (YesNoChoice("No admin has been found with that email.", "Do you want to try again?", "No admin was removed."))
             {
                 RemoveAdmin();
             }
@@ -549,7 +547,7 @@ public class AdminPanel : Panel
 
         // Confirms action
         Console.WriteLine(admin);
-        if(YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed."))
+        if (YesNoChoice("This is the admin you want to remove ^", "Are you sure you want to remove this admin?", "Admin was not removed."))
         {
             Customer customer = new Customer(admin.Id, admin.Name, admin.Email, admin.Password);
             GetUserService().RemoveById(admin.Id);
@@ -563,7 +561,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         GetUserService().Display();
-        if(YesNoChoice("User list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
+        if (YesNoChoice("User list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "User list was not saved."))
         {
             GetUserService().SaveList(GetPath() + "users.txt");
             DrawLine();
@@ -574,7 +572,7 @@ public class AdminPanel : Panel
     private void ClearUserList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared."))
+        if (YesNoChoice("THIS WILL DELETE ALL USERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "User list was not cleared."))
         {
             GetUserService().ClearList();
             GetUserService().Add(GetUser());
@@ -595,15 +593,15 @@ public class AdminPanel : Panel
     {
         // Creating manufacturer
         Console.WriteLine("Enter the name of the manufacturer you want to add:");
-        String name = Console.ReadLine();
+        string name = Console.ReadLine();
         Console.WriteLine("Enter the email of the manufacturer you want to add:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         Manufacturer manufacturer = new Manufacturer(_manufacturerService.NewId(), name, email);
 
         // Confirms action
         Console.WriteLine("\n" + manufacturer);
-        if(YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added."))
+        if (YesNoChoice("New manufacturer is above ^", "Are you sure you want to add it?", "Manufacturer was not added."))
         {
             _manufacturerService.Add(manufacturer);
             DrawLine();
@@ -614,14 +612,14 @@ public class AdminPanel : Panel
     private void EditManufacturer()
     {
         Console.WriteLine("Enter the email of the manufacturer you want to edit:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
 
         // Checks if the manufacturer exists.
-        if(manufacturer == null!)
+        if (manufacturer == null!)
         {
-            if(YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
+            if (YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
             {
                 EditManufacturer();
             }
@@ -634,18 +632,18 @@ public class AdminPanel : Panel
         Console.WriteLine("2 - Edit email of manufacturer");
         Console.WriteLine("3 - Name and email of manufacturer");
         Console.WriteLine("Anything else to cancel.");
-        String choice = Console.ReadLine();
+        string choice = Console.ReadLine();
 
-        String editedName = manufacturer.Name, editedEmail = manufacturer.Email;
-        switch(choice)
+        string editedName = manufacturer.Name, editedEmail = manufacturer.Email;
+        switch (choice)
         {
             case "1":
                 Console.WriteLine("\nEnter the new name of the manufacturer:");
                 editedName = Console.ReadLine();
 
-                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                if (editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
+                    if (!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
                     {
                         return;
                     }
@@ -656,9 +654,9 @@ public class AdminPanel : Panel
             case "2":
                 Console.WriteLine("\nEnter the new email of the manufacturer:");
                 editedEmail = Console.ReadLine();
-                while(_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                while (_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
+                    if (!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
                     {
                         return;
                     }
@@ -669,9 +667,9 @@ public class AdminPanel : Panel
             case "3":
                 Console.WriteLine("\nEnter the new name of the manufacturer:");
                 editedName = Console.ReadLine();
-                if(editedName == null! || editedName.Replace(" ", "").Equals(""))
+                if (editedName == null! || editedName.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
+                    if (!YesNoChoice("You must input a name!", "Do you want to try again?", "Manufacturer was not edited."))
                     {
                         return;
                     }
@@ -681,9 +679,9 @@ public class AdminPanel : Panel
 
                 Console.WriteLine("\nEnter the new email of the manufacturer:");
                 editedEmail = Console.ReadLine();
-                while(_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
+                while (_manufacturerService.FindByEmail(editedEmail) != null! || editedEmail == null! || editedEmail.Replace(" ", "").Equals(""))
                 {
-                    if(!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
+                    if (!YesNoChoice("Email is invalid or already used.", "Do you want to try again?", "Manufacturer was not edited."))
                     {
                         return;
                     }
@@ -700,7 +698,7 @@ public class AdminPanel : Panel
         Manufacturer editedManufacturer = new Manufacturer(manufacturer.Id, editedName, editedEmail);
 
         // Confirming actions
-        if(YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited."))
+        if (YesNoChoice("\nDetails of the edited manufacturer:\n" + editedManufacturer, "Are you sure you want to make these changes?", "Manufacturer has not been edited."))
         {
             _manufacturerService.EditById(editedManufacturer, editedManufacturer.Id);
             DrawLine();
@@ -711,14 +709,14 @@ public class AdminPanel : Panel
     private void RemoveManufacturer()
     {
         Console.WriteLine("Enter the email of the manufacturer you want to remove:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
 
         // Checks if the manufacturer exists.
-        if(manufacturer == null!)
+        if (manufacturer == null!)
         {
-            if(YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
+            if (YesNoChoice("No manufacturer has been found with that email.", "Do you want to try again?", "No manufacturer has been removed."))
             {
                 RemoveManufacturer();
             }
@@ -726,12 +724,12 @@ public class AdminPanel : Panel
         }
 
         // Confirming action
-        if(YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed."))
+        if (YesNoChoice("THIS CAN NOT BE UNDONE!", "Are you sure you want to remove this manufacturer?", "Manufacturer was not removed."))
         {
             _manufacturerService.RemoveById(manufacturer.Id);
             DrawLine();
             Console.WriteLine("Manufacturer was removed.\n");
-            if(YesNoChoice("Manufacturer was removed.\n", "Do you also want to delete medicine related to this manufacturer?", "Only manufacturer was removed."))
+            if (YesNoChoice("Manufacturer was removed.\n", "Do you also want to delete medicine related to this manufacturer?", "Only manufacturer was removed."))
             {
                 _medicineService.RemoveByManufacturerId(manufacturer.Id);
                 DrawLine();
@@ -744,7 +742,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _manufacturerService.Display();
-        if(YesNoChoice("Manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
+        if (YesNoChoice("Manufacturer list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not saved."))
         {
             _manufacturerService.SaveList(GetPath() + "manufacturers.txt");
             DrawLine();
@@ -755,12 +753,12 @@ public class AdminPanel : Panel
     private void ClearManufacturerList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
+        if (YesNoChoice("THIS WILL DELETE ALL MANUFACTURERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
         {
             _manufacturerService.ClearList();
             DrawLine();
 
-            if(YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
+            if (YesNoChoice("Manufacturer list has been cleared!\n", "Do you also want to delete all medicine?\nTHIS CAN NOT BE UNDONE!", "Manufacturer list was not cleared."))
             {
                 _medicineService.ClearList();
                 DrawLine();
@@ -780,27 +778,27 @@ public class AdminPanel : Panel
     private void AddMedicine()
     {
         Console.WriteLine("Enter the email of the manufacturer:");
-        String email = Console.ReadLine();
+        string email = Console.ReadLine();
         Manufacturer manufacturer = _manufacturerService.FindByEmail(email);
         int id = manufacturer == null! ? 0 : manufacturer.Id;
 
-        if(manufacturer == null! && !YesNoChoice("No manufacturer was found with that email.", "Do you still want to continue adding the medicine?\nThe manufacturer ID will be set to 0 in this case.", "No medicine was added.")){return;}
+        if (manufacturer == null! && !YesNoChoice("No manufacturer was found with that email.", "Do you still want to continue adding the medicine?\nThe manufacturer ID will be set to 0 in this case.", "No medicine was added.")) { return; }
 
         Console.WriteLine("Enter the price:");
-        Double price = Double.Parse(Console.ReadLine());
+        double price = double.Parse(Console.ReadLine());
         Console.WriteLine("Enter the stock ammount:");
-        int stock = Int32.Parse(Console.ReadLine());
+        int stock = int.Parse(Console.ReadLine());
         Console.WriteLine("Enter the name:");
-        String name = Console.ReadLine();
+        string name = Console.ReadLine();
         Console.WriteLine("Enter the information:");
-        String info = Console.ReadLine();
+        string info = Console.ReadLine();
         Console.WriteLine("Enter all tags separated by a comma (no spaces):");
-        String tags = Console.ReadLine();
+        string tags = Console.ReadLine();
 
         Medicine medicine = new Medicine(_medicineService.NewId(), id, price, stock, name, info, tags);
 
         // Confirms actions
-        if(YesNoChoice($"\nHere is the medicine you created? {medicine}", "Do you want to add it?", "No medicine was added."))
+        if (YesNoChoice($"\nHere is the medicine you created? {medicine}", "Do you want to add it?", "No medicine was added."))
         {
             _medicineService.Add(medicine);
             DrawLine();
@@ -811,12 +809,12 @@ public class AdminPanel : Panel
     private void EditMedicine()
     {
         Console.WriteLine("Enter the id of the medicine you want to edit:");
-        int id = Int32.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine());
 
         Medicine medicine = _medicineService.FindById(id);
-        if(medicine == null!)
+        if (medicine == null!)
         {
-            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was edited."))
+            if (YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was edited."))
             {
                 RemoveMedicine();
             }
@@ -833,21 +831,21 @@ public class AdminPanel : Panel
         Console.WriteLine("7 - Everything");
         Console.WriteLine("Anything else to cancel.");
 
-        String editedName = medicine.Name, editedInfo = medicine.Information, email;
-        Double editedPrice = medicine.Price;
+        string editedName = medicine.Name, editedInfo = medicine.Information, email;
+        double editedPrice = medicine.Price;
         int editedId = medicine.ManufacturerId, editedStock = medicine.StockAmmount;
         Manufacturer manufacturer;
-        String editedTags = "";
-        foreach(String tag in medicine.Tags)
+        string editedTags = "";
+        foreach (string tag in medicine.Tags)
         {
             editedTags += tag;
-            if(medicine.Tags.Last() != tag)
+            if (medicine.Tags.Last() != tag)
             {
                 editedTags += ",";
             }
         }
 
-        String choice = Console.ReadLine();
+        string choice = Console.ReadLine();
         switch (choice)
         {
             case "1":
@@ -855,9 +853,9 @@ public class AdminPanel : Panel
                 email = Console.ReadLine();
                 manufacturer = _manufacturerService.FindByEmail(email);
 
-                while(manufacturer == null!)
+                while (manufacturer == null!)
                 {
-                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    if (!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
                     {
                         return;
                     }
@@ -868,11 +866,11 @@ public class AdminPanel : Panel
                 break;
             case "2":
                 Console.WriteLine("Enter the new price:");
-                editedPrice = Double.Parse(Console.ReadLine());
+                editedPrice = double.Parse(Console.ReadLine());
                 break;
             case "3":
                 Console.WriteLine("Enter the new stock ammount:");
-                editedStock = Int32.Parse(Console.ReadLine());
+                editedStock = int.Parse(Console.ReadLine());
                 break;
             case "4":
                 Console.WriteLine("Enter the new name:");
@@ -891,9 +889,9 @@ public class AdminPanel : Panel
                 email = Console.ReadLine();
                 manufacturer = _manufacturerService.FindByEmail(email);
 
-                while(manufacturer == null!)
+                while (manufacturer == null!)
                 {
-                    if(!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
+                    if (!YesNoChoice("No manufacturer found with that email.", "Do you want to try again?", "No medicine was edited."))
                     {
                         return;
                     }
@@ -902,9 +900,9 @@ public class AdminPanel : Panel
                 }
                 editedId = manufacturer.Id;
                 Console.WriteLine("Enter the new price:");
-                editedPrice = Double.Parse(Console.ReadLine());
+                editedPrice = double.Parse(Console.ReadLine());
                 Console.WriteLine("Enter the new stock ammount:");
-                editedStock = Int32.Parse(Console.ReadLine());
+                editedStock = int.Parse(Console.ReadLine());
                 Console.WriteLine("Enter the new name:");
                 editedName = Console.ReadLine();
                 Console.WriteLine("Enter the new informations:");
@@ -919,7 +917,7 @@ public class AdminPanel : Panel
         // Confirms actions
         Medicine editedMedicine = new Medicine(medicine.Id, editedId, editedPrice, editedStock, editedName, editedInfo, editedTags);
 
-        if(YesNoChoice("\nDetails of the edited medicine:\n" + editedMedicine.DescriptionForAdmin(), "Are you sure you want to make these changes?", "Medicine was not edited."))
+        if (YesNoChoice("\nDetails of the edited medicine:\n" + editedMedicine.DescriptionForAdmin(), "Are you sure you want to make these changes?", "Medicine was not edited."))
         {
             _medicineService.EditById(editedMedicine, editedMedicine.Id);
             DrawLine();
@@ -930,12 +928,12 @@ public class AdminPanel : Panel
     private void RemoveMedicine()
     {
         Console.WriteLine("Enter the id of the medicine you want to remove:");
-        int id = Int32.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine());
 
         Medicine medicine = _medicineService.FindById(id);
-        if(medicine == null!)
+        if (medicine == null!)
         {
-            if(YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was removed."))
+            if (YesNoChoice("No medicine found with that id.", "Do you want to try again?", "No medicine was removed."))
             {
                 RemoveMedicine();
             }
@@ -943,7 +941,7 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed."))
+        if (YesNoChoice($"This is the medicine: {medicine}", "Are you sure you want to remove it?", "No medicine was removed."))
         {
             _medicineService.RemoveById(medicine.Id);
             DrawLine();
@@ -955,7 +953,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _medicineService.Display();
-        if(YesNoChoice("Medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
+        if (YesNoChoice("Medicine list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not saved."))
         {
             _medicineService.SaveList(GetPath() + "medicine.txt");
             DrawLine();
@@ -966,7 +964,7 @@ public class AdminPanel : Panel
     private void ClearMedicineList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared."))
+        if (YesNoChoice("THIS WILL DELETE ALL MEDICINE!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Medicine list was not cleared."))
         {
             _medicineService.ClearList();
             DrawLine();
@@ -985,12 +983,12 @@ public class AdminPanel : Panel
     private void EditStatusOfOrder()
     {
         Console.WriteLine("Enter the id of the order you want to edit:");
-        int id = Int32.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine());
 
         Order order = _orderService.FindById(id);
-        if(order == null!)
+        if (order == null!)
         {
-            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            if (YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
             {
                 RemoveOrder();
             }
@@ -1001,11 +999,11 @@ public class AdminPanel : Panel
         Console.WriteLine("(Submitted/Sent/Received/Completed)");
         Console.WriteLine("Anything else to cancel.");
         DateTime dt = DateTime.UtcNow;
-        String date = dt.ToString("d.M.yyyy");
+        string date = dt.ToString("d.M.yyyy");
         Order editedOrder = order.Duplicate();
 
-        String choice = Console.ReadLine();
-        switch(choice.ToLower())
+        string choice = Console.ReadLine();
+        switch (choice.ToLower())
         {
             case "submitted":
                 editedOrder.Status = "submitted";
@@ -1014,9 +1012,9 @@ public class AdminPanel : Panel
                     editedOrder.StatusDates[i] = null!;
                 }
 
-                for(int i = 0; i < 1; i++)
+                for (int i = 0; i < 1; i++)
                 {
-                    if(editedOrder.StatusDates[i] == null!)
+                    if (editedOrder.StatusDates[i] == null!)
                     {
                         editedOrder.StatusDates[i] = date;
                     }
@@ -1029,9 +1027,9 @@ public class AdminPanel : Panel
                     editedOrder.StatusDates[i] = null!;
                 }
 
-                for(int i = 0; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    if(editedOrder.StatusDates[i] == null!)
+                    if (editedOrder.StatusDates[i] == null!)
                     {
                         editedOrder.StatusDates[i] = date;
                     }
@@ -1044,9 +1042,9 @@ public class AdminPanel : Panel
                     editedOrder.StatusDates[i] = null!;
                 }
 
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    if(editedOrder.StatusDates[i] == null!)
+                    if (editedOrder.StatusDates[i] == null!)
                     {
                         editedOrder.StatusDates[i] = date;
                     }
@@ -1059,9 +1057,9 @@ public class AdminPanel : Panel
                     editedOrder.StatusDates[i] = null!;
                 }
 
-                for(int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    if(editedOrder.StatusDates[i] == null!)
+                    if (editedOrder.StatusDates[i] == null!)
                     {
                         editedOrder.StatusDates[i] = date;
                     }
@@ -1072,7 +1070,7 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"\nThis is the new order:\n {order}", "Are you sure you want to save it?", "No orders were edited."))
+        if (YesNoChoice($"\nThis is the new order:\n {order}", "Are you sure you want to save it?", "No orders were edited."))
         {
             _orderService.EditById(editedOrder, order.Id);
             DrawLine();
@@ -1083,12 +1081,12 @@ public class AdminPanel : Panel
     private void RemoveOrder()
     {
         Console.WriteLine("Enter the id of the order you want to remove:");
-        int id = Int32.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine());
 
         Order order = _orderService.FindById(id);
-        if(order == null!)
+        if (order == null!)
         {
-            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were removed."))
+            if (YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were removed."))
             {
                 RemoveOrder();
             }
@@ -1096,7 +1094,7 @@ public class AdminPanel : Panel
         }
 
         // Confirms choice
-        if(YesNoChoice($"This is the order: {order}", "Are you sure you want to remove it?", "No orders were removed."))
+        if (YesNoChoice($"This is the order: {order}", "Are you sure you want to remove it?", "No orders were removed."))
         {
             _orderService.RemoveById(order.Id);
             _orderDetailsService.RemoveByOrderId(order.Id);
@@ -1109,7 +1107,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         _orderService.Display();
-        if(YesNoChoice("Order list is above ^\nTHIS ALSO SAVES ORDER DETAILS!", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
+        if (YesNoChoice("Order list is above ^\nTHIS ALSO SAVES ORDER DETAILS!", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order list was not saved."))
         {
             _orderService.SaveList(GetPath() + "orders.txt");
             _orderDetailsService.SaveList(GetPath() + "order_details.txt");
@@ -1121,7 +1119,7 @@ public class AdminPanel : Panel
     private void ClearOrderList()
     {
         // Confirms action
-        if(YesNoChoice("THIS WILL DELETE ALL ORDERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Order list was not cleared."))
+        if (YesNoChoice("THIS WILL DELETE ALL ORDERS!", "Are you sure you want to clear the list?\nTHIS CAN NOT BE UNDONE!", "Order list was not cleared."))
         {
             _medicineService.ClearList();
             DrawLine();
@@ -1131,35 +1129,34 @@ public class AdminPanel : Panel
 
     // Order details service methods
 
-    // Displays order details list with medicine names
-    private void DisplayOrderDetails(OrderDetails details)
+    // Finds medicine names from order details medicine id list
+    private String[] ObtainMedicineArray(OrderDetails details)
     {
-        String[] medicine = new String[details.MedicineIds.Count];
-
+        string[] medicine = new string[details.MedicineIds.Count];
         int i = 0;
-        foreach(int id in details.MedicineIds)
+        foreach (int id in details.MedicineIds)
         {
             medicine[i] = _medicineService.FindById(id).Name;
             i++;
         }
+        return medicine;
+    }
+
+    // Displays order details list with medicine names
+    private void DisplayOrderDetails(OrderDetails details)
+    {
+        String[] medicine = ObtainMedicineArray(details);
         Console.WriteLine(details.Description(medicine.ToList()));
     }
 
     // Displays order details with medicine names
     private void DisplayOrderDetailsList()
     {
-        String[][] medicine = new String[_orderDetailsService.Count()][];
+        String[][] medicine = new string[_orderDetailsService.Count()][];
         int i = 0;
         foreach (OrderDetails details in _orderDetailsService.GetList())
         {
-            medicine[i] = new String[details.MedicineIds.Count];
-
-            int j = 0;
-            foreach (int id in details.MedicineIds)
-            {
-                medicine[i][j] = _medicineService.FindById(id).Name;
-                j++;
-            }
+            medicine[i] = ObtainMedicineArray(details);
             i++;
         }
 
@@ -1176,12 +1173,12 @@ public class AdminPanel : Panel
     private void EditOrderDetails()
     {
         Console.WriteLine("Enter the id of the order you want to edit:");
-        int id = Int32.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine());
 
         Order order = _orderService.FindById(id);
-        if(order == null!)
+        if (order == null!)
         {
-            if(YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
+            if (YesNoChoice("No orders were found with that id.", "Do you want to try again?", "No orders were edited."))
             {
                 EditOrderDetails();
             }
@@ -1189,7 +1186,7 @@ public class AdminPanel : Panel
         }
 
         OrderDetails details = _orderDetailsService.FindByOrderId(order.Id);
-        if(details == null!)
+        if (details == null!)
         {
             DrawLine();
             Console.WriteLine("Order has no details?");
@@ -1207,7 +1204,7 @@ public class AdminPanel : Panel
             Console.WriteLine("3 - Remove medicine");
             Console.WriteLine("4 - Edit medicine ammount");
             Console.WriteLine("Anything else to stop and go to order save menu.");
-            String choice = Console.ReadLine();
+            string choice = Console.ReadLine();
 
             Console.WriteLine();
             int medId, ammount;
@@ -1219,12 +1216,12 @@ public class AdminPanel : Panel
                     break;
                 case "2":
                     Console.WriteLine("Enter the id of the medicine you want to add:");
-                    medId = Int32.Parse(Console.ReadLine());
+                    medId = int.Parse(Console.ReadLine());
 
                     Medicine medicine = _medicineService.FindById(medId);
 
                     bool addBreak = false;
-                    while(medicine == null!)
+                    while (medicine == null!)
                     {
                         if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine ids were added."))
                         {
@@ -1232,12 +1229,12 @@ public class AdminPanel : Panel
                             break;
                         }
                         Console.WriteLine("Enter the id of the medicine you want to add:");
-                        medId = Int32.Parse(Console.ReadLine());
+                        medId = int.Parse(Console.ReadLine());
                     }
                     if (addBreak) { break; }
 
                     Console.WriteLine("Enter the ammount:");
-                    ammount = Int32.Parse(Console.ReadLine());
+                    ammount = int.Parse(Console.ReadLine());
 
                     while (ammount <= 0)
                     {
@@ -1247,7 +1244,7 @@ public class AdminPanel : Panel
                             break;
                         }
                         Console.WriteLine("Enter the ammount:");
-                        ammount = Int32.Parse(Console.ReadLine());
+                        ammount = int.Parse(Console.ReadLine());
                     }
                     if (addBreak) { break; }
 
@@ -1258,11 +1255,11 @@ public class AdminPanel : Panel
                     break;
                 case "3":
                     Console.WriteLine("Enter the id of the medicine you want to remove:");
-                    medId = Int32.Parse(Console.ReadLine());
+                    medId = int.Parse(Console.ReadLine());
 
                     bool removeBreak = false;
                     int removed = editedDetails.RemoveMedicineId(medId);
-                    while(removed == 0)
+                    while (removed == 0)
                     {
                         if (!YesNoChoice("Order details don't contain medicine with that id.", "Do you want to try again?", "No medicine ids were removed."))
                         {
@@ -1270,7 +1267,7 @@ public class AdminPanel : Panel
                             break;
                         }
                         Console.WriteLine("Enter the id of the medicine you want to remove:");
-                        medId = Int32.Parse(Console.ReadLine());
+                        medId = int.Parse(Console.ReadLine());
                         removed = editedDetails.RemoveMedicineId(medId);
                     }
                     if (removeBreak) { break; }
@@ -1280,7 +1277,7 @@ public class AdminPanel : Panel
                     break;
                 case "4":
                     Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
-                    medId = Int32.Parse(Console.ReadLine());
+                    medId = int.Parse(Console.ReadLine());
 
                     bool editBreak = false;
                     int edited = editedDetails.IndexOfMedicine(medId);
@@ -1292,13 +1289,13 @@ public class AdminPanel : Panel
                             break;
                         }
                         Console.WriteLine("Enter the medicine id for the ammount you want to edit:");
-                        medId = Int32.Parse(Console.ReadLine());
+                        medId = int.Parse(Console.ReadLine());
                         edited = editedDetails.IndexOfMedicine(medId);
                     }
                     if (editBreak) { break; }
 
                     Console.WriteLine("Enter the new ammount:");
-                    ammount = Int32.Parse(Console.ReadLine());
+                    ammount = int.Parse(Console.ReadLine());
 
                     while (ammount <= 0)
                     {
@@ -1308,7 +1305,7 @@ public class AdminPanel : Panel
                             break;
                         }
                         Console.WriteLine("Enter the ammount:");
-                        ammount = Int32.Parse(Console.ReadLine());
+                        ammount = int.Parse(Console.ReadLine());
                     }
                     if (editBreak) { break; }
 
@@ -1336,7 +1333,7 @@ public class AdminPanel : Panel
     {
         // Confirms action
         DisplayOrderDetailsList();
-        if(YesNoChoice("Order details list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order details list was not saved."))
+        if (YesNoChoice("Order details list is above ^", "Are you sure you want to save it?\nTHIS CAN NOT BE UNDONE!", "Order details list was not saved."))
         {
             _orderDetailsService.SaveList(GetPath() + "order_details.txt");
             DrawLine();

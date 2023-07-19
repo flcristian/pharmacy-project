@@ -1,15 +1,9 @@
 ﻿using pharmacy_project.medicine.model;
-using pharmacy_project.abstract_classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using pharmacy_project.bases.service_base;
 
 namespace pharmacy_project.medicine.service
 {
-    public class MedicineService : Service<Medicine>
+    public class MedicineService : Service<Medicine>, IMedicineService
     {
         // Constructors
 

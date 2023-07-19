@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using pharmacy_project.user.model;
-using pharmacy_project.abstract_classes;
+﻿using pharmacy_project.user.model;
+using pharmacy_project.bases.service_base;
 
 namespace pharmacy_project.user.service
 {
-    public class UserService : Service<User>
+    public class UserService : Service<User>, IUserService
     {
         // Constructors
 
