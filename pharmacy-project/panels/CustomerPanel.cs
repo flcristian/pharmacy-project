@@ -42,6 +42,7 @@ public class CustomerPanel : Panel, IPanel
         Console.WriteLine("7 - Place order");
         Console.WriteLine("8 - Edit your account details");
         Console.WriteLine("9 - See your orders");
+        Console.WriteLine("10 - Cancel an order");
     }
 
     public override void Run()
@@ -67,6 +68,7 @@ public class CustomerPanel : Panel, IPanel
                     RemoveMedicine();
                     break;
                 case "5":
+                    EditAmmount();
                     break;
                 case "6":
                     ClearCart();
@@ -79,6 +81,9 @@ public class CustomerPanel : Panel, IPanel
                     break;
                 case "9":
                     SeeOrders();
+                    break;
+                case "10":
+                    CancelOrder();
                     break;
                 default:
                     return;
@@ -174,6 +179,39 @@ public class CustomerPanel : Panel, IPanel
         Console.WriteLine("Medicine was removed!\n");
     }
 
+    private void EditAmmount()
+    {
+        int id;
+        Console.WriteLine("Enter the id of the medicine:");
+        Int32.TryParse(Console.ReadLine(), out id);
+        while (id == 0 || _cartDetails.IndexOfMedicine(id) == -1)
+        {
+            if (!YesNoChoice("No medicine was found with that id.", "Do you want to try again?", "No medicine were added."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the id of the medicine:");
+            Int32.TryParse(Console.ReadLine(), out id);
+        }
+
+        int ammount;
+        Console.WriteLine("Enter the ammount:");
+        Int32.TryParse(Console.ReadLine(), out ammount);
+        while (ammount < 1)
+        {
+            if (!YesNoChoice("Ammount must be at least equal to 1.", "Do you want to try again?", "No medicine were added."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the ammount:");
+            Int32.TryParse(Console.ReadLine(), out ammount);
+        }
+
+        _cartDetails.EditAmmountByMedicineId(id, ammount);
+        DrawLine();
+        Console.WriteLine("Ammount edited succesfully.\n");
+    }
+
     private void ClearCart()
     {
         if (!YesNoChoice("This will clear every item in your cart.", "Are you sure you want to do this?", "Your cart was not cleared."))
@@ -239,5 +277,41 @@ public class CustomerPanel : Panel, IPanel
     {
         DisplayCustomerOrders();
         WaitForKey();
+    }
+
+    private void CancelOrder()
+    {
+        int id;
+        Console.WriteLine("Enter the id of the order:");
+        Int32.TryParse(Console.ReadLine(), out id);
+        Order order = _orderService.FindById(id);
+        while (id == 0 || order == null! || order.CustomerId != GetUser().Id)
+        {
+            if (!YesNoChoice("You don't have any order with that id.", "Do you want to try again?", "No order was canceled."))
+            {
+                return;
+            }
+            Console.WriteLine("Enter the id of the order:");
+            Int32.TryParse(Console.ReadLine(), out id);
+        }
+
+        if(!order.Status.Equals("Submitted"))
+        {
+            DrawLine();
+            Console.WriteLine("You can't cancel this order.\nPlease contact an administrator to discuss a refund.\n");
+            return;
+        }
+
+        if(!YesNoChoice("This can not be undone!", "Are you sure you want to cancel this order?", "No order was canceled."))
+        {
+            return;
+        }
+
+        order.Status = "Canceled";
+        order.StatusDates = new String[4];
+        _orderService.EditById(order, order.Id);
+        _orderService.SaveList(GetPath() + "orders.txt");
+        DrawLine();
+        Console.WriteLine("You succesfully canceled the order.\n");
     }
 }

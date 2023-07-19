@@ -16,7 +16,7 @@ namespace pharmacy_project.order.model
         private String _status;
         private String[] _statusDates;
 
-        // ORDER STATUSES = Submitted / Sent / Received / Completed
+        // ORDER STATUSES = Submitted / Sent / Received / Completed / Canceled
 
         // Constructors
 
@@ -102,6 +102,11 @@ namespace pharmacy_project.order.model
             desc += "Customer Id : " + _customerId + "\n";
             desc += "Status : " + _status + "\n";
 
+            if(_status == "Canceled")
+            {
+                return desc;
+            }
+
             String[] statuses = new String[4] { "Submitted", "Sent", "Received", "Completed" };
             int i = 0;
             while (i < 4 && _statusDates[i] != null!)
@@ -118,6 +123,11 @@ namespace pharmacy_project.order.model
             String desc = "";
 
             desc += "Status : " + _status + "\n";
+
+            if (_status == "Canceled")
+            {
+                return desc;
+            }
 
             String[] statuses = new String[4] { "Submitted", "Sent", "Received", "Completed" };
             int i = 0;
