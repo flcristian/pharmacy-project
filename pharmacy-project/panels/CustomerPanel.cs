@@ -18,7 +18,7 @@ public class CustomerPanel : Panel, IPanel
 
     // Constructors
 
-    public CustomerPanel(string path, Customer customer) : base(path, customer)
+    public CustomerPanel(string path, User customer) : base(path, customer)
     {
         _medicineService = new MedicineService(path + "medicine.txt");
         _orderService = new OrderService(path + "orders.txt");

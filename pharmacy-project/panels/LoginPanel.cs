@@ -1,5 +1,6 @@
 using pharmacy_project.user.model;
 using pharmacy_project.bases.panel_base;
+using System.Xml.Linq;
 
 namespace pharmacy_project.panels
 {
@@ -44,25 +45,52 @@ namespace pharmacy_project.panels
 
         // Methods
 
-        private string ObtainName()
+        private int ObtainName(out string name)
         {
             Console.WriteLine("Enter your name:");
-            string name = Console.ReadLine();
-            return name;
+            name = Console.ReadLine()!;
+            while (name == null || !name.Any() || name.StartsWith(' '))
+            {
+                if(!YesNoChoice("Name was entered incorrectly.", "Do you want to try again?", "Action canceled."))
+                {
+                    return 0;
+                }
+                Console.WriteLine("Enter your name:");
+                name = Console.ReadLine()!;
+            }
+            return 1;
         }
 
-        private string ObtainEmail()
+        private int ObtainEmail(out string email)
         {
             Console.WriteLine("Enter your email:");
-            string email = Console.ReadLine();
-            return email;
+            email = Console.ReadLine()!;
+            while (email == null || !email.Any() || email.Contains(' '))
+            {
+                if (!YesNoChoice("Email was entered incorrectly.", "Do you want to try again?", "Action canceled."))
+                {
+                    return 0;
+                }
+                Console.WriteLine("Enter your email:");
+                email = Console.ReadLine()!;
+            }
+            return 1;
         }
 
-        private string ObtainPassword()
+        private int ObtainPassword(out string password)
         {
-            Console.WriteLine("Enter your password:");
-            string password = Console.ReadLine();
-            return password;
+            Console.WriteLine("Enter the password:");
+            password = Console.ReadLine()!;
+            while (password == null || !password.Any() || password.Contains(' '))
+            {
+                if (!YesNoChoice("Password was entered incorrectly.", "Do you want to try again?", "Action canceled."))
+                {
+                    return 0;
+                }
+                Console.WriteLine("Enter the password:");
+                password = Console.ReadLine()!;
+            }
+            return 1;
         }
 
         private void AdminChoice(User user)
@@ -82,6 +110,8 @@ namespace pharmacy_project.panels
                     return;
                 case "2":
                     Console.WriteLine($"Logged in as customer.\nWelcome {user.Name}!\n");
+                    CustomerPanel customerPanel = new CustomerPanel(GetPath(), user);
+                    customerPanel.Run();
                     return;
                 default:
                     return;
@@ -91,8 +121,12 @@ namespace pharmacy_project.panels
         private void Login()
         {
             // Obtaining credentials
-            string email = ObtainEmail();
-            string password = ObtainPassword();
+            string email, password;
+            if(ObtainEmail(out email) == 0 || ObtainPassword(out password) == 0)
+            {
+                return;
+            }
+            
             DrawLine();
 
             // Checking if user exists
@@ -112,14 +146,19 @@ namespace pharmacy_project.panels
 
             // Log in user as customer
             Console.WriteLine($"Welcome {user.Name}!\n");
+            CustomerPanel panel = new CustomerPanel(GetPath(), user);
+            panel.Run();
         }
 
         private void Register()
         {
             // Obtaining credentials
-            string name = ObtainName();
-            string email = ObtainEmail();
-            string password = ObtainPassword();
+            string name, email, password;
+            if (ObtainName(out name) == 0 || ObtainEmail(out email) == 0 || ObtainPassword(out password) == 0)
+            {
+                return;
+            }
+
 
             // Creating customer account
             Customer customer = new Customer(GetUserService().NewId(), name, email, password);

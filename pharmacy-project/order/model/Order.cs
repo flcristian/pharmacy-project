@@ -152,7 +152,6 @@ namespace pharmacy_project.order.model
                 {
                     save += "/";
                 }
-                Console.WriteLine(_statusDates[i]);
                 i++;
             }
 
